@@ -1,0 +1,69 @@
+ {
+  "pharmacyName": "Lineaus",
+  "agbCode": "03030227",
+  "timestamp": "2018-01-31T14:45:57.652Z",
+  "medicationDispenseEvents": [
+    {
+      "id": "114FEB04-FA07-4F39-9360-2E8CFCFB2AE4",
+      "transcriptionTimestamp": "2018-01-19T14:45:57.652Z",
+      "dispenseTimestamp": "2018-01-19T14:45:57.652Z",
+      "prescriber": {
+        "agbCode": "03030228",
+        "name": "H. Huisarts",
+        "speciality": "Huisarts"
+      },
+      "usageStartDate": "2018-01-19",
+      "usageEndDate": "2018-01-26",
+	  "nhg25": "1-3D1-3CA",
+      "amount": 30,
+      "codedUnit": "stuks",
+      "zi": "16044940",
+      "hpk": "1633090",
+      "prk": "17809",
+      "dispensedMedicationName": "AMOXI/CLAV CF TABLET OMHULD 500/125MG",
+      "guidanceText": [
+        "3 maal per dag 3 tabletten<br/>Heel doorslikken, niet kauwen<br/>TIJDENS het eten innemen<br/>Pas op met alcohol i.v.m. maagklachten"
+      ]
+    },
+    {
+      "id": "114FEB04-FA07-4F39-9360-2E8CFCFB2AE5",
+      "transcriptionTimestamp": "2017-10-19T14:45:57.652Z",
+      "dispenseTimestamp": "2018-01-19T14:45:57.652Z",
+      "prescriber": {
+        "agbCode": "03030228",
+        "name": "S. Pecialist",
+        "speciality": "Very special"
+      },
+      "usageStartDate": "2017-10-19",
+	  "nhg25": "1UZ1DR",
+      "amount": 40,
+      "codedUnit": "stuks",
+      "zi": "16044941",
+      "hpk": "1633091",
+      "prk": "17810",
+      "dispensedMedicationName": "Ascal 100mg"
+    },
+    {
+      "id": "114FEB04-FA07-4F39-9360-2E8CFCFB2AE5",
+      "transcriptionTimestamp": "2017-01-01T14:45:57.652Z",
+      "dispenseTimestamp": "2018-01-19T14:45:57.652Z",
+      "prescriber": {
+        "agbCode": "03030228",
+        "name": "H. Huisarts",
+        "speciality": "Huisarts"
+      },
+      "usageStartDate": "2017-01-01",
+	  "nhg25": "1D1T",
+      "amount": 2,
+      "codedUnit": "doosjes",
+      "zi": "16044942",
+      "hpk": "1633092",
+      "prk": "17811",
+      "dispensedMedicationName": "Atorvastatine",
+      "guidanceText": [
+        "Zie maar wanneer je dr zin an hebt!",
+		"En anders laat dan maar zitten"
+      ]
+    }
+  ]
+}

@@ -194,8 +194,8 @@ function onShowMed (lijst, regel)
 				var szHTML = '';
 				var row = results.rows.item(0);
 
-				szHTML  = addDate (row['transcriptTimestamp'], 'Datum voorschrift');
-				szHTML += addDate (row['dispenseTimestamp']  , 'Laatste geleverd');
+				szHTML  = addDate (row['transcriptTimestamp'], 'Voorschrift');
+				szHTML += addDate (row['dispenseTimestamp']  , 'Geleverd');
 				szHTML += addDate (row['startGebruik']       , 'Startdatum');
 				szHTML += addDate (row['eindGebruik']        , 'Stopdatum');
 				var d = nhg25 (row['nhg25']);

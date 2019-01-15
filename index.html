@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<!--
+    Copyright (c) 2015 MedLex BV
+
+    http://www.alexanderengberts.nl
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.
+-->
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="msapplication-tap-highlight" content="no" />
+	<!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+<!--      <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" /> -->
+	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, viewport-fit=cover" />
+	<link rel="stylesheet" type="text/css" href="css/MediApp.css" />
+	<link rel="stylesheet" type="text/css" href="css/inputs.css" />
+<!--	<link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.0rc1.min.css" /> -->
+
+<!--	<script type="text/javascript" src="phonegap.js"></script> -->
+	<script type="text/javascript" src="js/MediGen.js"></script>
+	<script type="text/javascript" src="js/MediApp.js"></script>
+	<script type="text/javascript" src="js/Calender.js"></script>
+	<script type="text/javascript" src="js/lijsten.js"></script>
+	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+<!--	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/jquery.mobile-1.0rc1.min.js"></script> -->
+	<title>Medicatieoverzicht</title>
+</head>
+<body onload="init()">
+    <div id="wrapper" style="top:0px;">
+		<!--
+			Hier volgt het medicatieoverzicht
+		 -->
+		<div id="overzicht">
+			<div id="itemHeader" class="itemHeader standardWhite standard"><b>Medicatielijst</b></div>
+		</div>
+		<!--
+			Hierin bevindt zich de medicijnkalender. Ofwel het medicatieoverzicht of de kalender worden getoond.
+		-->
+		<div id="kalender">
+			<div id="wekkerHeader" class="itemHeader standardWhite standard"><b>Medicijnwekker</b></div>
+		</div>
+		<!--
+			Het debug venster
+		 -->
+		<div id="debug">
+			<div id="debugHeader" class="itemHeader standardWhite large">
+				<b>Debug venster</b>
+			</div>
+			<div id="debugWindow" class="standard"></div>
+			<div class="ok okWrap button" onclick="debugClose();"><b>OK</b></div>
+		</div>
+		<!--
+			De lijst met personen, wordt ook gebruikt voor de lijst met lijsten :)
+		 -->
+		<div id="list">
+			<div id="listHeader" class="itemHeader standardWhite standard">
+				<b>Gebruikers</b>
+			</div>
+		</div>
+		<!--
+			Onderhoud / toevoegen van de gegevens van een individuele persoon
+		 -->
+		<div id="individualCover"></div>
+		<div id="individual">
+			<div class="individualHeader popHeader"><div id="individualText"><b>Toevoegen nieuwe persoon</b></div>
+				<div class="individualClose" onmouseup="indiCancel();"></div>
+			</div>
+			<div id="individualBody">
+				<form>
+					<table>
+						<tr>
+							<td class="standard">Naam</td>
+							<td><input id="indiNaam" type="text" /></td>
+						</tr>
+						<tr>
+							<td class="standard">Geboortedatum</td>
+							<td><input id="indiGeboren" type="date" /></td>
+						</tr>
+					</table>
+				</form>
+			</div>
+			<div id="individualButton" class="ok okWrap button" onmouseup="indiOK(-1,0);"><b>OK</b></div>
+		</div>
+		<!--
+			Verwijderen van een persoon en/of de medicatielijst(en) van een persoon
+		 -->
+		<!--
+			Nieuw tijdstip of wijzigen bestaand tijdstip
+		 -->
+		<div id="tijdStip">
+			<div class="stipHeader popHeader"><div id="stipText"><b>Wijzigen tijdstip</b></div>
+				<div class="individualClose" onmouseup="stipCancel();"></div>
+			</div>
+			<div id="stipBody">
+				<table width="100%" style="border-collapse:collapse;">
+					<tr>
+						<td style="padding-right:10px;">Naam</td>
+						<td><input id="stipNaam" type="text" /></td>
+						<td><div id="stipDelete" onclick="deleteStip();"></div></td>
+					</tr>
+					<tr>
+						<td style="padding-right:10px;">Tijd</td>
+						<td colspan="2"><input id="stipTijd" type="time" /></td>
+					</tr>
+					<tr><td colspan="2">&nbsp;</td></tr>
+					<tr>
+						<td>Innemen op</td>
+						<td colspan="2">
+							<table width="100%" style="border-collapse:collapse">
+								<tr>
+									<td><input id="maandag" type="checkbox" name="iedere" value="0" />
+										<label for="maandag"><span></span>Maandag</label></td>
+									<td><input id="vrijdag" type="checkbox" name="iedere" value="0" />
+										<label for="vrijdag"><span></span>Vrijdag</label></td>
+								</tr>
+								<tr>
+									<td><input id="dinsdag" type="checkbox" name="iedere" value="0" />
+										<label for="dinsdag"><span></span>Dinsdag</label></td>
+									<td><input id="zaterdag" type="checkbox" name="iedere" value="0" />
+										<label for="zaterdag"><span></span>Zaterdag</label></td>
+								</tr>
+								<tr>
+									<td><input id="woensdag" type="checkbox" name="iedere" value="0" />
+										<label for="woensdag"><span></span>Woensdag</label></td>
+									<td><input id="zondag" type="checkbox" name="iedere" value="0" />
+										<label for="zondag"><span></span>Zondag</label></td>
+								</tr>
+								<tr>
+									<td><input id="donderdag" type="checkbox" name="iedere" value="0" />
+										<label for="donderdag"><span></span>Donderdag</label></td>
+									<td>&nbsp;</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="okWrap">
+				<div class="ok2 button" onmouseup="stipOK();"><b>OK</b></div>
+				<div class="ok3 button" onmouseup="stipCancel();"><b>Annuleer</b></div>
+			</div>
+		</div>
+
+		<!--
+			De configuratie settings
+		 -->
+		<div id="config">
+			<div class="itemHeader standardWhite standard"><b>Instellingen</b></div>
+			<div id="configBody" class="large">
+				<table style="border-collapse:collapse;">
+					<tr class="cHeight">
+						<td class="cHeight large">Bewaartermijn&nbsp;oude&nbsp;lijsten<br />(maanden)</td>
+						<td class="cHeight large">&nbsp;<input type="number" id="termijn" min="0" max="12" value="0" style="width:4em;" /></td>
+					</tr>
+					<tr class="cHeight">
+						<td class="cHeight large"><label for="largeFont" class="large">Grote letters</label></td>
+						<td>
+							<input id="largeFont" type="checkbox" onclick="setFontSize();"/>
+						    <label for="largeFont"><span></span>&nbsp;</label>
+						</td>
+				</table>
+			</div>
+		</div>
+		<!--
+			En de menubalk
+		 -->
+		<div id="menubar" class="standard standardWhite">
+			<div id="back" onclick="back();"></div>
+			<div id="headertext" class="standardWhite header">Medin</div>
+			<div id="menubutton" onmouseup="showMenu(1);"></div>
+		</div>
+		<!--
+			Onder de menubalk komt de keuze tussen de beide hoofdschermen. Kalender en Medicijnlijst.
+			de "slider" geeft aan waar we zitten. Deze krijgt ook een attribuut "data-screen" waarin dit wordt vastgelegd
+			De programmatuur haalt hier de informatie vandaan.
+		-->
+		<div id="select" class="materialHeader">
+			<div id="selectKalender" class="large" onclick="setMain (0);"><b>Kalender</b></div>
+			<div id="selectLijst" class="large" onclick="setMain (1);"><b>Medicijnlijst</b></div>
+			<div id="mainSlider"></div>
+		</div>
+		<!--
+			Het "plus" knopje heeft meerdere functies, afhankelijk van het scherm waar we ons bevinden.
+			In het medicijnlijstscherm bijboorbeeld het ophalen van een nieuwe lijst (via QR code)
+			In het kalenderscherm het toevoegen van een nieuw tijdstip enzovoorts
+		-->
+		<div id="plus" class="material" onmouseup="plus();"></div>
+		
+		<!--
+			Alleen ter test: een vakje om een bestandsnaam op te vragen als er om een upload
+			wordt gevraagd en we zitten in een browser en niet in de app op een mobiel
+		-->
+		<div id="jsonCover"></div>
+		<div id="askJSON">
+			<div class="individualHeader popHeader"><div><b>kies een JSON bestand</b></div>
+				<div class="individualClose" onmouseup="jsonCancel();"></div>
+			</div>
+			<div id="jsonBody" class="large">
+				<label for="files">Choose file to upload</label>&nbsp;
+				<input type="file" id="files" name="files" />
+			</div>
+			<div class="okWrap">
+				<div class="ok2 button" onmouseup="jsonLoad ();"><b>Laden</b></div>
+				<div class="ok3 button" onmouseup="jsonCancel();"><b>Annuleer</b></div>
+			</div>
+		</div>
+
+		<!--
+			Hier komt het menu. Dit moet helemaal onderaan blijven om te zorgen dat het overal overheen kan
+		 -->
+		<div id="menuCover" onclick="showMenu (0);"></div>
+		<div id="menuBox" class="standard material">
+			<div class="divMenu large" onclick="showMenu(0);"><div class="menuBack"></div>Terug</div>
+			<div id="allLists" class="divMenu large" onclick="showAllLists();"><div id="allListsImg"></div>Toon alle lijsten</div>
+			<div class="divMenu large" onclick="showPersons();"><div class="person"></div>Gebruikers</div>
+			<div class="divMenu large" onclick="showConfig();"><div class="settings"></div>Instellingen</div>
+		</div>
+	</div>
+</body>
+</html>

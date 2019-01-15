@@ -1,0 +1,95 @@
+<widget xmlns="http://www.w3.org/ns/widgets"
+	xmlns:gap="http://phonegap.com/ns/1.0"
+	id="nl.medlex.medin"
+	versionCode="100"
+	version="1.0.0">
+	<name>Medin</name>
+	<description>Medicatieoverzicht</description>
+	<author href="http://medlex.nl" email="info@medlex.nl">MedLex</author>
+	<gap:platform name="ios" />
+	<gap:platform name="android" />
+	<gap:platform name="winphone" />
+	<content src="index.html" width="72" height="72"/>
+	<preference name="phonegap-version" value="cli-7.1.0" />
+	<preference name="permissions" value="none"/>
+	<preference name="orientation" value="default"/>
+	<preference name="target-device" value="universal"/>
+	<preference name="fullscreen" value="false"/>
+	<preference name="webviewbounce" value="true"/>
+	<preference name="prerendered-icon" value="true"/>
+	<preference name="stay-in-webview" value="false"/>
+	<preference name="ios-statusbarstyle" value="black-opaque"/>
+	<preference name="detect-data-types" value="true"/>
+	<preference name="exit-on-suspend" value="false"/>
+	<preference name="show-splash-screen-spinner" value="true"/>
+	<preference name="auto-hide-splash-screen" value="true"/>
+	<preference name="disable-cursor" value="false"/>
+	<preference name="android-installLocation" value="auto"/>
+	<preference name="AndroidPersistentFileLocation" value="Compatibility" />
+	<preference name="iosPersistentFileLocation" value="Compatibility" />
+
+	<plugin spec="https://github.com/phonegap/phonegap-plugin-barcodescanner" source="git" />
+<!--	<plugin spec="https://github.com/apache/cordova-plugin-statusbar" source="git" /> -->
+<!--	<plugin spec="https://github.com/napolitano/cordova-plugin-intent" source="git" /> -->
+
+	<platform name="android">
+		<icon   src="res/icon/android/drawable-mdpi-icon.png"     platform="android" density="mdpi"    qualifier="mdpi"   />
+		<icon   src="res/icon/android/drawable-hdpi-icon.png"     platform="android" density="hdpi"    qualifier="hdpi"   />
+		<icon   src="res/icon/android/drawable-xhdpi-icon.png"    platform="android" density="xhdpi"   qualifier="xhdpi"  />
+		<icon   src="res/icon/android/drawable-xxhdpi-icon.png"   platform="android" density="xxhdpi"  qualifier="xxhdpi" />
+		<icon   src="res/icon/android/drawable-xxxhdpi-icon.png"  platform="android" density="xxxhdpi" qualifier="xxxhdpi" />
+		<icon   src="res/icon/android/drawable-ldpi-icon.png"     platform="android" density="ldpi"    qualifier="ldpi"   />
+		<splash src="res/screen/android/LDPIPortrait.png"         gap:platform="android" gap:qualifier="port-ldpi"/>
+		<splash src="res/screen/android/LDPILandscape.png"        gap:platform="android" gap:qualifier="land-ldpi"/>
+		<splash src="res/screen/android/MDPIPortrait.png"         gap:platform="android" gap:qualifier="port-mdpi"/>
+		<splash src="res/screen/android/MDPILandscape.png"        gap:platform="android" gap:qualifier="land-mdpi"/>
+		<splash src="res/screen/android/HDPIPortrait.png"         gap:platform="android" gap:qualifier="port-hdpi"/>
+		<splash src="res/screen/android/HDPILandscape.png"        gap:platform="android" gap:qualifier="land-hdpi"/>
+		<splash src="res/screen/android/XHDPIPortrait.png"        gap:platform="android" gap:qualifier="port-xhdpi"/>
+		<splash src="res/screen/android/XHDPILandscape.png"       gap:platform="android" gap:qualifier="land-xhdpi"/>
+		<splash src="res/screen/android/XXHDPIPortrait.png"       gap:platform="android" gap:qualifier="port-xxhdpi"/>
+		<splash src="res/screen/android/XXHDPILandscape.png"      gap:platform="android" gap:qualifier="land-xxhdpi"/>
+		<splash src="res/screen/android/XXXHDPIPortrait.png"      gap:platform="android" gap:qualifier="port-xxxhdpi"/>
+		<splash src="res/screen/android/XXXHDPILandscape.png"     gap:platform="android" gap:qualifier="land-xxxhdpi"/>
+		<preference name="SplashScreenDelay" value="10000" />
+		<preference name="SplashMaintainAspectRatio" value="false" />
+		<preference name="SplashShowOnlyFirstTime" value="false" />
+		<preference name="SplashScreen" value="screen" />
+	</platform>
+
+	<platform name="ios">
+		<preference name="StatusBarOverlaysWebView" value="false"/>
+		<preference name="StatusBarBackgroundColor" value="#ffffff"/>
+		<preference name="StatusBarStyle" value="blacktranslucent" />
+
+		<icon   src="res/icon/ios/icon.png"                       platform="ios" width="57"   height="57" />
+		<icon   src="res/icon/ios/icon@2x.png"                    platform="ios" width="114"  height="114" />
+		<icon   src="res/icon/ios/icon-40.png"                    platform="ios" width="40"   height="40" />
+		<icon   src="res/icon/ios/icon-40@2x.png"                 platform="ios" width="80"   height="80" />
+		<icon   src="res/icon/ios/icon-50.png"                    platform="ios" width="50"   height="50" />
+		<icon   src="res/icon/ios/icon-50@2x.png"                 platform="ios" width="100"  height="100" />
+		<icon   src="res/icon/ios/icon-60.png"                    platform="ios" width="60"   height="60" />
+		<icon   src="res/icon/ios/icon-60@2x.png"                 platform="ios" width="120"  height="120" />
+		<icon   src="res/icon/ios/icon-60@3x.png"                 platform="ios" width="180"  height="180" />
+		<icon   src="res/icon/ios/icon-72.png"                    platform="ios" width="72"   height="72" />
+		<icon   src="res/icon/ios/icon-72@2x.png"                 platform="ios" width="144"  height="144" />
+		<icon   src="res/icon/ios/icon-76.png"                    platform="ios" width="76"   height="76" />
+		<icon   src="res/icon/ios/icon-76@2x.png"                 platform="ios" width="152"  height="152" />
+		<icon   src="res/icon/ios/icon-small.png"                 platform="ios" width="29"   height="29" />
+		<icon   src="res/icon/ios/icon-small@2x.png"              platform="ios" width="58"   height="58" />
+		<icon   src="res/icon/ios/icon-small@3x.png"              platform="ios" width="87"   height="87" />
+
+		<!-- One general splash screen 2732x2732 -->
+		<splash src="res/screen/ios/Default@2x~universal~anyany.png" />
+
+<!--		<preference name="SplashScreenDelay" value="5000" />
+		<preference name="SplashMaintainAspectRatio" value="false" />
+		<preference name="SplashShowOnlyFirstTime" value="false" /> -->
+
+		<edit-config target="NSCameraUsageDescription" file="*-Info.plist" mode="merge">	<!-- Verplicht om op te geven waarvoor de camera nodig is -->
+			<string>Om de QR code bij de apotheek te kunnen lezen</string>
+		</edit-config>
+	</platform>
+
+	<access origin="*"/>
+</widget>

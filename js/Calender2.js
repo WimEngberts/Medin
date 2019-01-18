@@ -14,7 +14,7 @@ function checkListInCalender ()
 	db.transaction(function(tx)
 	{
 		//-------------------------------------------------------------------------------------------------------
-		// Stap 1: Haal cde persoon op voor wie we dit allemaal gaan doen. Dat is dus de geselecteerde persoon
+		// Stap 1: Haal de persoon op voor wie we dit allemaal gaan doen. Dat is dus de geselecteerde persoon
 		//
 		tx.executeSql('SELECT * FROM person WHERE selected = 1', [], function (tx, results)
 		{
@@ -92,7 +92,7 @@ function checkListInCalenderStep3 (userID, listID)
 					{
 						var medicatie = g_Medicatie.item(m);
 
-						medicatie['distributed'] = 0;
+						medicatie['distributed'] = -2;
 						var nhg25 = nhg25 (medicatie['nhg25']);
 						medicatie['nhgExpanded'] = nhg25;
 						var hVan = parseInt (nhg25.hCodeVan);
@@ -102,7 +102,11 @@ function checkListInCalenderStep3 (userID, listID)
 						{
 							var row = results.rows.item(i);
 							if (medicatie['prk'] == row['prk'])				// OK, die hebben we
-								n++;										// is dus één keer meer opgevoerd in de kalender
+							{
+								n += row['nDosis'];							// Zoveel tellen we er nu dus bij
+								if (row['nDosis'] == 0)						// was niet gestructureerd opgegeven?
+									n++;									// dan dus maar één keer meer opgevoerd in de kalender
+							}
 						}
 						if (hTot == 0)										// We hebben één vast aantal malen te gaan
 						{
@@ -126,6 +130,43 @@ function checkListInCalenderStep3 (userID, listID)
 						if (medicatie['distributed'] != 0)					// Niet helemaal goed dus nog
 							g_ThingsToDo = true;							// Dan moet er dus nog iets gebeuren!
 					}
+					if (g_ThingsToDo)										// De lijst is niet helemaal goed gevuld. Daar gaan we nu iets over zeggen!
+					{
+						setVisibility ('distriCover', true);
+						setVisibility ('notDistributed', true);
+						var body = document.getElementById ('distriBody');
+						var table = body.getElementById ('distriTable');
+						var div = table.childNodes;
+						var i = div.length;
+
+						while (i-- > 0)										// verwijder alle regels uit een eventuele huidige lijst
+							table.removeChild (div[i]);
+
+						for (var m = 0; m < g_Medicatie.length; m++)		// Kijk dan even welke medicijnen we iets over gaan miepen
+						{
+							var medicatie = g_Medicatie.item(m);
+							if (medicatie['distributed'] != 0)				// Deze dus (onder anderen wellicht)!
+							{
+								var tr = document.createElement ('tr');
+								var td = document.createElement ('td');
+								var szHTML = '<b>' + medicatie['dispensedMedicationName'] + '</b><br />';
+								szHTML += medicatie['hoeveelheid'];
+								szHTML += ' ';
+								szHTML += medicatie['codeUnit'];
+								td.innerHTML = szHTML;
+								tr.appendChild (td);
+								td = document.createElement ('td');
+								if (medicatie['distributed'] == -2)			// Nog helemaal niet gezien
+									td.innerHTML = 'Nog niet in kalender';
+								else if (medicatie['distributed'] == -1)	// Te weinig gezien
+									td.innerHTML = 'Niet voldoende in kalender';
+								else										// Blijft over: 1 = teveel gezien
+									td.innerHTML = 'Teveel in kalender';
+								tr.appendChild (td);
+								table.appendChild (tr);
+							}
+						}
+					}
 				}
 				}), function (tx, error)
 				{
@@ -141,4 +182,10 @@ function checkListInCalenderStep3 (userID, listID)
 		{
 		};
 	});
+}
+
+function distriCancel ()
+{
+	setVisibility ('distriCover', false);
+	setVisibility ('notDistributed', false);
 }

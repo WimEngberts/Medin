@@ -53,7 +53,8 @@ function initTables (db)
 		tx.executeSql ('CREATE TABLE IF NOT EXISTS inname     (personID INTEGER,'					// Iedere gebruiker z'n eigen lijst
 															+ 'tijdID INTEGER,'						// op dit tijdStip
 															+ 'prk TEXT,'							// neemt u dit medicijn
-															+ 'dosis TEXT)');						// in deze hoeveelheid
+															+ 'nDosis INTEGER,',					// in deze hoeveelheid (verwerkbaar)
+															+ 'dosis TEXT)');						// in deze hoeveelheid (tekstueel)
 	}, function (tx)
 	{
 	},

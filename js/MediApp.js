@@ -436,7 +436,7 @@ function handleQRCode (QRCode, bScanned)
 	var parts = QRCode.split (';');
 
 	document.getElementById ('debugWindow').innerHTML = '';
-	
+
 	if (   parts.length < 4
 		|| parts.length > 5)
 		errorCode = 1;
@@ -940,7 +940,7 @@ function addMedicationList ()
 						 + ' AND listMaand=' + listMaand
 						 + ' AND listJaar=' + listJaar
 						 + ' AND listTijd=\'' + listTijd + '\'';
-		
+
 		log ('finding possible existing list<br />&nbsp;&nbsp;' + sqlStatement);
 
 		tx.executeSql (sqlStatement, [], function (tx, results)
@@ -1120,6 +1120,7 @@ function importOverzicht (id, lijst)
 		setVisibility ('back', false);	// Er zou een terugknop kunnen staan. Die willen we nu niet meer
 		log ('showing list');
 		showList (db);
+		CheckListInCalender ();
 	});
 }
 
@@ -1270,6 +1271,7 @@ function ProcessReceivedData ()
 	// Zo niet, dan vragen we of we iemand moeten aanmaken.
 	// Als er meer dan één is (tweeling) dan vragen we welke we moeten hebben.
 	//
+	g_bwarnAboutList = true;
 	var dateTemp = receivedList.birthdate.split ('-');		// haal even uit elkaar
 	if (dateTemp.length != 3)						// daaruit moeten we drie componenten overhouden
 	{
@@ -1387,14 +1389,14 @@ function ProcessReceivedData ()
 				};
 				elemWrapper.appendChild (elemDiv);
 				document.body.appendChild (elemWrapper);
-				
+
 				var vWidth  = elemWrapper.offsetWidth;
 				var vHeight = elemWrapper.offsetHeight;
 				vWidth = parseInt (vWidth/2, 10);
 				vHeight = parseInt (vHeight/2, 10);
 				elemWrapper.style.marginLeft = '-' + vWidth + 'px';
 				elemWrapper.style.marginTop = '-' + vHeight + 'px';
-				
+
 				elemWrapper.style.opacity = '1';
 				elemWrapper.style.mozOpacity = '1';
 				elemWrapper.style.khtmlOpacity = '1';

@@ -676,6 +676,48 @@ body
 	bottom:50px;
 }
 
+#distriCover
+{
+	position:absolute;
+	top:50px;
+	bottom:0px;
+	left:0px;
+	left:0px;
+	right:0px;
+	background-color:black;
+	opacity:0.3;
+    transition: all 0.4s ease;
+    -webkit-transition: all 0.4s ease; /* For Safari 3.1 to 6.0 */
+	display:none;
+}
+
+#notDistributed
+{
+	position:absolute;
+	width:86%;
+	top:20%;
+	left:7%;
+	height:60%;
+	padding:0px;
+    transition: all 0.4s ease;
+    -webkit-transition: all 0.4s ease; /* For Safari 3.1 to 6.0 */
+	background-color:white;
+	color:black;
+/*	opacity:0; */
+	border-radius:20px;
+	overflow:hidden;
+	display:none;
+}
+
+#distriBody
+{
+	position:absolute;
+	top:70px;
+	right:0px;
+	left:0px;
+	bottom:50px;
+}
+
 #individualCover
 {
 	position:absolute;

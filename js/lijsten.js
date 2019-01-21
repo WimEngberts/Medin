@@ -52,8 +52,11 @@ function initTables (db)
 															+ 'tijdStip TEXT)');					// Het bijbehorende tijdstip (hh:mm)
 		tx.executeSql ('CREATE TABLE IF NOT EXISTS inname     (personID INTEGER,'					// Iedere gebruiker z'n eigen lijst
 															+ 'tijdID INTEGER,'						// op dit tijdStip
+															+ 'sequence INTEGER PRIMARY KEY ASC,'	// unieke ID
 															+ 'prk TEXT,'							// neemt u dit medicijn
-															+ 'nDosis INTEGER,',					// in deze hoeveelheid (verwerkbaar)
+															+ 'naam TEXT,'							// De naam van het medicijn
+															+ 'eigen INTEGER,'						// Deze hebt u buiten de lijst om zelf toegevoegd
+															+ 'nDosis INTEGER,'						// in deze hoeveelheid (verwerkbaar)
 															+ 'dosis TEXT)');						// in deze hoeveelheid (tekstueel)
 	}, function (tx)
 	{
@@ -157,15 +160,17 @@ function showListStep3 (db, id)
 			for (var i=0; i < results.rows.length; i++)
 			{
 				var row = results.rows.item(i);
+				var n25 = nhg25 (row['nhg25']);
 				if (i == 0)
 					id = row['lijst'];
 				var div = document.createElement ('div');
 				div.className = 'item standard';
 				div.setAttribute ('onclick', 'onShowMed (' + id + ', ' + row['regel'] + ');');
 				szHTML = '<b>' + row['dispensedMedicationName'] + '</b><br />';
-				szHTML += row['hoeveelheid'];
-				szHTML += ' ';
-				szHTML += row['codeUnit'];
+				szHTML += n25['omschrijving'];
+//				szHTML += row['hoeveelheid'];
+//				szHTML += ' ';
+//				szHTML += row['codeUnit'];
 				if (row['text1'] != '')
 					szHTML += '<div class="warning"></div>';
 				div.innerHTML = szHTML;
@@ -199,6 +204,7 @@ function onShowMed (lijst, regel)
 				szHTML += addDate (row['dispenseTimestamp']  , 'Geleverd');
 				szHTML += addDate (row['startGebruik']       , 'Startdatum');
 				szHTML += addDate (row['eindGebruik']        , 'Stopdatum');
+				szHTML += '<tr><td>Geleverd</td><td>:</td><td>'				+ row['hoeveelheid'] + ' ' + row['codeUnit'] + '</td></tr>';
 				var d = nhg25 (row['nhg25']);
 				szHTML += '<tr><td>Dosering</td><td>:</td><td>'				+ d.omschrijving			+ '</td></tr>'
 	                   +  '<tr><td>Voorschrijver</td><td>:</td><td>'		+ row['voorschrijverNaam']	+ '</td></tr>';

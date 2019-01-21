@@ -1120,7 +1120,7 @@ function importOverzicht (id, lijst)
 		setVisibility ('back', false);	// Er zou een terugknop kunnen staan. Die willen we nu niet meer
 		log ('showing list');
 		showList (db);
-		CheckListInCalender ();
+//		checkListInCalender ();
 	});
 }
 
@@ -1132,7 +1132,7 @@ function fillLists (lists)
 	var div;
 	var action;
 	var colorName;
-	
+
 	div = lists.getElementsByClassName ('listLine');
 	var i = div.length;
 	while (i--)

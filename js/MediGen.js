@@ -9,7 +9,7 @@ var enterHandlers		= [];
 var enterHandlerIndex	= -1;
 var backHandlers		= [];
 var backHandlerIndex	= -1;
-var g_bWarnAboutList	= true;
+var g_bWarnAboutList	= false;
 
 //---------------------------------------------------------------
 // Cordova is ready
@@ -26,8 +26,8 @@ function onDeviceReady()
 		initTables (db);
 		showList (db);
 		fillCalender ();
-		if (g_bwarnAboutList)
-			CheckListInCalender ();
+		if (g_bWarnAboutList)
+			checkListInCalender ();
 	}
 	else
 		alert ('no database available!');

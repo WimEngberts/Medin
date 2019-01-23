@@ -1,9 +1,9 @@
 <widget xmlns="http://www.w3.org/ns/widgets"
 	xmlns:gap="http://phonegap.com/ns/1.0"
-	id="nl.medlex.medin"
+	id="nl.medlex.meddin"
 	versionCode="100"
 	version="1.0.0">
-	<name>Medin</name>
+	<name>Meddin</name>
 	<description>Medicatieoverzicht</description>
 	<author href="http://medlex.nl" email="info@medlex.nl">MedLex</author>
 	<gap:platform name="ios" />

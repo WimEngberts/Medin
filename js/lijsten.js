@@ -4,7 +4,6 @@
 //
 function initTables (db)
 {
-
 	db.transaction (function (tx)
 	{
 		tx.executeSql ('CREATE TABLE IF NOT EXISTS person(id INTEGER PRIMARY KEY ASC,'
@@ -12,7 +11,8 @@ function initTables (db)
 															+ 'gebJaar INTEGER,'
 															+ 'gebMaand INTEGER,'
 															+ 'gebDag INTEGER,'
-															+ 'selected INTEGER)');
+															+ 'selected INTEGER,'
+															+ 'warnCalender INTEGER DEFAULT 1)');
 		tx.executeSql ('CREATE TABLE IF NOT EXISTS lijsten(id INTEGER PRIMARY KEY ASC,'
 															+ 'apotheekID TEXT,'					// AGB code van de apotheek
 															+ 'apotheek TEXT,'
@@ -58,6 +58,7 @@ function initTables (db)
 															+ 'eigen INTEGER,'						// Deze hebt u buiten de lijst om zelf toegevoegd
 															+ 'nDosis INTEGER,'						// in deze hoeveelheid (verwerkbaar)
 															+ 'dosis TEXT)');						// in deze hoeveelheid (tekstueel)
+		saveSetting ('dbVersion', '1');
 	}, function (tx)
 	{
 	},

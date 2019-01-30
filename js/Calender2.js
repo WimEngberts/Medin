@@ -249,6 +249,7 @@ function addToCalender (listID, regel)
 				var n25 = nhg25 (medicatie['nhg25']);
 				szHTML += n25['omschrijving'];
 				div.innerHTML = szHTML;
+				div.style.backgroundColor = '#c7e0ff';
 				
 				tx.executeSql ('SELECT * FROM tijden WHERE personID=' + g_Person, [], function (tx, results)
 				{

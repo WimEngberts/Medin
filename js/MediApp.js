@@ -303,6 +303,12 @@ function editPerson (id)
 				{
 					addEnterListener(indiEnter);
 					addBackListener (indiBack);
+					setVisibility ('individualCover', true);
+					setVisibility ('individual', true);
+					setVisibility ('back', false);
+					document.getElementById ('individualCover').style.opacity = '0.4';
+					setVisibility ('plus', false);
+					individual.style.opacity = '1';
 					var date = new Date (row['gebJaar'], (row['gebMaand']-1), row['gebDag'], 5, 5, 5, 5)
 					var day = date.getDate();
 					if(day<10){ day="0"+day;}
@@ -314,14 +320,12 @@ function editPerson (id)
 					individual.setAttribute ('data-new', 0);
 					document.getElementById ('indiNaam').value = row['naam'];
 					document.getElementById ('indiGeboren').value = dateString;
+					if (row['warnCalender'])
+						document.getElementById ('indiKalender').className = 'xSelected';
+					else
+						document.getElementById ('indiKalender').className = 'xUnselected';
 					document.getElementById ('individualText').innerHTML = '<b>wijzigen gegevens</b>';
 					document.getElementById ('individualButton').setAttribute ('onmouseup', 'indiOK (' + row['id'] + ',0);');
-					setVisibility ('individualCover', true);
-					setVisibility ('individual', true);
-					setVisibility ('back', false);
-					document.getElementById ('individualCover').style.opacity = '0.4';
-					setVisibility ('plus', false);
-					individual.style.opacity = '1';
 				}
 			}
 		}), function (tx, error)
@@ -388,6 +392,7 @@ function plus ()
 		document.getElementById ('indiGeboren').disabled = false;
 		document.getElementById ('individualButton').setAttribute ('onmouseup', 'indiOK (-1,0);');
 		document.getElementById ('indiNaam').focus();
+		document.getElementById ('indiKalender').className = 'xSelected';
 		individual.setAttribute ('data-id', -1);
 		individual.setAttribute ('data-new', 0);
 		setVisibility ('back', false);
@@ -575,6 +580,15 @@ function jsonCancel ()
 	setVisibility ('askJSON', false);
 }
 
+function clickKalender ()
+{
+	var k = document.getElementById ('indiKalender');
+	if (k.className == 'xSelected')
+		k.className = 'xUnselected';
+	else
+		k.className = 'xSelected';
+}
+
 function indiOK (id, qr)
 {
 	var individual;
@@ -583,6 +597,10 @@ function indiOK (id, qr)
 	globalNaam = document.getElementById ('indiNaam').value;
 	geboren    = document.getElementById ('indiGeboren').value;
 	globalDate = new Date (geboren);
+	if (document.getElementById ('indiKalender').className == 'xUnselected')
+		g_bWarnAboutList = false;
+	else
+		g_bWarnAboutList = true;
 	globalID   = id;
 
 	if (geboren == '')
@@ -601,7 +619,7 @@ function indiOK (id, qr)
 		var sqlStatement;
 
 		if (globalID == -1)
-			sqlStatement = 'INSERT INTO person (naam, gebJaar, gebMaand, gebDag) VALUES (\'' + globalNaam + '\', ' + globalDate.getFullYear() + ', ' + (globalDate.getMonth()+1) + ', ' + globalDate.getDate () + ')';
+			sqlStatement = 'INSERT INTO person (naam, gebJaar, gebMaand, gebDag, warnCalender) VALUES (\'' + globalNaam + '\', ' + globalDate.getFullYear() + ', ' + (globalDate.getMonth()+1) + ', ' + globalDate.getDate () + ', ' + g_bWarnAboutList + ')';
 		else
 			sqlStatement = 'UPDATE person SET naam = \'' + globalNaam + '\', gebJaar = ' + globalDate.getFullYear() + ', gebMaand = ' + (globalDate.getMonth()+1) + ', gebDag = ' + globalDate.getDate() + ' WHERE id = ' + globalID;
 

@@ -44,6 +44,7 @@ function fillCalender ()
 			if (results.rows.length > 0)
 			{
 				row = results.rows.item(0);
+				g_bWarnAboutList = row['warnCalender'];
 				document.getElementById ('listHeader').innerHTML = '<b>Medicijn kalender van ' + row['naam'] + '</b>';
 				currentUser = row['naam'];
 				globalID = row['id'];

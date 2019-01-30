@@ -20,7 +20,7 @@ function onDeviceReady()
 	
 //	alert ('The device is ready');
 
-	db = window.openDatabase("MediList.db", "1.0", "MediList", 200000);
+	db = window.openDatabase("Medin.db", "1.0", "Medin", 200000);
 	if (db)
 	{
 		initTables (db);

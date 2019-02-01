@@ -517,3 +517,9 @@ function formatTijd (d)
 
 	return r;
 }
+
+function sendYes()
+{
+	document.getElementById('id_confrmdiv').style.display="none"; //this is the replace of this line
+
+};

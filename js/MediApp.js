@@ -930,7 +930,7 @@ function addMedicationList ()
 	if (   !apotheekID
 		|| !date)
 	{
-		myAlert ('Geen geldig medApp bestand ontvangen (3)');
+		myAlert ('Geen geldig Medin bestand ontvangen (3)');
 		return ;
 	}
 
@@ -964,7 +964,7 @@ function addMedicationList ()
 		tx.executeSql (sqlStatement, [], function (tx, results)
 		{
 			var verder = true;
-			if (results.length > 0)
+			if (results.rows.length > 0)
 				verder = confirm ('Deze medicatielijst lijkt al aanwezig te zijn. Wilt u deze lijst toch toevoegen?');
 			if (verder)
 			{
@@ -996,6 +996,8 @@ function addMedicationList ()
 				{
 				});
 			}
+			else
+				log ('This list already exists; do not import');
 		}, function (tx, error)
 		{
 			alert ('er is een fout opgetreden\r\n' + error.message);

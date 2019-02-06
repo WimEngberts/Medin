@@ -13,6 +13,9 @@ function initTables (db)
 															+ 'gebDag INTEGER,'
 															+ 'selected INTEGER,'
 															+ 'warnCalender INTEGER DEFAULT 1)');
+	});
+	db.transaction (function (tx)
+	{
 		tx.executeSql ('CREATE TABLE IF NOT EXISTS lijsten(id INTEGER PRIMARY KEY ASC,'
 															+ 'apotheekID TEXT,'					// AGB code van de apotheek
 															+ 'apotheek TEXT,'
@@ -21,6 +24,9 @@ function initTables (db)
 															+ 'listJaar INTEGER,'
 															+ 'patient INTEGER,'
 															+ 'listTijd TEXT)');
+	});
+	db.transaction (function (tx)
+	{
 		tx.executeSql ('CREATE TABLE IF NOT EXISTS medicatie  (lijst INTEGER,'						// interne lijst ID
 															+ 'regel INTEGER,'						// intern regelnummer
 															+ 'uuid TEXT,'							// medicatie ID van het apotheeksysteem
@@ -45,30 +51,27 @@ function initTables (db)
 															+ 'text4 TEXT,'							// 1 maal per dag 2 tabletten Kuur afmaken<br/>Eerst uiteen laten vallen in water
 															+ 'text5 TEXT,'
 															+ 'nhg25 TEXT)');						// inname gecodeerd
+	});
+	db.transaction (function (tx)
+	{
 		tx.executeSql ('CREATE TABLE IF NOT EXISTS tijden     (personID INTEGER,'					// Iedere gebruiker z'n eigen lijst
 															+ 'tijdID INTEGER PRIMARY KEY ASC,'		// Het tijdstip ID
 															+ 'tijdNaam TEXT,'						// De naam (ontbijt, lunch, etc)
 															+ 'periodiciteit TEXT,'					// Periodiciteit (dag, week, etc)
 															+ 'tijdStip TEXT)');					// Het bijbehorende tijdstip (hh:mm)
+	});
+	db.transaction (function (tx)
+	{
 		tx.executeSql ('CREATE TABLE IF NOT EXISTS inname     (personID INTEGER,'					// Iedere gebruiker z'n eigen lijst
 															+ 'tijdID INTEGER,'						// op dit tijdStip
-															+ 'sequence INTEGER PRIMARY KEY ASC,'	// unieke ID
 															+ 'prk TEXT,'							// neemt u dit medicijn
 															+ 'naam TEXT,'							// De naam van het medicijn
 															+ 'eigen INTEGER,'						// Deze hebt u buiten de lijst om zelf toegevoegd
 															+ 'nDosis INTEGER,'						// in deze hoeveelheid (verwerkbaar)
-															+ 'dosis TEXT)');						// in deze hoeveelheid (tekstueel)
-		saveSetting ('dbVersion', '1');
-	}, function (tx)
-	{
-	},
-	function (tx, error)
-	{
-//		alert ('er is een fout opgetreden\r\n' + error.message);
-	}, function ()							// Succes. Hoeven we niet meer te melden
-	{
-//		alert ('tables created');
+															+ 'dosis TEXT,'							// in deze hoeveelheid (tekstueel)
+															+ 'UNIQUE (personID, tijdID, prk))');	// Deze combi moet uniek zijn. Niet tweemaal hetzelfde medicijn op dezelfde tijd
 	});
+	saveSetting ('dbVersion', '1');
 }
 
 //-------------------------------------------------------------------------------------
@@ -150,6 +153,7 @@ function showListStep2 (db, id)
 //
 function showListStep3 (db, id)
 {
+
 	db.transaction(function(tx)
 	{
 		tx.executeSql('SELECT * FROM medicatie WHERE lijst = ' + id, [], function (tx, results)

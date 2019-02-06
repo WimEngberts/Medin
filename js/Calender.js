@@ -28,7 +28,7 @@ function fillCalender ()
 	var div;
 	var action;
 	var colorName;
-	
+
 	calender = document.getElementById ('kalender');
 	div = calender.getElementsByClassName ('listLine');
 	var i = div.length;
@@ -205,6 +205,7 @@ function editTijd (personID, rowID)
 				var stip = document.getElementById ('tijdStip');
 				stip.setAttribute ('data-person', '' + row['personID']);
 				stip.setAttribute ('data-stip', '' + row['tijdID']);
+				stip.setAttribute ('data-first', 'true');
 				openTijdstip (false);
 			}
 		}), function (tx, error)
@@ -219,35 +220,44 @@ function editTijd (personID, rowID)
 function fillCalenderStep3 (personID)
 {
 
+
 	db.transaction(function(tx)
 	{
 		tx.executeSql('SELECT * FROM inname WHERE personID = '+ personID, [], function (tx, results)
 		{
+			calender = document.getElementById ('kalender');
+			var tijden = calender.getElementsByClassName ('tijdLine');
+
 			for (var i = 0; i < results.rows.length; i++)
 			{
 				row = results.rows.item(i);
-				var tijden = calender.getElementsByClassName ('tijdLine');
-				for (var i = 0; i < tijden.length; i++)
+				for (var j = 0; j < tijden.length; j++)
 				{
-					tijd = tijden[i].getAttribute ('data-tijd');
-					if (tijd == row['tijdID'])
+					var tijd = tijden[j];
+					var datatijd = tijd.getAttribute ('data-tijd');
+					if (datatijd == row['tijdID'])
 					{
-						tx.executeSql('SELECT * FROM medicatie WHERE lijst = ' + lijst + ' AND prk = ' + row['prk'], [], function (tx, results)
-						{
-							if (results.length > 0)
-							{
-								var szHTML = tijd.innerHTML;
-								szHTML += '<br />&nbsp;&nbsp;';
-								szHTML += results.rows.item(0)['dispensedMedicationName'];
-								tijd.innerHTML = szHTML;
-							}
-						}), function (tx, error)
-						{
-							alert ('er is een fout opgetreden\r\n' + error.message);
-						}, function ()
-						{
-						};
+						var szHTML = tijd.innerHTML;
+						var first = tijd.getAttribute ('data-first');
+						if (first == 'true')
+							szHTML += '<ul>';
+						szHTML += '<li style="padding-left:15px;">';
+						szHTML += row['naam'];
+						szHTML += '</li>';
+						tijd.innerHTML = szHTML;
+						tijd.setAttribute ('first', 'false');
 					}
+				}
+			}
+			for (var j = 0; j < tijden.length; j++)
+			{
+				var tijd = tijden[j];
+				var first = tijd.getAttribute ('first');
+				if (first == 'false');
+				{
+					var szHTML = tijd.innerHTML;
+					szHTML += '</ul>';
+					tijd.innerHTML = szHTML;
 				}
 			}
 			setFontSizes ();

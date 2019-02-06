@@ -1077,7 +1077,7 @@ function importOverzicht (id, lijst)
 			if (medicijn.hpk)
 				zi = medicijn.hpk;
 			if (medicijn.prk)
-				zi = medicijn.prk;
+				prk = medicijn.prk;
 			if (medicijn.dispensedMedicationName)
 				dispensedMedicationName = medicijn.dispensedMedicationName;
 			if (medicijn.guidanceText)

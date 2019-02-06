@@ -1,15 +1,18 @@
 var g_Medicatie = null;
 var g_Person;
 var g_ThingsToDo = false;
+var g_Innames;
 
 //---------------------------------------------------------------------------------------------------------------
 // Check of een lijst al volledig is verdeeld in de kalender
 //
-function checkListInCalender ()
+function checkListInCalendar ()
 {
 
 	globalID = -1;
 	g_Medicatie = null;
+
+	showMenu (0);								// menu mag weer even weg (als het er al stond)
 
 	db.transaction(function(tx)
 	{
@@ -28,6 +31,10 @@ function checkListInCalender ()
 			// ----------------------------------------------------------------------------------------------------
 			// Is er geen geselecteerde persoon, dan doen we dus niets
 			//
+			else
+			{
+				myAlert ('Er is nog geen geselecteerde gebruiker gevonden');
+			}
 		}), function (tx, error)
 		{
 			alert ('er is een fout opgetreden\r\n' + error.message);
@@ -96,6 +103,7 @@ function checkListInCalenderStep3 (userID, listID)
 			{
 				tx.executeSql('SELECT * FROM inname WHERE personID = ' + g_Person, [], function (tx, results)
 				{
+					var szHTML = '';
 					for (var m = 0; m < g_Medicatie.length; m++)
 					{
 						var medicatie = g_Medicatie.item(m);
@@ -119,52 +127,17 @@ function checkListInCalenderStep3 (userID, listID)
 							}
 						}
 						if (f)
-						{
-							if (hTot == 0)										// We hebben één vast aantal malen te gaan
-							{
-								if (n < hVan)									// maar we hebben er minder gevonden, dus we zijn er nog niet
-									medicatie['distributed'] = -1;
-								else if (n == hVan)								// Nee joh, we hebben er precies genoeg!
-									medicatie['distributed'] = 0;
-								else											// En anders zijn we hier een beetje aan het overdoseren!
-									medicatie['distributed'] = 1;
-							}
-							else												// We hebben een van-tot situatie
-							{
-								if (n < hVan)									// maar we hebben er minder gevonden, dus we zijn er nog niet
-									medicatie['distributed'] = -1;
-								else if (   n >= hVan							// Nee joh, we hebben er genoeg!
-										 && n <= hTot)							// En ook niet meer dan het maximum
-									medicatie['distributed'] = 0;
-								else											// En anders zijn we hier een beetje aan het overdoseren!
-									medicatie['distributed'] = 1;
-							}
-						}
-						if (medicatie['distributed'] != 0)					// Niet helemaal goed dus nog
-						{
-							var table = document.getElementById ('distriTable');
-							var tr = document.createElement ('tr');
-							var td = document.createElement ('td');
-							var szHTML = '<b>' + medicatie['dispensedMedicationName'] + '</b><br />';
-							var n25 = nhg25 (medicatie['nhg25']);
-							
-							tr.setAttribute ('onmouseup', 'addToCalender (' + listID + ', ' + medicatie['regel'] + ');');
-							szHTML += n25['omschrijving'];
-							td.innerHTML = szHTML;
-							tr.appendChild (td);
-							td = document.createElement ('td');
-							td.className = 'distriStatus large';
-							if (medicatie['distributed'] == -2)			// Nog helemaal niet gezien
-								td.innerHTML = 'Nog niet in kalender';
-							else if (medicatie['distributed'] == -1)	// Te weinig gezien
-								td.innerHTML = 'Niet voldoende in kalender';
-							else										// Blijft over: 1 = teveel gezien
-								td.innerHTML = 'Teveel in kalender';
-							tr.appendChild (td);
-							table.appendChild (tr);
-							setVisibility ('distriCover', true);
-							setVisibility ('notDistributed', true);
-						}
+							medicatie['distributed'] = 1;
+						else
+							medicatie['distributed'] = 0;
+						szHTML += '<tr onmouseup=\"addToCalendar (' + medicatie['lijst'] + ', ' + medicatie['regel'] + ');\">';
+						szHTML += '<td><b>' + medicatie['dispensedMedicationName'] + '</b><br />';
+						szHTML += n25['omschrijving'] + '</td><td class=\"tdright\">';
+						if (f)
+							szHTML += 'wijzigen';
+						else
+							szHTML += 'toevoegen';
+						szHTML += '</td></tr>';
 					}
 					for (var i=0; i < results.rows.length; i++)							// Nu even omgekeerd. Hebt u niet teveel in de kalender?
 					{
@@ -180,29 +153,14 @@ function checkListInCalenderStep3 (userID, listID)
 							}
 							if (!f)														// Nee, die staat niet meer in de lijst!
 							{
-								var table = document.getElementById ('distriTable');
-								var tr = document.createElement ('tr');
-								var td = document.createElement ('td');
-								td.innerHTML = '<b>' + row['naam'] + '</b>';
-								tr.setAttribute ('onmouseup', 'deleteFromCalender (' + row['personID'] + ',' + row['tijdID'] + ',' + row['sequence'] + ');');
-								szHTML += n25['omschrijving'];
-								td.innerHTML = szHTML;
-								tr.appendChild (td);
-								td = document.createElement ('td');
-								td.className = 'distriStatus large';
-								if (medicatie['distributed'] == -2)			// Nog helemaal niet gezien
-									td.innerHTML = 'Nog niet in kalender';
-								else if (medicatie['distributed'] == -1)	// Te weinig gezien
-									td.innerHTML = 'Niet voldoende in kalender';
-								else										// Blijft over: 1 = teveel gezien
-									td.innerHTML = 'Teveel in kalender';
-								tr.appendChild (td);
-								table.appendChild (tr);
-								setVisibility ('distriCover', true);
-								setVisibility ('notDistributed', true);
+								szHTML += '<tr onmouseup=\"deleteFromCalendar (' + row['personID'] + ',' + row['tijdID'] + ',' + row['sequence'] + ');\">';
+								szHTML += '<td><b>' + row['naam'] + '</b><br />';
+								var n25 = nhg25 (row['nhg25']);
+								szHTML += n25['omschrijving'] + '</td><td>verwijderen</td></tr>';
 							}
 						}
 					}
+					createList ('lijssie', 'medicatie in wekker', szHTML, onCloseCheck, null, true);
 				}), function (tx, error)
 				{
 					alert ('er is een fout opgetreden\r\n' + error.message);
@@ -217,6 +175,11 @@ function checkListInCalenderStep3 (userID, listID)
 		{
 		};
 	});
+}
+
+function onCloseCheck (div)
+{
+	fillCalender ();
 }
 
 function distriCancel ()
@@ -231,7 +194,7 @@ function addCancel ()
 	setVisibility ('addMedicin', false);
 }
 
-function addToCalender (listID, regel)
+function addToCalendar (listID, regel)
 {
 	db.transaction(function(tx)
 	{
@@ -243,49 +206,58 @@ function addToCalender (listID, regel)
 			}
 			else
 			{
-				var medicatie = results.rows.item(0);
-				var div = document.getElementById ('addDescription');
-				var szHTML = '<b>' + medicatie['dispensedMedicationName'] + '</b><br />';
-				var n25 = nhg25 (medicatie['nhg25']);
-				szHTML += n25['omschrijving'];
-				div.innerHTML = szHTML;
-				div.style.backgroundColor = '#c7e0ff';
-				
-				tx.executeSql ('SELECT * FROM tijden WHERE personID=' + g_Person, [], function (tx, results)
+				g_Medicatie = results.rows.item(0);
+				tx.executeSql ('SELECT * FROM inname WHERE personID=' + g_Person + ' AND prk=\'' + g_Medicatie['prk'] + '\'', [], function (tx, results)
 				{
-					var mother = document.getElementById ('addBody');
-					var i = mother.length;
+					var title = '<b>' + g_Medicatie['dispensedMedicationName'] + '</b><br />';
+					var n25 = nhg25 (g_Medicatie['nhg25']);
+					title += n25['omschrijving'];
+					g_Innames = results.rows;
 
-					while (i-- > 0)										// verwijder alle regels uit een eventuele huidige lijst
-						mother.removeChild (div[i]);
-					var colorName = 'grey';
-					for (var i = 0; i < results.rows.length; i++)
+					tx.executeSql ('SELECT * FROM tijden WHERE personID=' + g_Person, [], function (tx, results)
 					{
-						var tijd = results.rows.item (i);
-						var row = document.createElement ('div');
-						row.className = 'addRow ' + colorName;
-						row.innerHTML = tijd['tijdNaam'];
-
-						action = document.createElement ('div');
-						action.className = 'timeUnselected ' + colorName;
-						action.setAttribute('onmouseup', 'selectTime(' + tijd['tijdID'] + ');');
-						row.appendChild (action);
-
-						mother.appendChild (row);
-						if (colorName == 'grey')
-							colorName = 'white';
-						else
-							colorName = 'grey';
-					}
+						var colorName = 'grey';
+						var szHTML = '';
+						var n = 0;
+						for (var i = 0; i < results.rows.length; i++)
+						{
+							var tijd = results.rows.item (i);
+							var f = false;
+							for (var j=0; j<g_Innames.length; j++)
+							{
+								if (g_Innames[j]['tijdID'] == tijd['tijdID'])
+									f = true;
+							}
+							szHTML += '<div class=\"addRow ' + colorName + '\">';
+							szHTML += tijd['tijdNaam'];
+							szHTML += '<div id=\"time' + n + '\" class=\"';
+							if (f)
+								szHTML += 'timeSelected ';
+							else
+								szHTML += 'timeUnselected ';
+							szHTML += 'timeline\" onmouseup=\"selectTime(\'time' + n + '\');\" data-tijd=\"' + tijd['tijdID'] + '\"></div></div>';
+							n++;
+							if (colorName == 'grey')
+								colorName = 'white';
+							else
+								colorName = 'grey';
+						}
+						var div = createList ('toevoegen', title, szHTML, closeAddAlarm, cancelAlarm, false);
+						div.setAttribute ('data-user', g_Person);
+						div.setAttribute ('data-prk',  g_Medicatie['prk']);
+						div.setAttribute ('data-naam', g_Medicatie['dispensedMedicationName']);
+					}), function (tx, error)
+					{
+						alert ('er is een fout opgetreden\r\n' + error.message);
+					}, function ()
+					{
+					};
 				}), function (tx, error)
 				{
 					alert ('er is een fout opgetreden\r\n' + error.message);
 				}, function ()
 				{
 				};
-
-				setVisibility ('addCover', true);
-				setVisibility ('addMedicin', true);
 			}
 		}), function (tx, error)
 		{
@@ -294,4 +266,53 @@ function addToCalender (listID, regel)
 		{
 		};
 	});
+}
+
+function selectTime (tijdID)
+{
+	var div = document.getElementById (tijdID);
+	if (div)
+	{
+		if (div.className == 'timeUnselected timeline')
+			div.className = 'timeSelected timeline';
+		else
+			div.className = 'timeUnselected timeline';
+	}
+}
+
+function closeAddAlarm (div)
+{
+
+	db.transaction(function(tx)
+	{
+		var personID = div.getAttribute ('data-user');
+		var naam = div.getAttribute ('data-naam');
+		var prk = div.getAttribute ('data-prk');
+		var sqlStatement = '';
+
+		var tijden = document.getElementsByClassName ('timeline');
+		for (var i = 0; i < tijden.length; i++)
+		{
+			var tijd = tijden[i];
+			var id = tijd.getAttribute ('data-tijd');
+
+			if (tijd.className == 'timeSelected timeline')
+				sqlStatement =   'INSERT OR IGNORE INTO inname (personID,tijdID,prk,naam,eigen,nDosis,dosis) VALUES(' + personID + ',' + id + ',\'' + prk + '\',\'' + naam + '\',0,1,\'1\')';
+			else
+				sqlStatement = 'DELETE FROM inname WHERE personID=' + personID + ' AND tijdID=' + id + ' AND prk=\'' + prk + '\'';
+
+			tx.executeSql(sqlStatement, [], function (tx, results)
+			{
+			}), function (tx, error)
+			{
+				alert ('er is een fout opgetreden\r\n' + error.message);
+			}, function ()
+			{
+			};
+		}
+	});
+}
+
+function cancelAlarm ()
+{
 }

@@ -124,16 +124,16 @@ function isDeviceReady ()
 //
 function Cover (szName, bRespond)
 {
-    
-    elemCover = document.createElement ('div');
-        
-    elemCover.style.cssText = 'position:absolute;left:0px;right:0px;top:0px;bottom:0px;opacity:0.2;background:#000;';
-    elemCover.id = '__brCover'+szName;
-    elemCover.style.transition = 'opacity 0.5s ease';
-    elemCover.style.webkitTransition = 'opacity 0.5s ease';
+
+	elemCover = document.createElement ('div');
+
+	elemCover.style.cssText = 'position:absolute;left:0px;right:0px;top:0px;bottom:0px;opacity:0.2;background:#000;';
+	elemCover.id = '__brCover'+szName;
+	elemCover.style.transition = 'opacity 0.5s ease';
+	elemCover.style.webkitTransition = 'opacity 0.5s ease';
 	if (bRespond)
 		elemCover.onclick = 'closemenu();';
-    document.body.appendChild (elemCover);
+	document.body.appendChild (elemCover);
 }
 
 //------------------------------------------------------------------------------------------------------
@@ -249,8 +249,8 @@ function showPrescription (szHeader, szText)
 	elemWrapper.style.webkitTransition = 'opacity 0.5s ease';
 	elemDiv = document.createElement ('div');
 	elemDiv.style.cssText = 'position:relative;width:100%;height:auto;padding-top:10px;padding-bottom:10px;border-bottom:solid 1px #afafaf;font-family:calibri, helvetica, sans-serif;'
-						  + 'font-size:large;text-align:left;color:#000000;background-color:#ffffff;padding-left:15px;border-radius:20px 20px 0 0;';
-	elemDiv.innerHTML = szHeader;
+						  + 'font-size:large;text-align:left;color:#000000;background-color:#c7e0ff;padding-left:15px;border-radius:20px 20px 0 0;border-bottom:solid 1px #a0a0a0;';
+	elemDiv.innerHTML = '<b>' + szHeader + '</b>';
 	elemWrapper.appendChild (elemDiv);
 	elemText = document.createElement ('div');
 	elemText.id = '__brAlertText';
@@ -324,6 +324,27 @@ function onClickOK (szName)
 	var elemCover = document.getElementById ('__brCover'+szName);
 	var elemWrapper = document.getElementById (szName);
 
+	if (elemWrapper)
+	{
+		elemWrapper.style.opacity = '0';
+		elemWrapper.style.mozOpacity = '0';
+		if (elemCover)
+		{
+			elemCover.style.opacity = '0';
+			elemCover.style.mozOpacity = '0';
+		}
+		setTimeout(function() { closeAll (szName); }, 500);
+	}
+}
+
+function onCloseList (szName, callback)
+{
+
+	var elemCover = document.getElementById ('__brCover'+szName);
+	var elemWrapper = document.getElementById (szName);
+
+	if (callback != null)
+		callback (elemWrapper);
 	if (elemWrapper)
 	{
 		elemWrapper.style.opacity = '0';
@@ -518,8 +539,102 @@ function formatTijd (d)
 	return r;
 }
 
-function sendYes()
+function createList (name, title, szText, callback, cancelCallback, bInTable)
 {
-	document.getElementById('id_confrmdiv').style.display="none"; //this is the replace of this line
 
-};
+	var elemWrapper;
+	var elemDiv;
+	var elemText;
+	var szHTML = '';
+	var fontSize = 'small';
+
+	if (isLargeFont ())
+		fontSize = 'medium';
+
+	showMenu (0);
+	Cover (name, true);								// onderliggende tekst even bedekken
+	elemWrapper = document.createElement ('div');		// wrapper voor alles
+	elemWrapper.id = name;								// met deze ID. Kunnen we hem straks bij de OK knop terugvinden om weg te gooien
+	elemWrapper.style.cssText = 'position:absolute;width:92%;top:50%;left:50%;height:auto;background-color:#ffffff;padding:0;opacity:0;-moz-opacity:0;-khtml-opacity:0;overflow:hidden;border-radius: 20px;';
+	elemWrapper.style.transition = 'opacity 0.5s ease';
+	elemWrapper.style.webkitTransition = 'opacity 0.5s ease';
+	elemDiv = document.createElement ('div');
+	elemDiv.style.cssText = 'position:relative;width:100%;height:auto;padding-top:10px;padding-bottom:10px;border-bottom:solid 1px #afafaf;font-family:calibri, helvetica, sans-serif;'
+						  + 'font-size:large;text-align:left;color:#000000;background-color:#c7e0ff;padding-left:15px;border-radius:20px 20px 0 0;border-bottom:solid 1px #a0a0a0;';
+	elemDiv.innerHTML = title;
+	elemWrapper.appendChild (elemDiv);
+	elemText = document.createElement ('div');
+	elemText.id = '__text' + name;
+	elemText.style.cssText = 'position:relative;left:0px;right:0px;height:auto;padding-top:15px;padding-bottom:20px;border-bottom:solid 1px #afafaf;font-family:calibri, helvetica, sans-serif;'
+						  + 'text-align:left;color:#000000;background-color:#ffffff;padding-left:15px;padding-right:15px;';
+	if (bInTable)
+		szHTML  = '<table class=\"tabclass\">';
+	szHTML += szText;
+	if (bInTable)
+		szHTML += '</table>';
+	elemText.innerHTML = szHTML;
+	elemWrapper.appendChild (elemText);
+	elemDiv = document.createElement ('div');
+	elemDiv.style.cssText = 'position:relative;width:100%;height:40px;padding:0;border-bottom:solid 1px #afafaf;background-color:#ffffff;border-radius:0 0 20px 20px;';
+	elemWrapper.appendChild (elemDiv);
+	var elemButton = document.createElement ('div');
+	if (cancelCallback)
+	{
+		elemButton.style.cssText = 'position:absolute;left:0px;width:50%;height:100%;padding:0;font-family:calibri, helvetica, sans-serif;padding-top:10px;padding-bottom:10px;'
+							     + 'font-size:medium;text-align:center;color:#000000;background-color:#ffffff;border-radius:0 0 20px 0px;';
+	}
+	else
+	{
+		elemButton.style.cssText = 'position:absolute;width:100%;height:100%;padding:0;font-family:calibri, helvetica, sans-serif;padding-top:10px;padding-bottom:10px;'
+							  + 'font-size:medium;text-align:center;color:#000000;background-color:#ffffff;border-radius:0 0 20px 20px;';
+	}
+	elemButton.onclick = function () { onCloseList (name, callback); };
+	elemButton.innerHTML = '<b>OK</b>';
+	elemButton.onmouseover = function ()
+	{
+		this.style.backgroundColor = '#afafaf';
+	};
+	elemButton.onmouseout = function ()
+	{
+		this.style.backgroundColor = '#ffffff';
+	};
+	elemDiv.appendChild (elemButton);
+	if (cancelCallback)
+	{
+		elemButton = document.createElement ('div');
+		elemButton.style.cssText = 'position:absolute;width:50%;right:0px;height:100%;padding:0;border-left:solid 1px #afafaf;font-family:calibri, helvetica, sans-serif;padding-top:10px;padding-bottom:10px;'
+							  + 'font-size:medium;text-align:center;color:#000000;background-color:#ffffff;border-radius:0 0 20px 20px;';
+		elemButton.onclick = function () { onCloseList (name, cancelCallback); };
+		elemButton.innerHTML = '<b>Cancel</b>';
+		elemButton.onmouseover = function ()
+		{
+			this.style.backgroundColor = '#afafaf';
+		};
+		elemButton.onmouseout = function ()
+		{
+			this.style.backgroundColor = '#ffffff';
+		};
+		elemDiv.appendChild (elemButton);
+	}
+
+	elemWrapper.style.opacity = '1';
+	elemWrapper.style.mozOpacity = '1';
+	elemWrapper.style.khtmlOpacity = '1';
+
+	document.body.appendChild (elemWrapper);
+
+	var td = elemText.getElementsByTagName ('td');
+	for (var i = 0; i < td.length; i++)
+		td[i].style.fontSize = fontSize;
+
+	var vWidth  = elemWrapper.offsetWidth;
+	var vHeight = elemWrapper.offsetHeight;
+	vWidth = parseInt (vWidth/2, 10);
+	vHeight = parseInt (vHeight/2, 10);
+	elemWrapper.style.marginLeft = '-' + vWidth + 'px';
+	elemWrapper.style.marginTop = '-' + vHeight + 'px';
+	addEnterListener (onEnterPrescription);
+	addBackListener (onBackPrescription);
+	
+	return elemWrapper;
+}

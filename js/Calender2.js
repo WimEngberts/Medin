@@ -214,7 +214,7 @@ function addToCalendar (listID, regel)
 					title += n25['omschrijving'];
 					g_Innames = results.rows;
 
-					tx.executeSql ('SELECT * FROM tijden WHERE personID=' + g_Person, [], function (tx, results)
+					tx.executeSql ('SELECT * FROM tijden WHERE personID=' + g_Person + ' ORDER BY tijdStip', [], function (tx, results)
 					{
 						var colorName = 'grey';
 						var szHTML = '';

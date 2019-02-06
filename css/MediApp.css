@@ -574,14 +574,14 @@ body
     background-size:30px;
 }
 
-.calender
+.calendar
 {
 	position:absolute;
 	left:10px;
 	top:9px;
 	height:30px;
 	width:30px;
-	background:transparent url('../img/calender.png') center no-repeat;
+	background:transparent url('../img/calendar.png') center no-repeat;
 	background-size:30px;
 }
 
@@ -1173,3 +1173,29 @@ body
 	background-size:40px;
 }
 
+.xUnselected
+{
+	height:40px;
+	width:40px;
+	background:url('../img/unselected2.png') center no-repeat;
+	background-size:40px;
+}
+
+.xSelected
+{
+	height:40px;
+	width:40px;
+	background:url('../img/selected2.png') center no-repeat;
+	background-size:40px;
+}
+
+.tabclass
+{
+	width:96%;
+	left:2%;
+}
+
+.tdright
+{
+	text-align: right;
+}

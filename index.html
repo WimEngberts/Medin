@@ -27,6 +27,7 @@
 	<script type="text/javascript" src="js/Calender.js"></script>
 	<script type="text/javascript" src="js/Calender2.js"></script>
 	<script type="text/javascript" src="js/lijsten.js"></script>
+	<script type="text/javascript" src="js/pincode.js"></script>
 	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
 <!--	<script type="text/javascript" src="js/jquery.js"></script>
 	<script type="text/javascript" src="js/jquery.mobile-1.0rc1.min.js"></script> -->
@@ -216,39 +217,6 @@
 		</div>
 
 		<!--
-			In dit stukje worden de medicijnen getoond die nog niet in de kalender zijn opgenomen
-		-->
-		<div id="distriCover"></div>
-		<div id="notDistributed">
-			<div class="individualHeader popHeader"><div><b>Nog te distribueren</b></div>
-				<div class="individualClose" onmouseup="distriCancel();"></div>
-			</div>
-			<div id="distriBody" class="large">
-				<table id="distriTable">
-				</table>
-			</div>
-			<div class="okWrap">
-				<div class="ok2 button" onmouseup="distriCancel ();"><b>OK</b></div>
-			</div>
-		</div>
-
-		<!--
-			In dit stukje kunnen medicijnen aan de kalender worden toegevoegd
-		-->
-		<div id="addCover"></div>
-		<div id="addMedicin">
-			<div class="individualHeader popHeader"><div><b>Voeg toe aan kalender</b></div>
-				<div class="individualClose" onmouseup="addCancel();"></div>
-			</div>
-			<div id="addDescription" class="standard"></div>
-			<div id="addBody" class="standard">
-			</div>
-			<div class="okWrap">
-				<div class="ok2 button" onmouseup="addOK ();"><b>OK</b></div>
-			</div>
-		</div>
-
-		<!--
 			Hier komt het menu. Dit moet helemaal onderaan blijven om te zorgen dat het overal overheen kan
 		 -->
 		<div id="menuCover" onclick="showMenu (0);"></div>
@@ -257,7 +225,12 @@
 			<div id="allLists" class="divMenu large" onclick="showAllLists();"><div id="allListsImg"></div>Toon alle lijsten</div>
 			<div class="divMenu large" onclick="showPersons();"><div class="person"></div>Gebruikers</div>
 			<div class="divMenu large" onclick="showConfig();"><div class="settings"></div>Instellingen</div>
-			<div class="divMenu large" onclick="checkListInCalendar ();"><div class="calendar"></div>Wekker controle</div>
+			<div class="divMenu large" onclick="checkListInCalendar ();"><div class="calendar"></div>Wekker instellen</div>
+		</div>
+		<!--
+			Alleen deze komt echt overal overheen. Het invoeren van d3e pincode. Dit moet eerst voordat men ook maar iets kan!
+		-->
+		<div id="pincode">
 		</div>
 	</div>
 </body>

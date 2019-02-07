@@ -84,13 +84,6 @@ function checkListInCalenderStep3 (userID, listID)
 	g_Person = userID;
 	g_ThingsToDo = false;
 
-	var table = document.getElementById ('distriTable');
-	var div = table.childNodes;
-	var i = div.length;
-
-	while (i-- > 0)										// verwijder alle regels uit een eventuele huidige lijst
-		table.removeChild (div[i]);
-
 	db.transaction(function(tx)
 	{
 		tx.executeSql('SELECT * FROM medicatie WHERE lijst = ' + listID, [], function (tx, results)

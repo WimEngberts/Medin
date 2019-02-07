@@ -62,7 +62,7 @@ function initTables (db)
 	});
 	db.transaction (function (tx)
 	{
-		tx.executeSql ('CREATE TABLE IF NOT EXISTS inname     (personID INTEGER,'					// Iedere gebruiker z'n eigen lijst
+		tx.executeSql ('CREATE TABLE IF NOT EXISTS innames    (personID INTEGER,'					// Iedere gebruiker z'n eigen lijst
 															+ 'tijdID INTEGER,'						// op dit tijdStip
 															+ 'prk TEXT,'							// neemt u dit medicijn
 															+ 'naam TEXT,'							// De naam van het medicijn
@@ -70,6 +70,10 @@ function initTables (db)
 															+ 'nDosis INTEGER,'						// in deze hoeveelheid (verwerkbaar)
 															+ 'dosis TEXT,'							// in deze hoeveelheid (tekstueel)
 															+ 'UNIQUE (personID, tijdID, prk))');	// Deze combi moet uniek zijn. Niet tweemaal hetzelfde medicijn op dezelfde tijd
+	});
+	db.transaction (function (tx)
+	{
+		tx.executeSql ('DROP TABLE IF EXISTS inname');												// Eventuele vorige versie mag weer weg nu.
 	});
 	saveSetting ('dbVersion', '1');
 }

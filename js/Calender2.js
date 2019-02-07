@@ -101,7 +101,7 @@ function checkListInCalenderStep3 (userID, listID)
 			g_Medicatie = results.rows;					// ff bewaren
 			if (g_Medicatie.length > 0)
 			{
-				tx.executeSql('SELECT * FROM inname WHERE personID = ' + g_Person, [], function (tx, results)
+				tx.executeSql('SELECT * FROM innames WHERE personID = ' + g_Person, [], function (tx, results)
 				{
 					var szHTML = '';
 					for (var m = 0; m < g_Medicatie.length; m++)
@@ -207,7 +207,7 @@ function addToCalendar (listID, regel)
 			else
 			{
 				g_Medicatie = results.rows.item(0);
-				tx.executeSql ('SELECT * FROM inname WHERE personID=' + g_Person + ' AND prk=\'' + g_Medicatie['prk'] + '\'', [], function (tx, results)
+				tx.executeSql ('SELECT * FROM innames WHERE personID=' + g_Person + ' AND prk=\'' + g_Medicatie['prk'] + '\'', [], function (tx, results)
 				{
 					var title = '<b>' + g_Medicatie['dispensedMedicationName'] + '</b><br />';
 					var n25 = nhg25 (g_Medicatie['nhg25']);
@@ -297,9 +297,9 @@ function closeAddAlarm (div)
 			var id = tijd.getAttribute ('data-tijd');
 
 			if (tijd.className == 'timeSelected timeline')
-				sqlStatement =   'INSERT OR IGNORE INTO inname (personID,tijdID,prk,naam,eigen,nDosis,dosis) VALUES(' + personID + ',' + id + ',\'' + prk + '\',\'' + naam + '\',0,1,\'1\')';
+				sqlStatement =   'INSERT OR IGNORE INTO innames (personID,tijdID,prk,naam,eigen,nDosis,dosis) VALUES(' + personID + ',' + id + ',\'' + prk + '\',\'' + naam + '\',0,1,\'1\')';
 			else
-				sqlStatement = 'DELETE FROM inname WHERE personID=' + personID + ' AND tijdID=' + id + ' AND prk=\'' + prk + '\'';
+				sqlStatement = 'DELETE FROM innames WHERE personID=' + personID + ' AND tijdID=' + id + ' AND prk=\'' + prk + '\'';
 
 			tx.executeSql(sqlStatement, [], function (tx, results)
 			{

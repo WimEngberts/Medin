@@ -32,6 +32,7 @@ function onDeviceReady()
 	else
 		alert ('no database available!');
 	setFontSizes ();
+	getPincode ();
 }
 
 function addEnterListener (listenFunction)

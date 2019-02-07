@@ -223,7 +223,7 @@ function fillCalenderStep3 (personID)
 
 	db.transaction(function(tx)
 	{
-		tx.executeSql('SELECT * FROM inname WHERE personID = '+ personID, [], function (tx, results)
+		tx.executeSql('SELECT * FROM innames WHERE personID = '+ personID, [], function (tx, results)
 		{
 			calender = document.getElementById ('kalender');
 			var tijden = calender.getElementsByClassName ('tijdLine');
@@ -319,7 +319,7 @@ function deleteStip ()
 				var stip = document.getElementById ('tijdStip');
 				dataPerson = stip.getAttribute ('data-person');
 				dataStip   = stip.getAttribute ('data-stip');
-				tx.executeSql('DELETE FROM inname WHERE personID = ' + dataPerson + ' AND tijdID = ' + dataStip, [], function (tx, results)
+				tx.executeSql('DELETE FROM innames WHERE personID = ' + dataPerson + ' AND tijdID = ' + dataStip, [], function (tx, results)
 				{
 					stipCancel ();
 					fillCalender ();

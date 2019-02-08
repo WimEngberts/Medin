@@ -37,7 +37,7 @@ function buildPincodeScreen ()
 	if (!requestedPincode || requestedPincode == '')
 		tekst.innerHTML = 'Om gebruik te maken van Medin dient u een 5-cijferige pincode te installeren';
 	else
-		tekst.innerHTML = 'Voer eerst uw 5-cijferige pincode in<br />Als u deze bent vergeten dient u de app opnieuw te installeren.';
+		tekst.innerHTML = 'Voer eerst uw 5-cijferige pincode in<br />Medlex kan uw pincode niet reproduceren. Als u uw pincode bent vergeten, kan u de app opnieuw installeren.';
 	width = div.offsetWidth;
 	width /= 3;
 	width = parseInt (width);
@@ -52,12 +52,18 @@ function buildPincodeScreen ()
 	for (var i = 12; i > 0; i--)
 	{
 		var key = document.createElement ('div');
-		key.style.cssText = 'position:absolute;left:'+ left + 'px;bottom:'+ bottom + 'px;width:' + width + 'px;height:' + height + 'px;line-height:' + height + 'px;background-color:#efefef;'
-						  + 'font-family:calibri, arial, helvetica, sans-serif;font-size:xx-large;font-weight:bold;vertical-align:center;text-align:center;display:block;color:#000000;'
-						  + 'border:solid 1px #a0a0a0;transition: all 0.5s ease;-webkit-transition: all 1s ease;';
+		key.style.left = left + 'px';
+		key.style.bottom = bottom + 'px';
+		key.style.width = width + 'px';
+		key.style.height = height + 'px';
+		key.style.lineHeight = height + 'px';
+		key.className = 'pinKeyboard';
 		if (i < 4)
 			key.style.borderTop = 'solid 4px #0152a1';
-		key.id='number' + i;
+		if (i == 12)
+			key.id = 'number-1';
+		else
+			key.id='number' + i;
 		left -= width;
 		if (left < 0)
 		{
@@ -213,10 +219,7 @@ function processPincode ()
 		else
 		{
 			saveSetting ('pincode', entered);
-			div.style.opacity = '0';
-			setVisibility ('menubutton', true)
-			div.style.mozOpacity = '0';
-			setTimeout(function() { div.style.display = 'none'; }, 500);
+			pinClear ();
 		}
 	}
 	else if (requestedPincode != entered)
@@ -236,10 +239,15 @@ function processPincode ()
 		}
 	}
 	else
-	{
-		div.style.opacity = '0';
-		div.style.mozOpacity = '0';
-		setVisibility ('menubutton', true)
-		setTimeout(function() { div.style.display = 'none'; }, 500);
-	}
+		pinClear ();
+}
+
+function pinClear ()
+{
+	var div = document.getElementById ('pincode');
+
+	div.style.opacity = '0';
+	div.style.mozOpacity = '0';
+	setVisibility ('menubutton', true)
+	setTimeout(function() { div.style.display = 'none'; }, 500);
 }

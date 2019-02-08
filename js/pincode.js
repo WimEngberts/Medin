@@ -15,10 +15,11 @@ function buildPincodeScreen ()
 	width -= 20;
 	width /= 5;
 	width = parseInt (width);
+	var requestedPincode = loadSetting ('pincode');
 	for (var i = 0; i < 5; i++)
 	{
 		var square = document.createElement ('div');
-		square.style.cssText = 'position:absolute;top:100px;left:' + left + 'px;width:'+ width + 'px; height:'+ width+ 'px;';
+		square.style.cssText = 'position:absolute;top:50px;left:' + left + 'px;width:'+ width + 'px; height:'+ width+ 'px;';
 		square.style.background = 'url(\'img/' + back + '\') center no-repeat';
 		square.style.backgroundSize = width + 'px';
 		square.id = 'square' + i;
@@ -26,6 +27,16 @@ function buildPincodeScreen ()
 		left += width;
 		back = 'pincode01.png';
 	}
+	
+	var tekst = document.getElementById ('pinTekst');
+	var vtop = 70;
+	vtop += width;
+	tekst.style.top = vtop + 'px';
+
+	if (!requestedPincode || requestedPincode == '')
+		tekst.innerHTML = 'Om gebruik te maken van Medin dient u een 5-cijferige pincode te installeren';
+	else
+		tekst.innerHTML = 'Voer eerst uw 5-cijferige pincode in<br />Als u deze bent vergeten dient u de app opnieuw te installeren.';
 	width = div.offsetWidth;
 	width /= 3;
 	width = parseInt (width);
@@ -42,7 +53,8 @@ function buildPincodeScreen ()
 		var key = document.createElement ('div');
 		key.style.cssText = 'position:absolute;left:'+ left + 'px;bottom:'+ bottom + 'px;width:' + width + 'px;height:' + height + 'px;line-height:' + height + 'px;background-color:#efefef;'
 						  + 'font-family:calibri, arial, helvetica, sans-serif;font-size:xx-large;font-weight:bold;vertical-align:center;text-align:center;display:block;color:#000000;'
-						  + 'border:solid 1px #a0a0a0;';
+						  + 'border:solid 1px #a0a0a0;transition: all 0.5s ease;-webkit-transition: all 1s ease;';
+		key.id='number' + i;
 		left -= width;
 		if (left < 0)
 		{
@@ -105,6 +117,8 @@ function buildPincodeScreen ()
 function keyPressed (key)
 {
 	key = parseInt (key);
+	var field = document.getElementById ('number' + key);
+	field.style.backgroundColor = '#efefef';
 	var div = document.getElementById ('pincode');
 	var position = div.getAttribute ('data-position');
 	var pincode = div.getAttribute ('data-pincode');
@@ -145,9 +159,82 @@ function keyPressed (key)
 		}
 		else
 		{
+			processPincode ();
+		}
+	}
+}
+
+function processPincode ()
+{
+
+	var div = document.getElementById ('pincode');
+	var entered = div.getAttribute ('data-pincode');
+	var requestedPincode = loadSetting ('pincode');
+	if (!requestedPincode || requestedPincode == '')							// OK, we zijn nu dus een nieuwe pincode aan het invoeren
+	{
+		var first = div.getAttribute ('data-first');
+		if (!first || first == '')												// OK, we hebben een eerste keer ingevoerd
+		{
+			var tekst = document.getElementById ('pinTekst');
+			var back = 'pincode03.png';
+			tekst.innerHTML = 'Voer nu ter controle uw pincode nogmaals in';
+			div.setAttribute ('data-first', entered);
+			div.setAttribute ('data-pincode', '');
+			div.setAttribute ('data-position', 0);
+			for (var i = 0; i < 5; i++)
+			{
+				var square = document.getElementById ('square' + i);
+				var width = square.offsetWidth;
+				square.style.background = 'url(\'img/' + back + '\') center no-repeat';
+				square.style.backgroundSize = width + 'px';
+				back = 'pincode01.png';
+			}
+		}
+		else if (first != entered)												// Tweede keer ongelijk aan eerste
+		{
+			var tekst = document.getElementById ('pinTekst');
+			var back = 'pincode03.png';
+			tekst.innerHTML = 'De tweede invoer was niet gelijk aan de eerste. Voer nogmaals uw pincode tweemal in.';
+			div.setAttribute ('data-first', '');
+			div.setAttribute ('data-pincode', '');
+			div.setAttribute ('data-position', 0);
+			for (var i = 0; i < 5; i++)
+			{
+				var square = document.getElementById ('square' + i);
+				var width = square.offsetWidth;
+				square.style.background = 'url(\'img/' + back + '\') center no-repeat';
+				square.style.backgroundSize = width + 'px';
+				back = 'pincode01.png';
+			}
+		}
+		else
+		{
+			saveSetting ('pincode', entered);
 			div.style.opacity = '0';
 			div.style.mozOpacity = '0';
 			setTimeout(function() { div.style.display = 'none'; }, 500);
 		}
+	}
+	else if (requestedPincode != entered)
+	{
+		var tekst = document.getElementById ('pinTekst');
+		var back = 'pincode03.png';
+		tekst.innerHTML = 'Onjuiste pincode ingevoerd.';
+		div.setAttribute ('data-pincode', '');
+		div.setAttribute ('data-position', 0);
+		for (var i = 0; i < 5; i++)
+		{
+			var square = document.getElementById ('square' + i);
+			var width = square.offsetWidth;
+			square.style.background = 'url(\'img/' + back + '\') center no-repeat';
+			square.style.backgroundSize = width + 'px';
+			back = 'pincode01.png';
+		}
+	}
+	else
+	{
+		div.style.opacity = '0';
+		div.style.mozOpacity = '0';
+		setTimeout(function() { div.style.display = 'none'; }, 500);
 	}
 }

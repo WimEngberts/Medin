@@ -1226,3 +1226,19 @@ body
 	overflow:hidden;
 	background-color:#ffffff;
 }
+
+.pinKeyboard
+{
+	position:absolute;
+	background-color:#efefef;
+	font-family:calibri, arial, helvetica, sans-serif;
+	font-size:xx-large;
+	font-weight:bold;
+	vertical-align:center;
+	text-align:center;
+	display:block;
+	color:#000000;
+	border:solid 1px #a0a0a0;
+	transition: all 0.5s ease;
+	-webkit-transition: all 1s ease;
+}

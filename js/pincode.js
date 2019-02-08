@@ -15,6 +15,7 @@ function buildPincodeScreen ()
 	width -= 20;
 	width /= 5;
 	width = parseInt (width);
+	setVisibility ('menubutton', false)
 	var requestedPincode = loadSetting ('pincode');
 	for (var i = 0; i < 5; i++)
 	{
@@ -54,6 +55,8 @@ function buildPincodeScreen ()
 		key.style.cssText = 'position:absolute;left:'+ left + 'px;bottom:'+ bottom + 'px;width:' + width + 'px;height:' + height + 'px;line-height:' + height + 'px;background-color:#efefef;'
 						  + 'font-family:calibri, arial, helvetica, sans-serif;font-size:xx-large;font-weight:bold;vertical-align:center;text-align:center;display:block;color:#000000;'
 						  + 'border:solid 1px #a0a0a0;transition: all 0.5s ease;-webkit-transition: all 1s ease;';
+		if (i < 4)
+			key.style.borderTop = 'solid 4px #0152a1';
 		key.id='number' + i;
 		left -= width;
 		if (left < 0)
@@ -211,6 +214,7 @@ function processPincode ()
 		{
 			saveSetting ('pincode', entered);
 			div.style.opacity = '0';
+			setVisibility ('menubutton', true)
 			div.style.mozOpacity = '0';
 			setTimeout(function() { div.style.display = 'none'; }, 500);
 		}
@@ -235,6 +239,7 @@ function processPincode ()
 	{
 		div.style.opacity = '0';
 		div.style.mozOpacity = '0';
+		setVisibility ('menubutton', true)
 		setTimeout(function() { div.style.display = 'none'; }, 500);
 	}
 }

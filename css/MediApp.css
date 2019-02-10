@@ -1207,7 +1207,7 @@ body
 	right:0px;
 	bottom:0px;
 	top:50px;
-	background-color:#5f5f5f;
+	background-color:#edf2f5;
 	transition: all 0.5s ease;
 	-webkit-transition: all 1s ease; /* For Safari 3.1 to 6.0 */
 }
@@ -1217,28 +1217,35 @@ body
 	position:absolute;
 	left:6%;
 	right:6%;
+	top:10px;
 	height:auto;
-	padding-left:8px;
-	padding-right:8px;
-	padding-top:12px;
-	padding-bottom:12px;
-	border-radius:10px;
+	padding:8px;
 	overflow:hidden;
-	background-color:#ffffff;
+	background-color:#edf2f5;
+	color:#000000;
 }
 
 .pinKeyboard
 {
 	position:absolute;
-	background-color:#efefef;
+	background-color:#273e46;
 	font-family:calibri, arial, helvetica, sans-serif;
 	font-size:xx-large;
-	font-weight:bold;
+	font-weight:normal;
 	vertical-align:center;
 	text-align:center;
 	display:block;
-	color:#000000;
-	border:solid 1px #a0a0a0;
+	color:#ffffff;
+	border:solid 1px #303030;
 	transition: all 0.5s ease;
 	-webkit-transition: all 1s ease;
+}
+
+#pinEntry
+{
+	position:absolute;
+	left:0px;
+	right:0px;
+	height:50px;
+	background:#ffffff;
 }

@@ -120,13 +120,12 @@ function buildPincodeScreen ()
 	}
 }
 
+// -----------------------------------------------------------------------------------------
+// Behandel een ingedrukte toets
+//
 function keyPressed (key)
 {
-	key = parseInt (key);
-	/*
-	var field = document.getElementById ('number' + key);
-	field.style.backgroundColor = '#efefef';
-	*/
+	key = parseInt (key);									// Deze toets is ingedrukt
 	var div = document.getElementById ('pincode');
 	var position = div.getAttribute ('data-position');
 	var pincode = div.getAttribute ('data-pincode');

@@ -15,9 +15,9 @@ function buildPincodeScreen ()
 	setVisibility ('menubutton', false)
 	var requestedPincode = loadSetting ('pincode');
 	if (!requestedPincode || requestedPincode == '')
-		tekst.innerHTML = 'Om gebruik te maken van Medin dient u een 5-cijferige pincode te installeren';
+		tekst.innerHTML = '<h2>Aanmaken pincode</h2>Om gebruik te maken van Medin dient u eerst een 5-cijferige pincode te installeren';
 	else
-		tekst.innerHTML = 'Welkom bij Medin. Voer alstublieft uw 5-cijferige pincode in';
+		tekst.innerHTML = '<h2>Pincode</h2>Welkom bij Medin. Voer alstublieft uw 5-cijferige pincode in';
 	width = div.offsetWidth;
 	width /= 3;
 	width = parseInt (width);
@@ -65,7 +65,7 @@ function buildPincodeScreen ()
 			var back = height;
 			back /= 2;
 			back = parseInt (back);
-			key.style.background = '#273e46 url(\'img/backspace.png\') center no-repeat';
+			key.style.background = '#0a435a url(\'img/backspace.png\') center no-repeat';
 			key.style.backgroundSize = back + 'px';
 			key.onmouseup = function () { keyPressed (-1); };
 		}
@@ -183,13 +183,13 @@ function processPincode ()
 		var first = div.getAttribute ('data-first');
 		if (!first || first == '')												// OK, we hebben een eerste keer ingevoerd
 		{
-			tekst.innerHTML = 'Voer nu ter controle uw pincode nogmaals in';
+			tekst.innerHTML = '<h2>Aanmaken pincode</h2>Voer nu ter controle uw pincode nogmaals in';
 			div.setAttribute ('data-first', entered);
 			clearPinFields ();
 		}
 		else if (first != entered)												// Tweede keer ongelijk aan eerste
 		{
-			tekst.innerHTML = 'De tweede invoer was niet gelijk aan de eerste. Voer nogmaals uw pincode tweemal in.';
+			tekst.innerHTML = '<h2>Aanmaken pincode</h2>De tweede invoer was niet gelijk aan de eerste. Voer nogmaals uw pincode tweemal in.';
 			div.setAttribute ('data-first', '');
 			clearPinFields ();
 		}
@@ -206,13 +206,13 @@ function processPincode ()
 			if (entered == requestedPincode)									// OK, die is goed ingevoerd
 			{
 				div.setAttribute ('data-firstOK', 1);
-				tekst.innerHTML = '<b>Wijzigen pincode</b><br />Voer nu de nieuwe pincode in';
+				tekst.innerHTML = '<h2>Wijzigen pincode</h2>Voer nu de nieuwe pincode in';
 				clearPinFields ();
 			}
 			else																// nee, foute pincode
 			{
 				div.setAttribute ('data-firstOK', 0);
-				tekst.innerHTML = 'Onjuiste pincode ingevoerd';
+				tekst.innerHTML = '<h2>Wijzigen pincode</h2>Onjuiste pincode ingevoerd';
 				clearPinFields ();
 			}
 		}
@@ -221,13 +221,13 @@ function processPincode ()
 			var first = div.getAttribute ('data-first');
 			if (!first || first == '')												// OK, we hebben een eerste keer ingevoerd
 			{
-				tekst.innerHTML = '<b>Wijzigen pincode</b><br />Voer nu ter controle uw pincode nogmaals in';
+				tekst.innerHTML = '<h2>Wijzigen pincode</h2>Voer nu ter controle uw pincode nogmaals in';
 				div.setAttribute ('data-first', entered);
 				clearPinFields ();
 			}
 			else if (first != entered)												// Tweede keer ongelijk aan eerste
 			{
-				tekst.innerHTML = '<b>Wijzigen pincode</b><br />De tweede invoer was niet gelijk aan de eerste. Voer nogmaals uw pincode tweemaal in.';
+				tekst.innerHTML = '<h2>Wijzigen pincode</h2>De tweede invoer was niet gelijk aan de eerste. Voer nogmaals uw pincode tweemaal in.';
 				div.setAttribute ('data-first', '');
 				clearPinFields ();
 			}
@@ -241,7 +241,7 @@ function processPincode ()
 	else if (requestedPincode != entered)
 	{
 		var tekst = document.getElementById ('pinTekst');
-		tekst.innerHTML = 'Onjuiste pincode ingevoerd.';
+		tekst.innerHTML = '<h2>Pincode</h2>Onjuiste pincode ingevoerd.';
 		clearPinFields ();
 	}
 	else
@@ -270,10 +270,10 @@ function changePincode ()
 	var key = document.getElementById ('number10');
 	key.onclick = function () { keyPressed (10); };
 	var height = key.offsetHeight;
-	key.style.background = '#273e46 url(\'img/cancelwhite.png\') center no-repeat';
+	key.style.background = '#0a435a url(\'img/cancelwhite.png\') center no-repeat';
 	key.style.backgroundSize = height + 'px';
 	var tekst = document.getElementById ('pinTekst');
-	tekst.innerHTML = '<b>Wijzigen pincode</b><br />Voer ter controle aub eerst uw huidige pincode in';
+	tekst.innerHTML = '<h2>Wijzigen pincode</h2>Voer ter controle aub eerst uw huidige pincode in';
 
 	div.style.opacity = '1';
 	div.style.mozOpacity = '1';

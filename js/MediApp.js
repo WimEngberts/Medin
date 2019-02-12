@@ -597,7 +597,9 @@ function indiOK (id, qr)
 	globalNaam = document.getElementById ('indiNaam').value;
 	geboren    = document.getElementById ('indiGeboren').value;
 	globalDate = new Date (geboren);
-	if (document.getElementById ('indiKalender').className == 'xUnselected')
+
+	var k = document.getElementById ('indiKalender');
+	if (k.className == 'xUnselected')
 		g_bWarnAboutList = false;
 	else
 		g_bWarnAboutList = true;
@@ -617,11 +619,14 @@ function indiOK (id, qr)
 	db.transaction(function(tx)
 	{
 		var sqlStatement;
-
+		var warn = 1;
+		if (!g_bWarnAboutList)
+			warn = 0;
+		
 		if (globalID == -1)
-			sqlStatement = 'INSERT INTO person (naam, gebJaar, gebMaand, gebDag, warnCalender) VALUES (\'' + globalNaam + '\', ' + globalDate.getFullYear() + ', ' + (globalDate.getMonth()+1) + ', ' + globalDate.getDate () + ', ' + g_bWarnAboutList + ')';
+			sqlStatement = 'INSERT INTO person (naam, gebJaar, gebMaand, gebDag, warnCalender) VALUES (\'' + globalNaam + '\', ' + globalDate.getFullYear() + ', ' + (globalDate.getMonth()+1) + ', ' + globalDate.getDate () + ', ' + warn + ')';
 		else
-			sqlStatement = 'UPDATE person SET naam = \'' + globalNaam + '\', gebJaar = ' + globalDate.getFullYear() + ', gebMaand = ' + (globalDate.getMonth()+1) + ', gebDag = ' + globalDate.getDate() + ' WHERE id = ' + globalID;
+			sqlStatement = 'UPDATE person SET naam = \'' + globalNaam + '\', gebJaar = ' + globalDate.getFullYear() + ', gebMaand = ' + (globalDate.getMonth()+1) + ', gebDag = ' + globalDate.getDate() + ', warnCalender=' + warn +  ' WHERE id = ' + globalID;
 
 		tx.executeSql(sqlStatement, [], function (tx, results)
 		{
@@ -637,6 +642,7 @@ function indiOK (id, qr)
 				var persons = document.getElementById ('list');
 				fillPersons (persons);				// Dan zitten we nu in de gebruikerlijst, dus opnieuw opbouwen
 			}
+			fillCalender ();						// Misschien nu wel of juist niet meer kalender tonen
 		}, function (tx, error)
 		{
 			alert ('er is een fout opgetreden\r\n' + error.message);
@@ -1495,6 +1501,11 @@ function setFontSizes ()
 		fontSize = 'medium';
 	for (var i = 0; i < div.length; i++)
 		div[i].style.fontSize = fontSize;
+
+	var div = document.getElementsByTagName ('li');
+	for (var i = 0; i < div.length; i++)
+		div[i].style.fontSize = fontSize;
+
 	div = document.getElementsByClassName ('large');
 	if (!div)
 		return;

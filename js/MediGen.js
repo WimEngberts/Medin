@@ -33,7 +33,7 @@ function onDeviceReady()
 		alert ('no database available!');
 	setFontSizes ();
 	getPincode ();
-	setTodaysNotifications ();
+//	setTodaysNotifications ();
 }
 
 function addEnterListener (listenFunction)

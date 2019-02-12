@@ -45,14 +45,22 @@ function fillCalender ()
 			{
 				row = results.rows.item(0);
 				g_bWarnAboutList = row['warnCalender'];
-				document.getElementById ('listHeader').innerHTML = '<b>Medicijn kalender van ' + row['naam'] + '</b>';
-				currentUser = row['naam'];
-				globalID = row['id'];
-				fillCalenderStep2 (row['id']);
-				setVisibility ('plus', true);
+				if (g_bWarnAboutList)
+				{
+					document.getElementById ('wekkerHeader').innerHTML = '<b>Medicijnkalender van ' + row['naam'] + '</b>';
+					currentUser = row['naam'];
+					globalID = row['id'];
+					fillCalenderStep2 (row['id']);
+					setVisibility ('plus', true);
+				}
+				else
+					document.getElementById ('wekkerHeader').innerHTML = row['naam'] + ' gebruikt de kalender niet';
 			}
 			else
-				document.getElementById ('listHeader').innerHTML = '<b>Medicijn kalender</b>';
+			{
+				document.getElementById ('wekkerHeader').innerHTML = '<b>Medicijnkalender</b>';
+				setVisibility ('plus', false);
+			}
 		}), function (tx, error)
 		{
 			alert ('er is een fout opgetreden\r\n' + error.message);
@@ -78,7 +86,7 @@ function fillCalenderStep2 (personID)
 			{
 				var row = results.rows.item(i);
 				var div = document.createElement ('div');
-				div.className = 'listLine tijdLine standardWhite';
+				div.className = 'listLine tijdLine standardWhite standard';
 				div.style.fontSize = fontSize;
 				div.style.fontFamily = 'calibri';
 				div.setAttribute ('data-tijd', row['tijdID']);

@@ -670,89 +670,6 @@ function indiCancel ()
 	}, 500);
 }
 
-function deleteOK (id)
-{
-	var individual;
-	var row;
-	var aantal = 1;
-	var bDeleteAll = document.getElementById ('deleteAll').checked;
-	var bDeleteLists = document.getElementById ('deleteLists').checked;
-
-	if (   !bDeleteAll
-		&& !bDeleteLists)
-	{
-		myAlert ('U hebt niets aangegeven om te verwijderen');
-	}
-	else if (bDeleteAll)
-	{
-		db.transaction(function(tx)
-		{
-			tx.executeSql('SELECT * FROM lijsten WHERE patient = ' + id, [], function (tx, results)
-			{
-				aantal = results.rows.length;
-			}), function (tx, error)
-			{
-				alert ('er is een fout opgetreden\r\n' + error.message);
-			}, function ()
-			{
-//				alert ('namen gelezen en verwerkt');
-			};
-			tx.executeSql('SELECT * FROM person WHERE id = ' + id, [], function (tx, results)
-			{
-				if (results.rows.length < 1)
-					myAlert ('Oeps, er is geen gebruiker gevonden met id '+ id);
-				else
-				{
-					row = results.rows.item(0);
-					var question = 'weet u zeker dat u\r\n\'' + row['naam'] + '\'\r\nwilt verwijderen';
-					if (aantal != 0)
-						question += '\r\ninclusief ' + aantal + ' medicatielijsten';
-					question += '?';
-					var r = confirm (question);
-					if (r == true)
-					{
-						tx.executeSql('DELETE FROM person WHERE id = ' + id, [], function (tx, results)
-						{
-						}), function (tx, error)
-						{
-							alert ('er is een fout opgetreden\r\n' + error.message);
-						}, function ()
-						{
-						};
-						var persons = document.getElementById ('list');
-					
-						fillPersons (persons);
-					}
-				}
-			}), function (tx, error)
-			{
-				alert ('er is een fout opgetreden\r\n' + error.message);
-			}, function ()
-			{
-//				alert ('namen gelezen en verwerkt');
-			};
-		});
-		deleteCancel ();								// haal het scherm weg
-	}
-	if (   bDeleteAll					// Alleen medicatielijsten weg
-		|| bDeleteLists)				// Of persoon inclusief de lijsten
-	{
-		db.transaction(function(tx)
-		{
-			tx.executeSql('DELETE FROM lijsten WHERE patient = ' + id, [], function (tx, results)
-			{
-			}), function (tx, error)
-			{
-				alert ('er is een fout opgetreden\r\n' + error.message);
-			}, function ()
-			{
-				alert (id + ' medicatielijsten verwijderd');
-			};
-		});
-		deleteCancel ();				// haal het scherm weg
-	}
-}
-
 function deletePerson (id)
 {
 	var individual;
@@ -769,7 +686,6 @@ function deletePerson (id)
 			alert ('er is een fout opgetreden\r\n' + error.message);
 		}, function ()
 		{
-//			alert ('namen gelezen en verwerkt');
 		};
 		tx.executeSql('SELECT * FROM person WHERE id = ' + id, [], function (tx, results)
 		{
@@ -779,30 +695,18 @@ function deletePerson (id)
 			{
 				row = results.rows.item(0);
 				var szQuestion;
-				
+				var szHTML = '<p class=\"standard\">Weet u zeker dat u de gegevens van ' + row['naam'] + ' wilt verwijderen?</p><table>';
+				szHTML += '<tr><td>Alleen ' + aantal + ' medicatielijst';
+				if (aantal != 1)
+					szHTML += 'en';
+				szHTML += '</td><td><div id=\"justList\" class=\"deleteSelected\" onmouseup=\"deleteWhat(\'justList\');\"></div></td></tr>';
+				szHTML += '<tr><td>Gebruiker inclusief medicatielijsten</td><td><div id=\"all\" class=\"deleteUnselected\" onmouseup=\"deleteWhat(\'all\');\"></div></td></tr></table>';
+
 				globalDeleteAll   = false;
 				globalDeleteLists = false;
-				szQuestion = 'Weet u  zeker dat u de gegevens van ' + row['naam'] + ' wilt verwijderen?';
-				document.getElementById ('deleteQuestion').innerHTML = szQuestion;
-				szQuestion = '<span></span>Alleen ' + aantal + ' medicatielijsten';
-//				document.getElementById ('iconDeleteAll').className = 'unchecked';
-//				document.getElementById ('iconDeleteLists').className = 'unchecked';
-				document.getElementById ('deleteAll').checked = false;
-				document.getElementById ('deleteLists').checked = false;
-				document.getElementById ('deleteListsText').innerHTML = szQuestion;
-				document.getElementById ('deleteIndividual').setAttribute('onmouseup','deleteOK(' + id + ');');
-				setVisibility ('individualCover', true);
-				setVisibility ('individualDelete', true);
-				setVisibility ('plus', false);
-				setVisibility ('back', false);
-				document.getElementById ('individualCover').style.opacity = '0.4';
-				var individual = document.getElementById ('individualDelete');
-				if (individual)
-				{
-					individual.style.opacity = '1';
-				}
-				else
-					alert ('kan individualDelete niet vinden');
+
+				var div = createList ('deleteUser', 'Verwijderen gebruiker', szHTML, deleteUser, cancelDeleteUser, false);
+				div.setAttribute ('data-id', row['id']);
 			}
 		}), function (tx, error)
 		{
@@ -814,19 +718,48 @@ function deletePerson (id)
 	});
 }
 
-function deleteCancel ()
+function deleteUser (div)
 {
-	var individual;
+	var id = div.getAttribute ('data-id');
+	var bAll = false;
+	if (document.getElementById ('all').className == 'deleteSelected')
+		bAll = true;
 
-	document.getElementById ('individualDelete').style.opacity = '0';
-	document.getElementById ('individualCover').style.opacity = '0';
-	setVisibility ('plus', true);
-	setVisibility ('back', true);
-	setTimeout(function()
+	db.transaction(function(tx)
 	{
-		setVisibility ('individualDelete', false);
-		setVisibility ('individualCover', false);
-	}, 500);
+		tx.executeSql('SELECT * FROM lijsten WHERE patient = ' + id, [], function (tx, results)
+		{
+			for (var i = 0; i < results.rows.length; i++)
+			{
+				var row = results.rows.item (i);
+				var lijst = row['id'];
+				tx.executeSql('DELETE FROM medicatie WHERE lijst=' + lijst);
+			}
+		});
+		tx.executeSql ('DELETE FROM innames WHERE personID=' + id);
+		if (bAll)
+			tx.executeSql ('DELETE FROM person WHERE id=' + id);
+	});
+	var persons = document.getElementById ('list');
+	fillPersons (persons);
+}
+
+function cancelDeleteUser ()
+{
+}
+
+function deleteWhat (what)
+{
+	if (what == 'all')
+	{
+		document.getElementById ('justList').className = 'deleteUnselected';
+		document.getElementById ('all').className = 'deleteSelected';
+	}
+	else
+	{
+		document.getElementById ('justList').className = 'deleteSelected';
+		document.getElementById ('all').className = 'deleteUnselected';
+	}
 }
 
 function selectPerson (id)

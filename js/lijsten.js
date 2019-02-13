@@ -745,7 +745,7 @@ function cleanMedicationStep2 (patient)
 			for (var i = 1; i < results.rows.length; i++)				// We doen sowieso alleen iets voor de niet actuele lijsten, dus lijst[0] blijft altijd buiten schot, hoe oud ook
 			{
 				var row = results.rows.item (i);						// We hebben een oudere lijst
-				var listDate = new Date (row['listJaar'], row['listMonth'], row['listDag'], 5, 5, 5, 5);
+				var listDate = new Date (row['listJaar'], row['listMaand'], row['listDag'], 5, 5, 5, 5);
 				var months = monthDiff (listDate, now);					// Zitten zoveel hele maanden tussen toen en nu
 				if (months > accept)									// meer dan we willen?
 					cleanMedicationStep3 (row['patient'], row['id']);	// Dan mag deze lijst weg
@@ -770,11 +770,11 @@ function cleanMedicationStep3 (patient, lijst)
 
 function monthDiff(d1, d2)
 {
-	var months;
-	
+	var months = 0;
+
 	months = (d2.getFullYear() - d1.getFullYear()) * 12;
 	months -= d1.getMonth() + 1;
 	months += d2.getMonth();
-	
+
 	return months <= 0 ? 0 : months;
 }

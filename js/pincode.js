@@ -21,16 +21,17 @@ function buildPincodeScreen ()
 	width = div.offsetWidth;
 	width /= 3;
 	width = parseInt (width);
-	var height = parseInt (width/2);
+	var height = width;
+	height *= 2;
+	height /= 3.7;
+	height = parseInt (height);
 	var left = 0;
 	left += width;
 	left += width;
 	var bottom = 0;
 	for (var i = 12; i > 0; i--)
 	{
-//		var key = document.createElement ('div');
-		var key = document.createElement ('button');
-		key.type='button';
+		var key = document.createElement ('div');
 		key.style.left = left + 'px';
 		key.style.bottom = bottom + 'px';
 		key.style.width = width + 'px';
@@ -156,7 +157,6 @@ function keyPressed (key)
 		square.style.background = 'url(\'img/pincode2.png\') center no-repeat';
 		square.style.backgroundSize = '30px';
 		pincode += key;
-		div.setAttribute ('pincode', pincode);
 
 		position += 1;
 		div.setAttribute ('data-position', position);

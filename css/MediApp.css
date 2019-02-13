@@ -1260,6 +1260,10 @@ body
 .pinKeyboard
 {
 	position:absolute;
+	display:inline-block;
+	text-decoration:none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
 /*	background-color:#273e46; */
 	background-color:#0a435a;
 	font-family:calibri, arial, helvetica, sans-serif;
@@ -1267,14 +1271,12 @@ body
 	font-weight:light;
 	vertical-align:center;
 	text-align:center;
-	display:block;
 	color:#ffffff;
+/*	border:solid 1px #303030; */
 	border:solid 1px #303030;
-}
-
-.pinKeyboard:focus
-{
-	outline:0;
+	padding:0;
+	margin:0;
+	touch-action: manipulation;
 }
 
 #pinEntry

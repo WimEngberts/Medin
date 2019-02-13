@@ -139,7 +139,7 @@ function showListStep2 (db, id)
 				var row = results.rows.item(0);
 				var d = formatDate (row['listDag'], row['listMaand'], row['listJaar']);
 				log ('most recent list = ' + row['id'] + ', ' + d);
-				szHTML += '<br><span class="standard">Lijst van ' + row['apotheek'] + ', ' + d + ', ' + row['listTijd'] + '</span>';
+				szHTML += '<br><span class="standard">' + row['apotheek'] + ', ' + d + ', ' + row['listTijd'] + '</span>';
 				document.getElementById ('itemHeader').innerHTML = szHTML;
 				showListStep3 (db, row['id']);
 			}
@@ -705,4 +705,76 @@ function nhg25 (rawCode)
 	r.perPeriode	= perPeriode;
 
 	return r;
+}
+
+function cleanMedication ()
+{
+
+	var accept = loadSetting ('monthsSave');							// Hoe lang bewaren we eigenlijk?
+	if (accept)
+		accept = parseInt (accept);
+	if (!accept || accept == 0)											// niet opgegeven of oneindig
+		return ;														// Dan is er niets te doen.
+
+	db.transaction(function(tx)
+	{
+		tx.executeSql('SELECT id FROM person', [], function (tx, results)
+		{
+			for (var i = 0; i < results.rows.length; i++)				// Het opschonen doen we voor alle personen
+			{
+				var row = results.rows.item (i);						// Dus ook voor jou!
+				cleanMedicationStep2 (row['id']);
+			}
+		}), function (tx, error)
+		{
+			alert ('er is een fout opgetreden\r\n' + error.message);
+		}, function ()
+		{
+		};
+	});
+}
+
+function cleanMedicationStep2 (patient)
+{
+	db.transaction(function(tx)
+	{
+		tx.executeSql('SELECT * FROM lijsten WHERE patient=' + patient + ' ORDER BY listJaar DESC, listMaand DESC, listDag DESC, listTijd DESC', [], function (tx, results)
+		{
+			var accept = parseInt (loadSetting ('monthsSave'));
+			var now = new Date ();
+			for (var i = 1; i < results.rows.length; i++)				// We doen sowieso alleen iets voor de niet actuele lijsten, dus lijst[0] blijft altijd buiten schot, hoe oud ook
+			{
+				var row = results.rows.item (i);						// We hebben een oudere lijst
+				var listDate = new Date (row['listJaar'], row['listMonth'], row['listDag'], 5, 5, 5, 5);
+				var months = monthDiff (listDate, now);					// Zitten zoveel hele maanden tussen toen en nu
+				if (months > accept)									// meer dan we willen?
+					cleanMedicationStep3 (row['patient'], row['id']);	// Dan mag deze lijst weg
+			}
+		}), function (tx, error)
+		{
+			alert ('er is een fout opgetreden\r\n' + error.message);
+		}, function ()
+		{
+		};
+	});
+}
+
+function cleanMedicationStep3 (patient, lijst)
+{
+	db.transaction(function(tx)
+	{
+		tx.executeSql('DELETE FROM medicatie WHERE lijst=' + lijst);
+		tx.executeSql('DELETE FROM lijsten WHERE patient=' + patient + ' AND id=' + lijst);
+	});
+}
+
+function monthDiff(d1, d2)
+{
+	var months;
+	
+	months = (d2.getFullYear() - d1.getFullYear()) * 12;
+	months -= d1.getMonth() + 1;
+	months += d2.getMonth();
+	
+	return months <= 0 ? 0 : months;
 }

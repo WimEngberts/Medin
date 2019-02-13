@@ -1,4 +1,4 @@
-function setTodaysNotifications ()
+function setNextNotification ()
 {
 	if (window.Notification)
 	{
@@ -15,7 +15,7 @@ function setTodaysNotifications ()
 						tag: 'Een Medin notificatie!!', 
 						body: 'Medin heeft u iets heeeeel belangrijks te zeggen!!' 
 					}); 
-					notification.onshow  = function() { alert('show'); };
+//					notification.onshow  = function() { alert('show'); };
 					notification.onclose = function() { alert('close'); };
 					notification.onclick = function() { alert('click'); };
 				}

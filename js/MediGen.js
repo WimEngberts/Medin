@@ -24,6 +24,7 @@ function onDeviceReady()
 	if (db)
 	{
 		initTables (db);
+		cleanMedication ();
 		showList (db);
 		fillCalender ();
 		if (g_bWarnAboutList)
@@ -33,7 +34,7 @@ function onDeviceReady()
 		alert ('no database available!');
 	setFontSizes ();
 	getPincode ();
-//	setTodaysNotifications ();
+	setNextNotification ();
 }
 
 function addEnterListener (listenFunction)

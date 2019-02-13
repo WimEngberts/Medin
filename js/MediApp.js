@@ -1198,7 +1198,7 @@ function showSimpleList (lijst)
 					{
 						row = results.rows.item(0);
 						var d = formatDate (row['listDag'], row['listMaand'], row['listJaar']);
-						szHTML += '<br><span class="standard">lijst van ' + row['apotheek'] + ', ' + d + '</span>';
+						szHTML += '<br><span class="standard">' + row['apotheek'] + ', ' + d + '</span>';
 						document.getElementById ('itemHeader').innerHTML = szHTML;
 						showListStep3 (db, lijst);
 					}

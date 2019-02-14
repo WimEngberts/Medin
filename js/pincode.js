@@ -70,34 +70,34 @@ function buildPincodeScreen ()
 			back = parseInt (back);
 			key.style.background = '#0a435a url(\'img/backspace.png\') center no-repeat';
 			key.style.backgroundSize = back + 'px';
-			key.onclick = function () { keyPressed (-1); };
+			key.onmouseup = function () { keyPressed (-1); };
 		}
 		else if (i == 11)
 		{
 			key.innerHTML = '0';
-			key.onclick = function () { keyPressed (0); };
+			key.onmouseup = function () { keyPressed (0); };
 		}
 		else if (i != 10)
 		{
 			key.innerHTML = i;
 			if (i == 1)
-				key.onclick = function () { keyPressed (1); };
+				key.onmouseup = function () { keyPressed (1); };
 			if (i == 2)
-				key.onclick = function () { keyPressed (2); };
+				key.onmouseup = function () { keyPressed (2); };
 			if (i == 3)
-				key.onclick = function () { keyPressed (3); };
+				key.onmouseup = function () { keyPressed (3); };
 			if (i == 4)
-				key.onclick = function () { keyPressed (4); };
+				key.onmouseup = function () { keyPressed (4); };
 			if (i == 5)
-				key.onclick = function () { keyPressed (5); };
+				key.onmouseup = function () { keyPressed (5); };
 			if (i == 6)
-				key.onclick = function () { keyPressed (6); };
+				key.onmouseup = function () { keyPressed (6); };
 			if (i == 7)
-				key.onclick = function () { keyPressed (7); };
+				key.onmouseup = function () { keyPressed (7); };
 			if (i == 8)
-				key.onclick = function () { keyPressed (8); };
+				key.onmouseup = function () { keyPressed (8); };
 			if (i == 9)
-				key.onclick = function () { keyPressed (9); };
+				key.onmouseup = function () { keyPressed (9); };
 		}
 		div.appendChild (key);
 	}
@@ -280,7 +280,7 @@ function changePincode ()
 	div.setAttribute ('data-change', 1);
 
 	var key = document.getElementById ('number10');
-	key.onclick = function () { keyPressed (10); };
+	key.onmouseup = function () { keyPressed (10); };
 	var height = key.offsetHeight;
 	key.style.background = '#0a435a url(\'img/cancelwhite.png\') center no-repeat';
 	key.style.backgroundSize = height + 'px';

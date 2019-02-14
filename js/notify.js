@@ -2,8 +2,8 @@ function setNextNotification ()
 {
 	if (window.Notification)
 	{
-		var notify = loadSetting ('notify');
-		if (!notify || notify != 'granted')
+		var granted = loadSetting ('notify');
+		if (!granted || granted != 'granted')
 		{
 			Notification.requestPermission(function (permission)
 			{
@@ -11,25 +11,25 @@ function setNextNotification ()
 				// If the user accepts, let’s create a notification
 				if (permission == 'granted')
 				{
-					var notification = new Notification('Medin', {
+					var notify = new Notification('Medin', {
 						tag: 'Een Medin notificatie!!', 
 						body: 'Medin heeft u iets heeeeel belangrijks te zeggen!!' 
-					}); 
-//					notification.onshow  = function() { alert('show'); };
-					notification.onclose = function() { alert('close'); };
-					notification.onclick = function() { alert('click'); };
+					});
+					notify.onshow  = function() { alert('show'); };
+					notify.onclose = function() { alert('close'); };
+					notify.onclick = function() { alert('click'); };
 				}
 			});
 		}
 		else
 		{
-			var notification = new Notification('Medin', {
+			var notify = new Notification('Medin', {
 				tag: 'Een Medin notificatie!!', 
 				body: 'Medin heeft u iets heeeeel belangrijks te zeggen!!' 
 			}); 
-			notification.onshow  = function() { alert('show'); };
-			notification.onclose = function() { alert('close'); };
-			notification.onclick = function() { alert('click'); };
+/*			notify.onshow  = function() { alert('show'); };
+			notify.onclose = function() { alert('close'); }; */
+			notify.onclick = function() { alert('click'); };
 		}
 	}
 }

@@ -28,8 +28,6 @@
 	<preference name="AndroidPersistentFileLocation" value="Compatibility" />
 	<preference name="iosPersistentFileLocation" value="Compatibility" />
 
-<!--	<plugin name="https://github.com/apache/cordova-plugin-whitelist" source="git" /> -->
-	<plugin name="cordove-plugin-whitelist" source="npm" version="1.3.3" />
 	<plugin spec="https://github.com/phonegap/phonegap-plugin-barcodescanner" source="git" />
 	<plugin spec="https://github.com/phonegap/phonegap-plugin-local-notification" source="git" />
 <!--	<plugin spec="https://github.com/apache/cordova-plugin-statusbar" source="git" /> -->
@@ -42,6 +40,8 @@
 	<access origin="https://*" requires-certificate-transparency='false' allows-arbitrary-loads-in-web-content='true' />
 
 	<platform name="android">
+		<plugin name="https://github.com/apache/cordova-plugin-whitelist" source="git" />
+
 		<icon   src="res/icon/android/drawable-mdpi-icon.png"     platform="android" density="mdpi"    qualifier="mdpi"   />
 		<icon   src="res/icon/android/drawable-hdpi-icon.png"     platform="android" density="hdpi"    qualifier="hdpi"   />
 		<icon   src="res/icon/android/drawable-xhdpi-icon.png"    platform="android" density="xhdpi"   qualifier="xhdpi"  />

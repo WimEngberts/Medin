@@ -348,8 +348,8 @@ function plus ()
 		{
 			if (typeof cordova == 'undefined' || !cordova)	// Aha, we draaien niet op een mobiel!
 			{
-//				handleQRCode ('1;1;19780404;https://tst.promedico-apro.nl/HealthcareManag_API/rest/Patient/medicationoverview/d9807354-13c5-4719-a1ba-b888c606b777',1);
-				handleQRCode ('1;1;19780404;https://build.phonegap.com/apps/2587184/install/SgnyyF1tHvVtw7RGJqJE',1);
+				handleQRCode ('1;1;19780404;https://tst.promedico-apro.nl/HealthcareManag_API/rest/Patient/medicationoverview/d9807354-13c5-4719-a1ba-b888c606b777;--',1);
+//				handleQRCode ('1;1;19780404;https://build.phonegap.com/apps/2587184/install/SgnyyF1tHvVtw7RGJqJE',1);
 				
 			}
 			else cordova.plugins.barcodeScanner.scan(
@@ -498,6 +498,13 @@ function handleQRCode (QRCode, bScanned)
 	else if (bScanned)
 	{
 		var xhttp = new XMLHttpRequest();
+		xhttp.timeout = 20000;
+		xhttp.ontimeout = function ()
+		{
+			log ('http GET request timed out');
+			myAlert ('Er werd geen lijst ontvangen binnen de gestelde reactietijd');
+
+		};
 		xhttp.onreadystatechange = function()
 		{
 			if (   this.readyState == 4
@@ -524,7 +531,7 @@ function handleQRCode (QRCode, bScanned)
 					myAlert (  'De opgegeven medicatielijst voor de gebruiker met geboortedatum '
 							 + globalShowDate
 							 + ' kon niet worden gevonden of is verlopen.');
-				else
+/*				else
 				{
 					try
 					{
@@ -538,7 +545,7 @@ function handleQRCode (QRCode, bScanned)
 					{
 						myAlert ('Er is een ongeldig medicatie bestand ontvangen');
 					}
-				}
+				} */
 			}
 		};
 

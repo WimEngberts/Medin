@@ -341,13 +341,17 @@ function editPerson (id)
 function plus ()
 {
 	var individual;
-	
+
 	if (screenID == 0)						// lijsten
 	{
 		if (whichMainScreen () == 0)		// Medicatielijst
 		{
 			if (typeof cordova == 'undefined' || !cordova)	// Aha, we draaien niet op een mobiel!
-				handleQRCode ('1;1;19250925;data/voorbeeld2.json;--',0);
+			{
+//				handleQRCode ('1;1;19780404;https://tst.promedico-apro.nl/HealthcareManag_API/rest/Patient/medicationoverview/d9807354-13c5-4719-a1ba-b888c606b777',1);
+				handleQRCode ('1;1;19780404;https://build.phonegap.com/apps/2587184/install/SgnyyF1tHvVtw7RGJqJE',1);
+				
+			}
 			else cordova.plugins.barcodeScanner.scan(
 				function (result)
 				{
@@ -493,6 +497,7 @@ function handleQRCode (QRCode, bScanned)
 		myAlert ('Er is een onjuiste QR code gelezen.<br />Foutcode = 10' + errorCode);
 	else if (bScanned)
 	{
+		alert ('performing GET');
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function()
 		{
@@ -512,7 +517,8 @@ function handleQRCode (QRCode, bScanned)
 				if (this.status == 404)
 					myAlert (  'De opgegeven medicatielijst voor de gebruiker met geboortedatum '
 							 + globalShowDate
-							 + ' kon niet worden gevonden of is verlopen');
+							 + ' kon niet worden gevonden of is verlopen<br/>'
+							 + this.responseText);
 				else
 				{
 					receivedList = JSON.parse(this.responseText);

@@ -34,7 +34,7 @@
 	<access origin="http://*" />
 	<access origin="https://*" />
 
-	<plugin name="cordova-plugin-whitelist" source="npm" spec="1.1.0" />
+	<plugin name="https://github.com/cordova-plugin-whitelist" source="git" />
 	<plugin spec="https://github.com/phonegap/phonegap-plugin-barcodescanner" source="git" />
 	<plugin spec="https://github.com/phonegap/phonegap-plugin-local-notification" source="git" />
 <!--	<plugin spec="https://github.com/apache/cordova-plugin-statusbar" source="git" /> -->

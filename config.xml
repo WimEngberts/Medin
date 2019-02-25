@@ -40,7 +40,7 @@
 	<access origin="https://*" requires-certificate-transparency='false' allows-arbitrary-loads-in-web-content='true' />
 
 	<platform name="android">
-		<plugin name="https://github.com/apache/cordova-plugin-whitelist" source="git" />
+		<plugin spec="https://github.com/apache/cordova-plugin-whitelist" source="git" />
 
 		<icon   src="res/icon/android/drawable-mdpi-icon.png"     platform="android" density="mdpi"    qualifier="mdpi"   />
 		<icon   src="res/icon/android/drawable-hdpi-icon.png"     platform="android" density="hdpi"    qualifier="hdpi"   />

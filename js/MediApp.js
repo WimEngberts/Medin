@@ -497,7 +497,6 @@ function handleQRCode (QRCode, bScanned)
 		myAlert ('Er is een onjuiste QR code gelezen.<br />Foutcode = 10' + errorCode);
 	else if (bScanned)
 	{
-		alert ('performing GET');
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function()
 		{
@@ -505,27 +504,40 @@ function handleQRCode (QRCode, bScanned)
 				&& this.status == 200)
 			{
 				log ('XMLhttprequest ended with ready state = ' + this.readyState + ', and status = ' + this.status);
-				receivedList = JSON.parse(this.responseText);
-				log ('parsed JSON data');
-				receivedList['birthdate'] = globalBirthDate;
-				log ('added global birthdate: \'' + receivedList.birthdate + '\', start processing data');
-				ProcessReceivedData ();
-			}
-			else if (this.readyState == 4)
-			{
-				log ('XMLhttprequest ended with ready state = ' + this.readyState + ', and status = ' + this.status);
-				if (this.status == 404)
-					myAlert (  'De opgegeven medicatielijst voor de gebruiker met geboortedatum '
-							 + globalShowDate
-							 + ' kon niet worden gevonden of is verlopen<br/>'
-							 + this.responseText);
-				else
+				try
 				{
 					receivedList = JSON.parse(this.responseText);
 					log ('parsed JSON data');
 					receivedList['birthdate'] = globalBirthDate;
 					log ('added global birthdate: \'' + receivedList.birthdate + '\', start processing data');
 					ProcessReceivedData ();
+				}
+				catch (objError)
+				{
+					myAlert ('Er is een ongeldig medicatie bestand ontvangen');
+				}
+			}
+			else if (this.readyState == 4)
+			{
+				log ('XMLhttprequest ended with ready state = ' + this.readyState + ', and status = ' + this.status + ' and responseText = \'' + this.responseText + '\'');
+				if (this.status == 404)
+					myAlert (  'De opgegeven medicatielijst voor de gebruiker met geboortedatum '
+							 + globalShowDate
+							 + ' kon niet worden gevonden of is verlopen.');
+				else
+				{
+					try
+					{
+						receivedList = JSON.parse(this.responseText);
+						log ('parsed JSON data');
+						receivedList['birthdate'] = globalBirthDate;
+						log ('added global birthdate: \'' + receivedList.birthdate + '\', start processing data');
+						ProcessReceivedData ();
+					}
+					catch (objError)
+					{
+						myAlert ('Er is een ongeldig medicatie bestand ontvangen');
+					}
 				}
 			}
 		};

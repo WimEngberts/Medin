@@ -35,6 +35,7 @@ function onDeviceReady()
 	setFontSizes ();
 	getPincode ();
 	setNextNotification ();
+	setPlus ();
 }
 
 function addEnterListener (listenFunction)

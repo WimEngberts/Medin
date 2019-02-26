@@ -47,6 +47,7 @@ function showPersons ()
 		persons.style.opacity = '1';
 		setVisibility ('plus', true);
 		fillPersons (persons);
+		setPlus ();
 	}
 }
 
@@ -67,6 +68,7 @@ function back ()
 		calenderOK ();
 		break;
 	}
+	setPlus ();
 }
 
 function personsOK ()
@@ -405,6 +407,28 @@ function plus ()
 			individual.style.opacity = '1';
 		}
 	}
+}
+
+function setPlus ()
+{
+	var plus = document.getElementById ('plus');
+	if (screenID == 0)						// lijsten
+	{
+		if (whichMainScreen () == 0)		// Medicatielijst
+			plus.style.backgroundImage = 'url(\'img/plus.png\')';
+		else								// momenten
+		{
+			plus.style.backgroundImage = 'url(\'img/calenderWhite.png\')';
+		}
+	}
+	else if (screenID == 1)						// gebruikers
+	{
+		plus.style.backgroundImage = 'url(\'img/plus.png\')';
+	}
+	plus.style.backgroundPosition = 'center';
+	plus.style.backgroundRepeat = 'no-repeat';
+	plus.style.backgroundSize = '56px';
+	plus.style.backgroundColor = '#0152a1';
 }
 
 function whichMainScreen ()
@@ -1513,5 +1537,6 @@ function setMain (setTo)
 		calender.style.transition = transition;
 		slider.style.transition = transition;
 		list.style.transition = transition;
+		setPlus ();
 	}, 500);
 }

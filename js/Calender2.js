@@ -6,7 +6,7 @@ var g_Innames;
 //---------------------------------------------------------------------------------------------------------------
 // Check of een lijst al volledig is verdeeld in de kalender
 //
-function checkListInCalendar ()
+function checkListInCalender ()
 {
 
 	globalID = -1;
@@ -123,7 +123,7 @@ function checkListInCalenderStep3 (userID, listID)
 							medicatie['distributed'] = 1;
 						else
 							medicatie['distributed'] = 0;
-						szHTML += '<tr onmouseup=\"addToCalendar (' + medicatie['lijst'] + ', ' + medicatie['regel'] + ');\">';
+						szHTML += '<tr onmouseup=\"addToCalender (' + medicatie['lijst'] + ', ' + medicatie['regel'] + ');\">';
 						szHTML += '<td><b>' + medicatie['dispensedMedicationName'] + '</b><br />';
 						szHTML += n25['omschrijving'] + '</td><td class=\"tdright\">';
 						if (f)
@@ -146,7 +146,7 @@ function checkListInCalenderStep3 (userID, listID)
 							}
 							if (!f)														// Nee, die staat niet meer in de lijst!
 							{
-								szHTML += '<tr onmouseup=\"deleteFromCalendar (' + row['personID'] + ',' + row['tijdID'] + ',' + row['sequence'] + ');\">';
+								szHTML += '<tr onmouseup=\"deleteFromCalender (' + row['personID'] + ',' + row['tijdID'] + ',' + row['sequence'] + ');\">';
 								szHTML += '<td><b>' + row['naam'] + '</b><br />';
 								var n25 = nhg25 (row['nhg25']);
 								szHTML += n25['omschrijving'] + '</td><td>verwijderen</td></tr>';
@@ -187,7 +187,7 @@ function addCancel ()
 	setVisibility ('addMedicin', false);
 }
 
-function addToCalendar (listID, regel)
+function addToCalender (listID, regel)
 {
 	db.transaction(function(tx)
 	{

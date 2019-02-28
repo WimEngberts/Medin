@@ -1,0 +1,84 @@
+{
+                "agbCode": "02486267",
+                "medicationDispenseEvents": [{
+                                                "amount": 180,
+                                                "codedUnit": "ST",
+                                                "dispenseTimestamp": "2019-02-26T13:10:47Z",
+                                                "dispensedMedicationName": "OMECAT CAPSULE MSR 10MG",
+                                                "guidanceText": ["zo nodig", "Heel doorslikken, niet kauwen"],
+                                                "hpk": "2546299",
+                                                "id": "6AA487F9-E55B-480B-85B9-A6019AF42C09",
+                                                "nhg25": " ZN",
+                                                "prescriber": {
+                                                                "agbCode": "01021476",
+                                                                "name": "Dokter"
+                                                },
+                                                "prk": "60054",
+                                                "transcriptionTimestamp": "2019-02-26T13:09:33Z",
+                                                "usageEndDate": "2019-03-26",
+                                                "usageStartDate": "2019-02-26",
+                                                "zi": "16275713"
+                                }, {
+                                                "amount": 20,
+                                                "codedUnit": "ST",
+                                                "dispenseTimestamp": "2019-02-26T13:10:36Z",
+                                                "dispensedMedicationName": "AMOXI/CLAV SANDOZ TABLET 500/125MG",
+                                                "guidanceText": ["1 maal per dag 1 tablet", "Kuur afmaken", "Innemen met wat voedsel"],
+                                                "hpk": "1127039",
+                                                "id": "3468EB1F-2A09-47B3-9D00-75CCCB82A8F4",
+                                                "nhg25": "1D1T",
+                                                "prescriber": {
+                                                                "agbCode": "01021476",
+                                                                "name": "Dokter"
+                                                },
+                                                "prk": "17809",
+                                                "transcriptionTimestamp": "2019-01-31T22:43:56Z",
+                                                "usageEndDate": "2019-03-17",
+                                                "usageStartDate": "2019-01-31",
+                                                "zi": "14304643"
+                                },
+    {
+      "id": "114FEB04-FA07-4F39-9360-2E8CFCFB2AE4",
+      "transcriptionTimestamp": "2018-01-19T14:45:57.652Z",
+      "dispenseTimestamp": "2018-01-19T14:45:57.652Z",
+      "prescriber": {
+        "agbCode": "03030228",
+        "name": "H. Huisarts",
+        "speciality": "Huisarts"
+      },
+      "usageStartDate": "2019-01-09",
+      "usageEndDate": "2019-01-26",
+	  "nhg25": "1-3D1-3CA MX10D",
+      "amount": 30,
+      "codedUnit": "stuks",
+      "zi": "16044940",
+      "hpk": "1633090",
+      "prk": "17809",
+      "dispensedMedicationName": "AMOXI/CLAV CF TABLET OMHULD 500/125MG",
+      "guidanceText": [
+        "3 maal per dag 3 tabletten<br/>Heel doorslikken, niet kauwen<br/>TIJDENS het eten innemen<br/>Pas op met alcohol i.v.m. maagklachten"
+      ]
+    },
+								{
+                                                "amount": 1,
+                                                "codedUnit": "ST",
+                                                "dispenseTimestamp": "2019-02-26T13:10:41Z",
+                                                "dispensedMedicationName": "MOMETASONFUROAAT SANDOZ NEUSSPR 50MCG/DO FL 140DO",
+                                                "guidanceText": ["1 maal per dag 1 dosis in beide neusgaten hoog opsnuiven", "Omschudden vlak voor gebruik", "Na openen 2 maanden houdbaar"],
+                                                "hpk": "2369729",
+                                                "id": "208AC65D-04F3-4F24-AC50-50B688BD4D5A",
+                                                "nhg25": "1D1DO IBNO",
+                                                "prescriber": {
+                                                                "agbCode": "01021476",
+                                                                "name": "Dokter"
+                                                },
+                                                "prk": "52434",
+                                                "transcriptionTimestamp": "2019-02-26T13:08:35Z",
+                                                "usageEndDate": "2019-05-06",
+                                                "usageStartDate": "2019-02-26",
+                                                "zi": "15950441"
+                                }
+                ],
+                "pharmacyName": "Zenderpark",
+                "timestamp": "2019-02-26T13:11:57Z"
+}

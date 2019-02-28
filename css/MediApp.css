@@ -117,47 +117,52 @@
 	background-color: #dfdfdf;
 }
 
+.greyLetters
+{
+	color:#aaaaaa;
+}
+
 /*----------------------------------------------------------------------------
  * Font-sizes
  */
  
 html
 {
-    font-size:small;
+	font-size:small;
 }
  
 label
 {
-    font-family:calibri, arial, helvetica, sans-serif;
-    font-size:small;
+	font-family:calibri, arial, helvetica, sans-serif;
+	font-size:small;
 }
  
 .standard, td, input, p
 {
-    font-family:calibri, arial, helvetica, sans-serif;
-    font-size: small;
+	font-family:calibri, arial, helvetica, sans-serif;
+	font-size: small;
 }
 .large, select
 {
-    font-family:calibri, arial, helvetica, sans-serif;
-    font-size:medium;
+	font-family:calibri, arial, helvetica, sans-serif;
+	font-size:medium;
 }
 .button
 {
-    font-family:calibri, arial, helvetica, sans-serif;
-    font-size:large;
+	font-family:calibri, arial, helvetica, sans-serif;
+	font-size:large;
 }
 
 .header
 {
-    font-family:calibri, arial, helvetica, sans-serif;
-    font-size:xx-large;
+	font-family:calibri, arial, helvetica, sans-serif;
+	font-size:xx-large;
 }
 
 .popHeader
 {
-    font-family:calibri, arial, helvetica, sans-serif;
-    font-size:large;
+	font-family:calibri, arial, helvetica, sans-serif;
+	font-size:large;
 	border-bottom:solid 1px #a0a0a0;
 }
 
@@ -1222,13 +1227,30 @@ body
 
 .tabclass
 {
-	width:96%;
-	left:2%;
+	width:100%;
+	left:0px;
+	border-collapse:collapse;
+	marin:0;
 }
 
 .tdright
 {
 	text-align: right;
+	border-left:solid 1px #afafaf;
+	font-weight:100;
+	padding-right:15px;
+	padding-left:7px;
+	padding-top:5px;
+	padding-bottom:5px;
+}
+
+.tdleft
+{
+	padding-top:5px;
+	padding-bottom:5px;
+	padding-left:15px;
+	padding-right:7px;
+	margin-right:7px;
 }
 
 #pincode

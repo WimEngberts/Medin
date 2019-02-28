@@ -69,7 +69,14 @@ function initTables (db)
 															+ 'eigen INTEGER,'						// Deze hebt u buiten de lijst om zelf toegevoegd
 															+ 'nDosis INTEGER,'						// in deze hoeveelheid (verwerkbaar)
 															+ 'dosis TEXT,'							// in deze hoeveelheid (tekstueel)
+															+ 'startGebruik TEXT,'					// datum start gebruik
+															+ 'eindGebruik TEXT,'					// datum eind gebruik
 															+ 'UNIQUE (personID, tijdID, prk))');	// Deze combi moet uniek zijn. Niet tweemaal hetzelfde medicijn op dezelfde tijd
+	});
+	db.transaction (function (tx)
+	{
+		tx.executeSql ('ALTER TABLE innames ADD COLUMN startGebruik TEXT');							// datum start gebruik
+		tx.executeSql ('ALTER TABLE innames ADD COLUMN eindGebruik TEXT');							// datum eind gebruik
 	});
 	db.transaction (function (tx)
 	{
@@ -170,10 +177,21 @@ function showListStep3 (db, id)
 			{
 				var row = results.rows.item(i);
 				var n25 = nhg25 (row['nhg25']);
+				var stop  = new Date (row['eindGebruik']);
+				var start = new Date (row['startGebruik']);
+				var now   = new Date ();
+				var bGrey = false;
+				if (now.getTime () > stop.getTime ())
+					bGrey = true;
+				if (now.getTime () < start.getTime ())
+					bGrey = true;
 				if (i == 0)
 					id = row['lijst'];
 				var div = document.createElement ('div');
-				div.className = 'item standard';
+				var className = 'item standard';
+				if (bGrey)
+					className += ' greyLetters';
+				div.className = className;
 				div.setAttribute ('onclick', 'onShowMed (' + id + ', ' + row['regel'] + ');');
 				szHTML = '<b>' + row['dispensedMedicationName'] + '</b><br />';
 				szHTML += n25['omschrijving'];
@@ -209,10 +227,10 @@ function onShowMed (lijst, regel)
 				var szHTML = '';
 				var row = results.rows.item(0);
 
-				szHTML  = addDate (row['transcriptTimestamp'], 'Voorschrift');
-				szHTML += addDate (row['dispenseTimestamp']  , 'Geleverd');
-				szHTML += addDate (row['startGebruik']       , 'Startdatum');
-				szHTML += addDate (row['eindGebruik']        , 'Stopdatum');
+				szHTML  = addDate (row['transcriptTimestamp'], 'Voorschrift', 0);
+				szHTML += addDate (row['dispenseTimestamp']  , 'Geleverd', 0);
+				szHTML += addDate (row['startGebruik']       , 'Startdatum', 1);
+				szHTML += addDate (row['eindGebruik']        , 'Stopdatum', 2);
 				szHTML += '<tr><td>Geleverd</td><td>:</td><td>'				+ row['hoeveelheid'] + ' ' + row['codeUnit'] + '</td></tr>';
 				var d = nhg25 (row['nhg25']);
 				szHTML += '<tr><td>Dosering</td><td>:</td><td>'				+ d.omschrijving			+ '</td></tr>'
@@ -243,8 +261,9 @@ function onShowMed (lijst, regel)
 	});
 }
 
-function addDate (dateString, label)
+function addDate (dateString, label, check)
 {
+	var bRed = false;
 	var szHTML = '';
 	var months = [
 		'januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus',
@@ -255,12 +274,30 @@ function addDate (dateString, label)
 	szHTML += '</td><td>:</td><td>';
 	if (dateString != '')
 	{
+		var now = new Date ();
 		var date = new Date (dateString);
-		var show = date.getDate ();
+		var show = '<span';
+		if (check == 1)
+		{
+			if (date.getTime () > now.getTime ())
+				bRed = true;
+		}
+		else if (check == 2)
+		{
+			if (date.getTime () < now.getTime ())
+				bRed = true;
+		}
+		if (bRed)
+			show += ' style=\"color:#ff0000;\"';
+		show += '>';
+		show += date.getDate ();
 		show += ' ';
 		show += months[date.getMonth ()];
 		show += ' ';
 		show += date.getFullYear ();
+		if (bRed)
+			show += ' !';
+		show += '</span>';
 		szHTML += show;
 	}
 	szHTML += '</td></tr>';
@@ -307,404 +344,6 @@ function showWarning (lijst, regel)
 		{
 		};
 	});
-}
-
-function nhg25 (rawCode)
-{
-	var r				= [];
-	var hoeveelheid		= '';
-	var hCodeVan		= '';
-	var hCodeTot		= '';
-	var pCodeVan		= '';
-	var pCodeTot		= '';
-	var omschrijving	= '';
-	var dosis			= '';
-	var per				= '';
-	var vorm			= '';
-	var b				= [];
-	var j				= 0;
-	var end				= 0;
-	var i				= 0;
-	var pVorm			= 0;
-	var fVorm			= 0;
-	var code			= '';
-	var perMaal			= 1;
-	var perPeriode		= 0;
-
-	if (typeof rawCode == 'undefined' || !rawCode)
-		return r;
-
-	code = rawCode.toUpperCase ();
-	var vormen = [
-		[ "AE", "aerosol", "aerosols"],
-		[ "AM", "ampul", "ampullen"],
-		[ "AV", "applicatorvulling", "applicatorvullingen"],
-		[ "AI", "autoinhaler", "autoinhalers"],
-		[ "BR", "bruistabletbruistabletten", ""],
-		[ "C", "capsule", "capsules"],
-		[ "CA", "capsule mga", "capsules mga"],
-		[ "CE", "capsule msr", "capsules msr"],
-		[ "CM", "centimeter", "centimeters"],
-		[ "CD", "collodium", "collodium"],
-		[ "CR", "creme", "creme"],
-		[ "DE", "depper", "deppers"],
-		[ "DI", "disper", "dispers"],
-		[ "DZ", "doos", "dozen"],
-		[ "DO", "dosis", "doses"],
-		[ "D", "dragee", "dragees"],
-		[ "DK", "drank", "drank"],
-		[ "DR", "druppel", "druppels"],
-		[ "DV", "druppelvloeistof", "druppelvloeistof"],
-		[ "DU", "durette", "durettes"],
-		[ "EH", "eenheid", "eenheden"],
-		[ "CO", "eetlepel (= 15ml)", "eetlepels (a 15 ml)"],
-		[ "EL", "elixer", "elixer"],
-		[ "EM", "emulsie", "emulsie"],
-		[ "EX", "extract", "extract"],
-		[ "FL", "fles", "flessen"],
-		[ "FO", "foam", "foam"],
-		[ "GZ", "gaas", "gazen"],
-		[ "GA", "gas", "gas"],
-		[ "GE", "gel", "gel"],
-		[ "GR", "gram", "gram"],
-		[ "GN", "granulaat", "granulaat"],
-		[ "GI", "griepinjectie", "griepinjecties"],
-		[ "IO", "incont.onderlegger", "incont.onderleggers"],
-		[ "I", "inhalatie", "inhalaties"],
-		[ "IH", "inhalator", "inhalators"],
-		[ "IJ", "injectie", "injecties"],
-		[ "IV", "injectievloeistof", "injectievloeistof"],
-		[ "IL", "inlegluier", "inlegluiers"],
-		[ "IT", "intertulle", "intertulles"],
-		[ "IU", "IUD", "IUD"],
-		[ "KW", "kauwgom", "kauwgoms"],
-		[ "KG", "kilogram", "kilogram"],
-		[ "KL", "klysma", "klysma's"],
-		[ "KO", "korrel", "korrels"],
-		[ "KR", "kraal", "kralen"],
-		[ "L", "liter", "liter"],
-		[ "LO", "lotion", "lotion"],
-		[ "LU", "luier", "luiers"],
-		[ "MA", "maatlepel", "maatlepels"],
-		[ "M", "meter", "meter"],
-		[ "UG", "microgram", "microgram"],
-		[ "UL", "microliter", "microliter"],
-		[ "MG", "milligram", "milligram"],
-		[ "ML", "milliliter", "milliliter"],
-		[ "MM", "millimeter", "millimeter"],
-		[ "MI", "minim", "minims"],
-		[ "MT", "mitis tablet", "mitis tabletten"],
-		[ "MX", "mixtura", "mixtura"],
-		[ "MU", "mucilago", "mucilago"],
-		[ "NL", "naald", "naalden"],
-		[ "NB", "nebulisator", "nebulisators"],
-		[ "OL", "olie", "olie"],
-		[ "QQ", "onbekend", "onbekend"],
-		[ "ON", "onderlegger", "onderleggers"],
-		[ "OG", "oogdruppel", "oogdruppels"],
-		[ "OW", "oogwater", "oogwater"],
-		[ "OZ", "oogzalf", "oogzalf"],
-		[ "OR", "oordruppel", "oordruppels"],
-		[ "O", "oplossing", "oplossing"],
-		[ "XX", "overig", "overig"],
-		[ "OV", "ovule", "ovules"],
-		[ "CP", "paplepel (= 8 ml)", "paplepels (a 8 ml)"],
-		[ "PA", "pasta", "pasta"],
-		[ "PE", "penfill ampul", "penfill ampullen"],
-		[ "PI", "pil", "pillen"],
-		[ "PP", "pipet", "pipetten"],
-		[ "PK", "plak", "plak"],
-		[ "PL", "pleister", "pleisters"],
-		[ "P", "poeder", "poeders"],
-		[ "PF", "pufje", "pufjes"],
-		[ "R", "rectiole", "rectioles"],
-		[ "RP", "repetab", "repetabs"],
-		[ "RC", "retard capsule", "retard capsules"],
-		[ "RT", "retard tablet", "retard tabletten"],
-		[ "RO", "rotacap", "rotacaps"],
-		[ "SA", "sachet", "sachets"],
-		[ "SH", "shampoo", "shampoo"],
-		[ "SI", "siroop", "siroop"],
-		[ "SF", "siroop forte", "siroop forte"],
-		[ "SL", "slijm", "slijm"],
-		[ "SM", "smeersel", "smeersel"],
-		[ "SO", "solutio", "solutio"],
-		[ "SR", "spacer", "spacers"],
-		[ "SP", "spray", "spray"],
-		[ "SN", "spuit en naald", "spuiten en naalden"],
-		[ "ST", "strip", "strips"],
-		[ "CS", "strooipoeder", "strooipoeder"],
-		[ "SK", "stuk", "stuks"],
-		[ "SU", "suspensie", "suspensies"],
-		[ "T", "tablet", "tabletten"],
-		[ "TA", "tablet mga", "tabletten mga"],
-		[ "TE", "tablet msr", "tabletten msr"],
-		[ "TP", "tampon", "tampons"],
-		[ "CT", "theelepel (= 3 ml)", "theelepels (a 3 ml)"],
-		[ "TI", "tinctuur", "tinctuur"],
-		[ "TD", "transdermaalpleister", "transdermaalpleisters"],
-		[ "TU", "tube", "tubes"],
-		[ "TB", "turbuhaler", "turbuhalers"],
-		[ "UR", "urotainer", "urotainers"],
-		[ "VO", "vaginaalovule", "vaginaalovules"],
-		[ "VS", "vaginaalspoeling", "vaginaalspoeling"],
-		[ "VT", "vaginaaltablet", "vaginaaltabletten"],
-		[ "VC", "vaginale creme", "vaginale creme"],
-		[ "VB", "verband", "verbanden"],
-		[ "VP", "verpakking", "verpakkingen"],
-		[ "VE", "vetcreme", "vetcreme"],
-		[ "VU", "verstuiving", "verstuivingen"],
-		[ "VZ", "vetzalf", "vetzalf"],
-		[ "WA", "wassing", "wassingen"],
-		[ "WT", "wat", "watten"],
-		[ "WW", "wegwerpspuit", "wegwerpspuiten"],
-		[ "Z", "zakje", "zakjes"],
-		[ "ZA", "zalf", "zalf"],
-		[ "ZE", "zeep", "zeep"],
-		[ "S", "zetpil", "zetpillen"],
-		[ "ZU", "zuigtablet", "zuigtabletten"]
-	];
-
-	if (code.length > 0)
-	{
-		if (code[0] == '-')
-			hoeveelheid = '';
-		else
-		{
-			while (i < code.length && !end)
-			{
-				if (code[i] >= '0' && code[i] <= '9')
-				{
-					if (pVorm == 0)
-						hCodeVan += code[i];
-					else
-						hCodeTot += code[i];
-					hoeveelheid += code[i];
-					i++;
-				}
-				else if (code[i] == '.')
-				{
-					if (pVorm == 0)
-						hCodeVan += code[i];
-					else
-						hCodeTot += code[i];
-					hoeveelheid += ',';
-					i++;
-				}
-				else if (code[i] == '-')
-				{
-					hoeveelheid += ' tot ';
-					pVorm = 1;
-					i++;
-				}
-				else
-					end = 1;
-			}
-			if (  !pVorm
-			    && parseInt (hoeveelheid) > 1)
-				pVorm = 1;
-		}
-		if (i < code.length && code[i] == ' ')
-			i++;
-		else
-		{
-			while (   i < code.length
-				   && code[i] >= 'A'
-				   && code[i] <= 'Z')
-				per += code[i++];
-		}
-		if (i < code.length && code[i] == ' ')
-			i++;
-		else
-		{
-			end = 0;
-			j = 0;
-			while (i < code.length && !end)
-			{
-				if (code[i] >= '0' && code[i] <= '9')
-				{
-					if (j == 0)
-						pCodeVan += code[i];
-					else
-						pCodeTot += code[i];
-					dosis += code[i];
-					i++;
-				}
-				else if (code[i] == '.')
-				{
-					if (j == 0)
-						pCodeVan += code[i];
-					else
-						pCodeTot += code[i];
-					dosis += ',';
-					i++;
-				}
-				else if (code[i] == '-')
-				{
-					dosis += ' tot ';
-					j = 1;
-					i++;
-				}
-				else
-					end = 1;
-			}
-		}
-		if (i < code.length && code[i] == ' ')
-			i++;
-		else
-		{
-			while (   i < code.length
-				   && code[i] >= 'A'
-				   && code[i] <= 'Z')
-				vorm += code[i++];
-		}
-
-		j = 0;
-		while (i < code.length && code[i] == ' ')
-		{
-			i++;
-			b[j] = '';
-			while (i < code.length && code[i] != ' ')
-				b[j] += code[i++];
-			j++;
-		}
-	}
-	if (hoeveelheid != '')
-		omschrijving = hoeveelheid + ' maal';
-
-	if (per.length > 0)
-	{
-		omschrijving += ' per ';
-		var plural = 0;
-		if (per.length > 1)
-		{
-			plural = 1;
-			if (per[1] == 'T')
-			{
-				perMaal = 2;
-				omschrijving += 'twee ';
-			}
-			else if (per[1] == 'D')
-			{
-				perMaal = 3;
-				omschrijving += 'drie ';
-			}
-			else if (per[1] == 'V')
-			{
-				perMaal = 4;
-				omschrijving += 'vier ';
-			}
-			else if (per[1] == 'Q')
-			{
-				perMaal = 5;
-				omschrijving += 'vijf ';
-			}
-			else if (per[1] == 'Z')
-			{
-				perMaal = 6;
-				omschrijving += 'zes ';
-			}
-			else if (per[1] == 'S')
-			{
-				perMaal = 7;
-				omschrijving += 'zeven ';
-			}
-			else if (per[1] == 'A')
-			{
-				perMaal = 8;
-				omschrijving += 'acht ';
-			}
-			else if (per[1] == 'N')
-			{
-				perMaal = 9;
-				omschrijving += 'negen ';
-			}
-			else if (per[1] == 'X')
-			{
-				perMaal = 10;
-				omschrijving += 'tien ';
-			}
-			else if (per[1] == 'W')
-			{
-				perMaal = 12;
-				omschrijving += 'twaalf ';
-			}
-			else if (per[1] == 'P')
-			{
-				perMaal = 24;
-				omschrijving += 'vierentwintig ';
-			}
-			else if (per[1] == 'H')
-			{
-				perMaal = 0.5;
-				omschrijving += 'half ';
-			}
-		}
-		if (per[0] == 'D' && !plural)
-		{
-			perPeriode = 1;
-			omschrijving += 'dag';
-		}
-		else if (per[0] == 'D' && plural)
-		{
-			perPeriode = 1;
-			omschrijving += 'dagen';
-		}
-		else if (per[0] == 'U')
-		{
-			perPeriode = 2;
-			omschrijving += 'uur';
-		}
-		else if (per[0] == 'W' && !plural)
-		{
-			perPeriode = 3;
-			omschrijving += 'week';
-		}
-		else if (per[0] == 'W' && plural)
-		{
-			perPeriode = 3;
-			omschrijving += 'weken';
-		}
-		else if (per[0] == 'M' && !plural)
-		{
-			perPeriode = 4;
-			omschrijving += 'maand';
-		}
-		else if (per[0] == 'M' && plural)
-		{
-			perPeriode = 4;
-			omschrijving += 'maanden';
-		}
-	}
-	if (dosis != '')
-		omschrijving += ' ' + dosis;
-	if (vorm != '')
-	{
-		omschrijving += ' ';
-		for (j = 0; j < vormen.length && fVorm == 0; j++)
-		{
-			if (vormen[j][0] == vorm)
-			{
-				fVorm = 1;
-				if (pVorm)
-					omschrijving += vormen[j][2];
-				else
-					omschrijving += vormen[j][1];
-			}
-		}
-	}
-
-	r.omschrijving	= omschrijving;
-	r.hoeveelheid	= hoeveelheid;
-	r.dosis			= dosis;
-	r.hCodeVan		= hCodeVan;
-	r.hCodeTot		= hCodeTot;
-	r.pCodeVan		= pCodeVan;
-	r.pCodeTot		= pCodeTot;
-	r.perMaal		= perMaal;
-	r.perPeriode	= perPeriode;
-
-	return r;
 }
 
 function cleanMedication ()

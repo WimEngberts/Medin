@@ -235,6 +235,7 @@ function fillCalenderStep3 (personID)
 		{
 			calender = document.getElementById ('kalender');
 			var tijden = calender.getElementsByClassName ('tijdLine');
+			var now = new Date ();
 
 			for (var i = 0; i < results.rows.length; i++)
 			{
@@ -245,11 +246,25 @@ function fillCalenderStep3 (personID)
 					var datatijd = tijd.getAttribute ('data-tijd');
 					if (datatijd == row['tijdID'])
 					{
+						var start = new Date (row['startGebruik']);
+						var stop  = new Date (row['eindGebruik']);
+						var className = '';
+						if (   row['startGebruik'] != ''
+							&& row['startGebruik'] != null
+							&& start.getTime () > now.getTime ())
+							className = 'greyLetters';
+						else if (   row['eindGebruik'] != ''
+								 && row['eindGebruik'] != null
+						         && stop.getTime () < now.getTime ())
+							className = 'greyLetters';
 						var szHTML = tijd.innerHTML;
 						var first = tijd.getAttribute ('data-first');
 						if (first == 'true')
 							szHTML += '<ul>';
-						szHTML += '<li style="padding-left:15px;">';
+						szHTML += '<li ';
+						if (className != '')
+							szHTML += 'class=\"' + className + '\" ';
+						szHTML += 'style="padding-left:15px;">';
 						szHTML += row['naam'];
 						szHTML += '</li>';
 						tijd.innerHTML = szHTML;

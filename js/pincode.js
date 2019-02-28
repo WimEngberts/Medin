@@ -9,7 +9,9 @@ function buildPincodeScreen ()
 	var div = document.getElementById ('pincode');
 	div.setAttribute ('data-position', 0);
 	div.setAttribute ('data-pincode', '');
-	var width = div.offsetWidth;
+	var width  = div.offsetWidth;
+	var height = div.offsetHeight;
+	var margin = 0;
 
 	var tekst = document.getElementById ('pinTekst');
 	setVisibility ('menubutton', false)
@@ -18,14 +20,28 @@ function buildPincodeScreen ()
 		tekst.innerHTML = '<h2>Aanmaken pincode</h2>Om gebruik te maken van Medin dient u eerst een 5-cijferige pincode te installeren';
 	else
 		tekst.innerHTML = '<h2>Pincode</h2>Welkom bij Medin. Voer alstublieft uw 5-cijferige pincode in';
-	width = div.offsetWidth;
-	width /= 3;
-	width = parseInt (width);
-	var height = width;
+	if (width > height)
+	{
+		margin  = width;
+		margin -= height;
+		margin /= 2;
+		margin = parseInt (margin);
+		width = height;
+		width /= 3;
+		width = parseInt (width);
+	}
+	else
+	{
+		width = div.offsetWidth;
+		width /= 3;
+		width = parseInt (width);
+	}
+	height = width;
 	height *= 2;
 	height /= 3.7;
 	height = parseInt (height);
-	var left = 0;
+
+	var left = margin;
 	left += width;
 	left += width;
 	var bottom = 0;
@@ -43,9 +59,9 @@ function buildPincodeScreen ()
 		else
 			key.id='number' + i;
 		left -= width;
-		if (left < 0)
+		if (left < margin)
 		{
-			left = 0;
+			left = margin;
 			left += width;
 			left += width;
 			bottom += height;

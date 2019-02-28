@@ -350,7 +350,7 @@ function plus ()
 		{
 			if (typeof cordova == 'undefined' || !cordova)	// Aha, we draaien niet op een mobiel!
 			{
-				handleQRCode ('1;1;19780404;https://tst.promedico-apro.nl/HealthcareManag_API/rest/Patient/medicationoverview/d9807354-13c5-4719-a1ba-b888c606b777;--',1);
+				handleQRCode ('1;1;19780404;https://tst.promedico-apro.nl/HealthcareManag_API/rest/Patient/medicationoverview/d9807354-13c5-4719-a1ba-b888c606b777;--',0);
 //				handleQRCode ('1;1;19780404;https://build.phonegap.com/apps/2587184/install/SgnyyF1tHvVtw7RGJqJE',1);
 				
 			}

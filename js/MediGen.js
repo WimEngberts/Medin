@@ -366,7 +366,7 @@ function closeAll (szName)
 {
 	var divCover	= document.getElementById ('__brCover'+szName);
 	var divWrapper	= document.getElementById (szName);
-	
+
 	if (divWrapper)
 		document.body.removeChild (divWrapper);
 	if (divCover)
@@ -570,7 +570,7 @@ function createList (name, title, szText, callback, cancelCallback, bInTable)
 	elemText = document.createElement ('div');
 	elemText.id = '__text' + name;
 	elemText.style.cssText = 'position:relative;left:0px;right:0px;height:auto;padding-top:15px;padding-bottom:20px;border-bottom:solid 1px #afafaf;font-family:calibri, helvetica, sans-serif;'
-						  + 'text-align:left;color:#000000;background-color:#ffffff;padding-left:15px;padding-right:15px;';
+						  + 'text-align:left;color:#000000;background-color:#ffffff;';
 	if (bInTable)
 		szHTML  = '<table class=\"tabclass\">';
 	szHTML += szText;

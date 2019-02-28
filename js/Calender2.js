@@ -97,6 +97,7 @@ function checkListInCalenderStep3 (userID, listID)
 				tx.executeSql('SELECT * FROM innames WHERE personID = ' + g_Person, [], function (tx, results)
 				{
 					var szHTML = '';
+					var back = 'white';
 					for (var m = 0; m < g_Medicatie.length; m++)
 					{
 						var medicatie = g_Medicatie.item(m);
@@ -107,8 +108,12 @@ function checkListInCalenderStep3 (userID, listID)
 						var hVan = parseInt (n25.hCodeVan);
 						var hTot = parseInt (n25.hCodeTot);
 						var f = false;
+						var bValid = true;
 						var n = 0;
-						for (var i=0; i < results.rows.length; i++)
+						var tijd;
+						var prk;
+						var person;
+						for (var i = 0; i < results.rows.length; i++)
 						{
 							var row = results.rows.item(i);
 							if (medicatie['prk'] == row['prk'])				// OK, die hebben we
@@ -117,25 +122,62 @@ function checkListInCalenderStep3 (userID, listID)
 								if (row['nDosis'] == 0)						// was niet gestructureerd opgegeven?
 									n++;									// dan dus maar één keer meer opgevoerd in de kalender
 								f = true;
+								prk = row['prk'];
+								person = row['personID'];
+								tijd = row['tijdID'];
 							}
 						}
 						if (f)
 							medicatie['distributed'] = 1;
 						else
 							medicatie['distributed'] = 0;
-						szHTML += '<tr onmouseup=\"addToCalender (' + medicatie['lijst'] + ', ' + medicatie['regel'] + ');\">';
-						szHTML += '<td><b>' + medicatie['dispensedMedicationName'] + '</b><br />';
-						szHTML += n25['omschrijving'] + '</td><td class=\"tdright\">';
-						if (f)
-							szHTML += 'wijzigen';
+						var waarom = '';
+						var now = new Date ();
+						var start = new Date (medicatie['startGebruik']);
+						var stop  = new Date (medicatie['eindGebruik']);
+						if (   medicatie['startGebruik'] != ''
+						    && start.getTime () > now.getTime ())
+						{
+							bValid = false;
+							waarom = 'nog niet gebruiken';
+						}
+						else if (   medicatie['eindgebruik'] != ''
+								 && stop.getTime () < now.getTime ())
+						{
+							bValid = false;
+							waarom = 'niet meer gebruiken';
+						}
+						szHTML += '<tr class=\"' + back;
+						if (f && !bValid)
+							szHTML += '\" onmouseup=\"deleteFromCalender (' + person + ', ' + tijd + ', ' + prk + ');\">';
+						else if (f)
+							szHTML += '\" onmouseup=\"addToCalender (' + medicatie['lijst'] + ', ' + medicatie['regel'] + ');\">';
+						else if (!f && !bValid)
+						{
+							szHTML += ' greyLetters\">';
+						}
 						else
+							szHTML += '\" onmouseup=\"addToCalender (' + medicatie['lijst'] + ', ' + medicatie['regel'] + ');\">';
+						szHTML += '<td class=\"tdleft\"><b>' + medicatie['dispensedMedicationName'] + '</b><br />';
+						szHTML += n25['omschrijving'] + '</td><td class=\"tdright\">';
+						if (f && !bValid)
+							szHTML += 'verwijderen (' + waarom + ')';
+						else if (f)
+							szHTML += 'wijzigen';
+						else if (!f && bValid)
 							szHTML += 'toevoegen';
+						else
+							szHTML += waarom;
 						szHTML += '</td></tr>';
+						if (back == 'white')
+							back = 'grey';
+						else
+							back = 'white';
 					}
-					for (var i=0; i < results.rows.length; i++)							// Nu even omgekeerd. Hebt u niet teveel in de kalender?
+					for (var i = 0; i < results.rows.length; i++)							// Nu even omgekeerd. Hebt u niet teveel in de kalender?
 					{
 						var row = results.rows.item(i);
-						if (row['eigen'] != 0)											// Eigen ingevoerde medicatie telt niet mee natuurlijk
+						if (row['eigen'] != 1)											// Eigen ingevoerde medicatie telt niet mee natuurlijk
 						{
 							var f = false;
 							for (var m = 0; m < g_Medicatie.length; m++)
@@ -146,10 +188,13 @@ function checkListInCalenderStep3 (userID, listID)
 							}
 							if (!f)														// Nee, die staat niet meer in de lijst!
 							{
-								szHTML += '<tr onmouseup=\"deleteFromCalender (' + row['personID'] + ',' + row['tijdID'] + ',' + row['sequence'] + ');\">';
-								szHTML += '<td><b>' + row['naam'] + '</b><br />';
-								var n25 = nhg25 (row['nhg25']);
-								szHTML += n25['omschrijving'] + '</td><td>verwijderen</td></tr>';
+								szHTML += '<tr class=\"' + back + '\" onmouseup=\"deleteFromCalender (' + row['personID'] + ',' + row['tijdID'] + ',' + row['prk'] + ');\">';
+								szHTML += '<td class=\"tdleft\"><b>' + row['naam'] + '</b><br />';
+								szHTML += '</td><td class=\"tdright\">verwijderen (niet meer in de lijst)</td></tr>';
+								if (back == 'white')
+									back = 'grey';
+								else
+									back = 'white';
 							}
 						}
 					}
@@ -173,6 +218,28 @@ function checkListInCalenderStep3 (userID, listID)
 function onCloseCheck (div)
 {
 	fillCalender ();
+}
+
+function deleteFromCalender (person, tijd, prk)
+{
+	db.transaction(function(tx)
+	{
+		tx.executeSql('DELETE FROM innames WHERE personID = ' + person + ' AND tijdID = ' + tijd + ' AND prk=\"' + prk + '\"', [], function (tx, results)
+		{
+			refreshDistribution ();
+		}), function (tx, error)
+		{
+			alert ('er is een fout opgetreden\r\n' + error.message);
+		}, function ()
+		{
+		};
+	});
+}
+
+function refreshDistribution ()
+{
+	closeAll ('lijssie');
+	checkListInCalender ();
 }
 
 function distriCancel ()
@@ -236,9 +303,11 @@ function addToCalender (listID, regel)
 								colorName = 'grey';
 						}
 						var div = createList ('toevoegen', title, szHTML, closeAddAlarm, cancelAlarm, false);
-						div.setAttribute ('data-user', g_Person);
-						div.setAttribute ('data-prk',  g_Medicatie['prk']);
-						div.setAttribute ('data-naam', g_Medicatie['dispensedMedicationName']);
+						div.setAttribute ('data-user' , g_Person);
+						div.setAttribute ('data-prk' ,  g_Medicatie['prk']);
+						div.setAttribute ('data-naam' , g_Medicatie['dispensedMedicationName']);
+						div.setAttribute ('data-start', g_Medicatie['startGebruik']);
+						div.setAttribute ('data-stop' , g_Medicatie['eindGebruik']);
 					}), function (tx, error)
 					{
 						alert ('er is een fout opgetreden\r\n' + error.message);
@@ -281,6 +350,8 @@ function closeAddAlarm (div)
 		var personID = div.getAttribute ('data-user');
 		var naam = div.getAttribute ('data-naam');
 		var prk = div.getAttribute ('data-prk');
+		var start = div.getAttribute ('data-start');
+		var stop = div.getAttribute ('data-stop');
 		var sqlStatement = '';
 
 		var tijden = document.getElementsByClassName ('timeline');
@@ -290,7 +361,8 @@ function closeAddAlarm (div)
 			var id = tijd.getAttribute ('data-tijd');
 
 			if (tijd.className == 'timeSelected timeline')
-				sqlStatement =   'INSERT OR IGNORE INTO innames (personID,tijdID,prk,naam,eigen,nDosis,dosis) VALUES(' + personID + ',' + id + ',\'' + prk + '\',\'' + naam + '\',0,1,\'1\')';
+				sqlStatement =   'INSERT OR IGNORE INTO innames (personID,tijdID,prk,naam,eigen,nDosis,dosis,startGebruik,eindGebruik) '
+			                   + 'VALUES(' + personID + ',' + id + ',\'' + prk + '\',\'' + naam + '\',0,1,\'1\',\'' + start + '\', \'' + stop + '\')';
 			else
 				sqlStatement = 'DELETE FROM innames WHERE personID=' + personID + ' AND tijdID=' + id + ' AND prk=\'' + prk + '\'';
 
@@ -303,6 +375,7 @@ function closeAddAlarm (div)
 			{
 			};
 		}
+		refreshDistribution ();
 	});
 }
 

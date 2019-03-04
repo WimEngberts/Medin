@@ -34,7 +34,7 @@ function onDeviceReady()
 		alert ('no database available!');
 	setFontSizes ();
 	getPincode ();
-	setNextNotification ();
+//	setNextNotification ();
 	setPlus ();
 }
 

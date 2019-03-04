@@ -500,7 +500,7 @@ function handleQRCode (QRCode, bScanned)
 		//-----------------------------------------------------------------------------------------------------------
 		// STRAKS WEER WEG!!!!
 		//
-		setVisibility ('debug', true);
+//		setVisibility ('debug', true);
 		if (parts.length >= 5)
 		{
 			if (parts[4] == '--')
@@ -1053,6 +1053,7 @@ function importOverzicht (id, lijst)
 				if (medicijn.prescriber.speciality)
 					voorschrijverSpec = medicijn.prescriber.speciality;
 			}
+			voorschrijverNaam.replace (/\'/g, "\\\'");
 			if (medicijn.usageStartDate)
 				startGebruik = medicijn.usageStartDate;
 			if (medicijn.nhg25)
@@ -1071,20 +1072,38 @@ function importOverzicht (id, lijst)
 				prk = medicijn.prk;
 			if (medicijn.dispensedMedicationName)
 				dispensedMedicationName = medicijn.dispensedMedicationName;
+			dispensedMedicationName.replace (/\'/g, "\\\'");
 			if (medicijn.guidanceText)
 			{
 				var length = medicijn.guidanceText.length;
 
 				if (length > 0)
+				{
 					text1 = medicijn.guidanceText[0];
+					text1.replace (/\'/g, "\\\'");
+				}
+
+
 				if (length > 1)
+				{
 					text2 = medicijn.guidanceText[1];
+					text2.replace (/\'/g, "\\\'");
+				}
 				if (length > 2)
+				{
 					text3 = medicijn.guidanceText[2];
+					text3.replace (/\'/g, "\\\'");
+				}
 				if (length > 3)
+				{
 					text4 = medicijn.guidanceText[3];
+					text4.replace (/\'/g, "\\\'");
+				}
 				if (length > 4)
+				{
 					text5 = medicijn.guidanceText[4];
+					text5.replace (/\'/g, "\\\'");
+				}
 			}
 			log ('adding \'' + dispensedMedicationName + '\'');
 

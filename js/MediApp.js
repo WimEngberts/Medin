@@ -497,7 +497,10 @@ function handleQRCode (QRCode, bScanned)
 			bd = getReadableDate (year, month, day);
 		globalBirthDate = year + '-' + month + '-' + day;
 		globalShowDate  = bd;
-		
+		//-----------------------------------------------------------------------------------------------------------
+		// STRAKS WEER WEG!!!!
+		//
+		setVisibility ('debug', true);
 		if (parts.length >= 5)
 		{
 			if (parts[4] == '--')
@@ -1113,6 +1116,7 @@ function importOverzicht (id, lijst)
 						 + '\'' + text4                   + '\','
 						 + '\'' + text5                   + '\','
 						 + '\'' + nhg25                   + '\')';
+			log (sqlStatement);
 
 			tx.executeSql(sqlStatement, [], function (tx, results)
 			{

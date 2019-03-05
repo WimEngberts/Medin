@@ -36,7 +36,7 @@ function showPersons ()
 	showMenu (false);
 	persons = document.getElementById ('list');
 	screenID = 1;
-	
+
 	if (persons)
 	{
 		header = document.getElementById ('listHeader');
@@ -95,7 +95,7 @@ function personsOK ()
 function listsOK ()
 {
 	var persons;
-	
+
 	persons = document.getElementById ('list');
 	setVisibility ('menubutton', true);
 	setVisibility ('back', false);
@@ -123,7 +123,7 @@ function showAllLists ()
 	screenID = 2;
 	showMenu (false);
 	lists = document.getElementById ('list');
-	
+
 	if (lists)
 	{
 		header = document.getElementById ('listHeader');
@@ -351,35 +351,41 @@ function plus ()
 			if (typeof cordova == 'undefined' || !cordova)	// Aha, we draaien niet op een mobiel!
 			{
 				handleQRCode ('1;1;19780404;https://tst.promedico-apro.nl/HealthcareManag_API/rest/Patient/medicationoverview/d9807354-13c5-4719-a1ba-b888c606b777;--',0);
-//				handleQRCode ('1;1;19780404;https://build.phonegap.com/apps/2587184/install/SgnyyF1tHvVtw7RGJqJE',1);
-				
 			}
-			else cordova.plugins.barcodeScanner.scan(
-				function (result)
-				{
-					if (result.cancelled)
-						myAlert ('Het lezen van de QR code is afgebroken');
-					else
-						handleQRCode (result.text,1);
-				},
-				function (error)
-				{
-					alert("Scanning failed: " + error);
-				},
-				{
-					preferFrontCamera : false,		// iOS and Android
-					showFlipCameraButton : true,	// iOS and Android
-					showTorchButton : true,			// iOS and Android
-					torchOn: false,					// Android, launch with the torch switched off
-					saveHistory: true,				// Android, save scan history (default false)
-					prompt : "Plaats de QR code binnen het scangebied", // Android
-					resultDisplayDuration: 0,		// Android, display scanned text for X ms. 0 suppresses it entirely, default 1500
-					formats : "QR_CODE,PDF_417",	// default: all but PDF_417 and RSS_EXPANDED
-					orientation : "unset",			// Android only (portrait|landscape), default unset so it rotates with the device
-					disableAnimations : true,		// iOS
-					disableSuccessBeep: false		// iOS and Android
-				}
-			);
+			else
+			{
+				var Scanner = cordova.plugins.barcodeScanner;
+				Scanner.show ();
+				setVisibility ('wrapper', false);
+				Scanner.scan(
+					function (result)
+					{
+						setVisibility ('wrapper', true);
+						if (result.cancelled)
+							myAlert ('Het lezen van de QR code is afgebroken');
+						else
+							handleQRCode (result.text,1);
+					},
+					function (error)
+					{
+						setVisibility ('wrapper', true);
+						alert("Scanning failed: " + error);
+					},
+					{
+						preferFrontCamera : false,		// iOS and Android
+						showFlipCameraButton : true,	// iOS and Android
+						showTorchButton : true,			// iOS and Android
+						torchOn: false,					// Android, launch with the torch switched off
+						saveHistory: true,				// Android, save scan history (default false)
+						prompt : "Plaats de QR code binnen het scangebied", // Android
+						resultDisplayDuration: 0,		// Android, display scanned text for X ms. 0 suppresses it entirely, default 1500
+						formats : "QR_CODE,PDF_417",	// default: all but PDF_417 and RSS_EXPANDED
+						orientation : "unset",			// Android only (portrait|landscape), default unset so it rotates with the device
+						disableAnimations : true,		// iOS
+						disableSuccessBeep: false		// iOS and Android
+					}
+				);
+			}
 		}
 		else								// momenten
 			nieuwTijdstip ();
@@ -497,10 +503,7 @@ function handleQRCode (QRCode, bScanned)
 			bd = getReadableDate (year, month, day);
 		globalBirthDate = year + '-' + month + '-' + day;
 		globalShowDate  = bd;
-		//-----------------------------------------------------------------------------------------------------------
-		// STRAKS WEER WEG!!!!
-		//
-//		setVisibility ('debug', true);
+
 		if (parts.length >= 5)
 		{
 			if (parts[4] == '--')
@@ -1037,6 +1040,7 @@ function importOverzicht (id, lijst)
 			var text4                   = '';
 			var text5                   = '';
 			var nhg25					= '';
+			var tmp;
 
 			if (medicijn.id)
 				uuid = medicijn.id;
@@ -1049,11 +1053,10 @@ function importOverzicht (id, lijst)
 				if (medicijn.prescriber.agbCode)
 					voorschrijverAGB = medicijn.prescriber.agbCode;
 				if (medicijn.prescriber.name)
-					voorschrijverNaam = medicijn.prescriber.name;
+					voorschrijverNaam = medicijn.prescriber.name.replace (/\'/g,"''");
 				if (medicijn.prescriber.speciality)
 					voorschrijverSpec = medicijn.prescriber.speciality;
 			}
-			voorschrijverNaam.replace (/\'/g, "\\\'");
 			if (medicijn.usageStartDate)
 				startGebruik = medicijn.usageStartDate;
 			if (medicijn.nhg25)
@@ -1071,39 +1074,21 @@ function importOverzicht (id, lijst)
 			if (medicijn.prk)
 				prk = medicijn.prk;
 			if (medicijn.dispensedMedicationName)
-				dispensedMedicationName = medicijn.dispensedMedicationName;
-			dispensedMedicationName.replace (/\'/g, "\\\'");
+				dispensedMedicationName = medicijn.dispensedMedicationName.replace (/\'/g, "''");
 			if (medicijn.guidanceText)
 			{
 				var length = medicijn.guidanceText.length;
 
 				if (length > 0)
-				{
-					text1 = medicijn.guidanceText[0];
-					text1.replace (/\'/g, "\\\'");
-				}
-
-
+					text1 = medicijn.guidanceText[0].replace (/\'/g,"''");
 				if (length > 1)
-				{
-					text2 = medicijn.guidanceText[1];
-					text2.replace (/\'/g, "\\\'");
-				}
+					text2 = medicijn.guidanceText[1].replace (/\'/g,"''");
 				if (length > 2)
-				{
-					text3 = medicijn.guidanceText[2];
-					text3.replace (/\'/g, "\\\'");
-				}
+					text3 = medicijn.guidanceText[2].replace (/\'/g,"''");
 				if (length > 3)
-				{
-					text4 = medicijn.guidanceText[3];
-					text4.replace (/\'/g, "\\\'");
-				}
+					text4 = medicijn.guidanceText[3].replace (/\'/g,"''");
 				if (length > 4)
-				{
-					text5 = medicijn.guidanceText[4];
-					text5.replace (/\'/g, "\\\'");
-				}
+					text5 = medicijn.guidanceText[4].replace (/\'/g,"''");
 			}
 			log ('adding \'' + dispensedMedicationName + '\'');
 
@@ -1151,6 +1136,7 @@ function importOverzicht (id, lijst)
 		setVisibility ('back', false);	// Er zou een terugknop kunnen staan. Die willen we nu niet meer
 		log ('showing list');
 		showList (db);
+		myAlert ('Nieuwe medicijnlijst is opgeslagen', 'Melding');
 //		checkListInCalender ();
 	});
 }
@@ -1241,6 +1227,8 @@ function showSimpleList (lijst)
 	persons = document.getElementById ('list');
 	setVisibility ('menubutton', true);
 	setVisibility ('back', false);
+	setVisibility ('plus', true);
+	screenID = 0;							// weer het medicatielijst scherm
 	if (persons)
 	{
 		persons.style.opacity = '0';

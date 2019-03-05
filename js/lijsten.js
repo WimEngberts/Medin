@@ -226,15 +226,18 @@ function onShowMed (lijst, regel)
 			{
 				var szHTML = '';
 				var row = results.rows.item(0);
+				var voorschrijver = row['voorschrijverNaam'];
+				if (row['voorschrijverSpec'])
+					voorschrijver += ',<br />' + row['voorschrijverSpec'];
 
 				szHTML  = addDate (row['transcriptTimestamp'], 'Voorschrift', 0);
-				szHTML += addDate (row['dispenseTimestamp']  , 'Geleverd', 0);
+				szHTML += addDate (row['dispenseTimestamp']  , 'Leverdatum', 0);
 				szHTML += addDate (row['startGebruik']       , 'Startdatum', 1);
 				szHTML += addDate (row['eindGebruik']        , 'Stopdatum', 2);
 				szHTML += '<tr><td>Geleverd</td><td>:</td><td>'				+ row['hoeveelheid'] + ' ' + row['codeUnit'] + '</td></tr>';
 				var d = nhg25 (row['nhg25']);
 				szHTML += '<tr><td>Dosering</td><td>:</td><td>'				+ d.omschrijving			+ '</td></tr>'
-	                   +  '<tr><td>Voorschrijver</td><td>:</td><td>'		+ row['voorschrijverNaam']	+ '</td></tr>';
+	                   +  '<tr><td>Voorschrijver</td><td>:</td><td>'		+ voorschrijver	+ '</td></tr>';
 				if (row['iterationCredit'] > 0)
 					szHTML += '<tr><td>Herhalingen</td><td>:</td><td>'		+ row['iterationCredit']	+ '</td></tr>';
 				if (row['text1'] != '')

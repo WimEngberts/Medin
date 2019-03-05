@@ -143,7 +143,7 @@ function Cover (szName, bRespond)
 //------------------------------------------------------------------------------------------------------
 // Geef een alert
 //
-function myAlert (szText)
+function myAlert (szText, szHeader)
 {
 
     var elemWrapper;
@@ -164,7 +164,10 @@ function myAlert (szText)
     elemDiv = document.createElement ('div');
     elemDiv.style.cssText = 'position:relative;width:100%;height:auto;padding-top:10px;padding-bottom:10px;border-bottom:solid 1px #afafaf;font-family:calibri, helvetica, sans-serif;'
                           + 'font-size:large;text-align:left;color:#000000;background-color:#ffffff;padding-left:15px;border-radius:20px 20px 0 0;';
-    elemDiv.innerHTML = '<b>Let op!</b>';
+	if (szHeader)
+		elemDiv.innerHTML = '<b>' + szHeader + '</b>';
+	else
+		elemDiv.innerHTML = '<b>Let op!</b>';
     elemWrapper.appendChild (elemDiv);
     elemDiv = document.createElement ('div');
     elemDiv.id = '__brAlertText';

@@ -22,9 +22,16 @@ function nhg25 (rawCode)
 	var tekst			= '';
 
 	if (typeof rawCode == 'undefined' || !rawCode)
+	{
+		r.omschrijving = 'Niet opgegeven';
 		return r;
+	}
 
 	code = rawCode.toUpperCase ();
+	if (   code.length > 0								// Er is wel degelijk een code
+	    && code[0] >= 'A'								// Maar ze beginnen direct al met de aanvullende teksten
+		&& code[0] <= 'Z')								// ZONDER voorafgaande spatie!
+		code = ' ' + code;								// Dan maken we dat maar eerst even in orde
 	var vormen = [
 		[ "AE", "aerosol", "aerosols"],
 		[ "AM", "ampul", "ampullen"],

@@ -355,7 +355,7 @@ function plus ()
 			else
 			{
 				var Scanner = cordova.plugins.barcodeScanner;
-				Scanner.show ();
+//				Scanner.show ();
 				setVisibility ('wrapper', false);
 				Scanner.scan(
 					function (result)
@@ -679,9 +679,9 @@ function indiOK (id, qr)
 			warn = 0;
 		
 		if (globalID == -1)
-			sqlStatement = 'INSERT INTO person (naam, gebJaar, gebMaand, gebDag, warnCalender) VALUES (\'' + globalNaam + '\', ' + globalDate.getFullYear() + ', ' + (globalDate.getMonth()+1) + ', ' + globalDate.getDate () + ', ' + warn + ')';
+			sqlStatement = 'INSERT INTO person (naam, gebJaar, gebMaand, gebDag, warnCalender) VALUES (\'' + globalNaam.replace (/\'/g, "''") + '\', ' + globalDate.getFullYear() + ', ' + (globalDate.getMonth()+1) + ', ' + globalDate.getDate () + ', ' + warn + ')';
 		else
-			sqlStatement = 'UPDATE person SET naam = \'' + globalNaam + '\', gebJaar = ' + globalDate.getFullYear() + ', gebMaand = ' + (globalDate.getMonth()+1) + ', gebDag = ' + globalDate.getDate() + ', warnCalender=' + warn +  ' WHERE id = ' + globalID;
+			sqlStatement = 'UPDATE person SET naam = \'' + globalNaam.replace (/\'/g, "''") + '\', gebJaar = ' + globalDate.getFullYear() + ', gebMaand = ' + (globalDate.getMonth()+1) + ', gebDag = ' + globalDate.getDate() + ', warnCalender=' + warn +  ' WHERE id = ' + globalID;
 
 		tx.executeSql(sqlStatement, [], function (tx, results)
 		{

@@ -1,5 +1,13 @@
 function setNextNotification ()
 {
+
+	cordova.plugins.notification.local.schedule(
+	{
+		title: 'Wellicht iets innemen?',
+		text: 'Nou ja, zie ook maar!',
+		trigger: { in: 1, unit: 'minute' }
+	});
+	/*
 	if (window.Notification)
 	{
 		var granted = loadSetting ('notify');
@@ -28,8 +36,8 @@ function setNextNotification ()
 				body: 'Medin heeft u iets heeeeel belangrijks te zeggen!!' 
 			}); 
 /*			notify.onshow  = function() { alert('show'); };
-			notify.onclose = function() { alert('close'); }; */
+			notify.onclose = function() { alert('close'); };
 			notify.onclick = function() { alert('click'); };
 		}
-	}
+	} */
 }

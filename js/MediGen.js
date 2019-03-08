@@ -34,7 +34,7 @@ function onDeviceReady()
 		alert ('no database available!');
 	setFontSizes ();
 	getPincode ();
-//	setNextNotification ();
+	setNextNotification ();
 	setPlus ();
 }
 
@@ -87,9 +87,10 @@ function init()
 	
 	g_bDeviceIsReady = false;
 
-	setting = loadSetting ('monthsSave');						// Hoe lang bewaren we lijsten?
-	if (setting)
-		document.getElementById ('termijn').value = setting;
+	setting = loadSetting ('monthsSave');						// Hoe lang bewaren we oude lijsten?
+	if (!setting)												// Niet opgegeven?
+		setting = 3;											// default is 3 maanden
+	document.getElementById ('termijn').value = setting;
 
 	setting = loadSetting ('largeFont');						// grote letters gekozen?
 	var bSetting = true;

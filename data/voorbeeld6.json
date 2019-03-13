@@ -1,0 +1,100 @@
+{
+	"agbCode": "02099999",
+	"medicationDispenseEvents": [{
+			"amount": 30,
+			"codedUnit": "ST",
+			"dispensedMedicationName": "CARBASALAATCALCIUM CARDIO MYLAN SACHET 100MG",
+			"guidanceText": ["1 maal per dag 1 sachet", "Eerst oplossen in water"],
+			"hpk": "1112635",
+			"id": "DA5B9752-3997-4E2E-B1D3-EA68C9A24E8C",
+			"nhg25": "1D1SA",
+			"prescriber": {
+				"agbCode": "01020230",
+				"name": "Liere",
+				"speciality": "Huisarts, medicatiebeoordeling chronisch UR-geneesmiddelgebruik (0102)"
+			},
+			"prk": "13072",
+			"transcriptionTimestamp": "2019-03-04T14:37:47Z",
+			"usageEndDate": "2019-04-02",
+			"usageStartDate": "2019-03-04",
+			"zi": "14168731"
+		}, {
+			"amount": 90,
+			"codedUnit": "ST",
+			"dispensedMedicationName": "SIMVASTATINE ACCORD TABLET FILMOMHULD 20MG",
+			"guidanceText": ["1 maal per dag 1 tablet", "'s Avonds innemen", "Bij dit middel GEEN grapefruit(sap) gebr."],
+			"hpk": "1981919",
+			"id": "87570EBE-1F4B-43FC-84D6-E3A774139FF3",
+			"iterationDate": "2020-01-23",
+			"nhg25": "1D1T",
+			"prescriber": {
+				"agbCode": "01020230",
+				"name": "Liere",
+				"speciality": "Huisarts, medicatiebeoordeling chronisch UR-geneesmiddelgebruik (0102)"
+			},
+			"prk": "67814",
+			"transcriptionTimestamp": "2019-02-23T11:56:07Z",
+			"usageEndDate": "2019-05-29",
+			"usageStartDate": "2019-02-01",
+			"zi": "16254112"
+		}, {
+			"amount": 20,
+			"codedUnit": "ST",
+			"dispensedMedicationName": "PARACETAMOL SANDOZ TABLET  500MG",
+			"guidanceText": ["1 maal per dag 1 tablet zo nodig", "BIJ HOOFDPIJN"],
+			"hpk": "665800",
+			"id": "D4A5D4DC-F720-4F36-AC9E-549151BD06A7",
+			"nhg25": "1D1T ZN ",
+			"prescriber": {
+				"agbCode": "01020230",
+				"name": "Liere",
+				"speciality": "Huisarts, medicatiebeoordeling chronisch UR-geneesmiddelgebruik (0102)"
+			},
+			"prk": "67903",
+			"transcriptionTimestamp": "2019-03-04T14:28:09Z",
+			"usageEndDate": "2019-03-17",
+			"usageStartDate": "2019-03-04",
+			"zi": "14163853"
+		}, {
+			"amount": 90,
+			"codedUnit": "ST",
+			"dispenseTimestamp": "2018-10-23T18:07:32Z",
+			"dispensedMedicationName": "FUROSEMIDE CF TABLET 40MG",
+			"guidanceText": ["2 maal per dag 1 tablet"],
+			"hpk": "1099477",
+			"id": "96C57C93-E713-40FD-9E29-E7D7C91B56D3",
+			"nhg25": "2D1T",
+			"prescriber": {
+				"agbCode": "01002541",
+				"name": "Vries",
+				"speciality": "Huisartsen, niet nader gespecificeerd (0100)"
+			},
+			"prk": "5967",
+			"transcriptionTimestamp": "2018-10-23T18:07:08Z",
+			"usageEndDate": "2018-12-06",
+			"usageStartDate": "2018-10-23",
+			"zi": "14145839"
+		}, {
+			"amount": 90,
+			"codedUnit": "ST",
+			"dispenseTimestamp": "2018-10-23T18:07:32Z",
+			"dispensedMedicationName": "BEKEND ZOOITJE",
+			"guidanceText": ["2 maal per dag 1 tablet"],
+			"hpk": "1099477",
+			"id": "96C57C93-E713-40FD-9E29-E7D7C91B56D3",
+			"nhg25": "GB",
+			"prescriber": {
+				"agbCode": "01002541",
+				"name": "Vries",
+				"speciality": "Huisartsen, niet nader gespecificeerd (0100)"
+			},
+			"prk": "5968",
+			"transcriptionTimestamp": "2018-10-23T18:07:08Z",
+			"usageEndDate": "2018-12-06",
+			"usageStartDate": "2018-10-23",
+			"zi": "14145839"
+		}
+	],
+	"pharmacyName": "Breedveld",
+	"timestamp": "2019-03-05T15:08:21Z"
+}

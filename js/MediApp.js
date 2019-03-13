@@ -864,20 +864,30 @@ function nieuwePatient (year, month, day)
 	var question;
 	var d = getReadableDate (year, month, day);
 
-	question = 'Er is nog geen gebruiker geregistreerd met geboortedatum\r\n     ' + d + '\r\n'
-			 + 'Wilt u deze gebruiker nu aanmaken?';
-	var q = confirm (question);						// Wat denk u ervan?
-	
-	if (q)											// Yep, dus nu even het betreffende scherm opbouwen
-	{
-		var preset = year + '-';					// de datum wordt vooraf ingevuld als yyyy-mm-dd
-		if (month < 10)
-			preset += '0';
-		preset += month + '-';
-		if (day < 10)
-			preset += '0';
-		preset += day;
+//	question = 'Er is nog geen gebruiker geregistreerd met geboortedatum\r\n     ' + d + '\r\n'
+//			 + 'Wilt u deze gebruiker nu aanmaken?';
+//	var q = confirm (question);						// Wat denk u ervan?
+	question = 'Er is nog geen gebruiker geregistreerd met geboortedatum<br />&nbsp;&nbsp;&nbsp;&nbsp;' + d + '<br />'
+			 + 'Wilt u deze gebruiker nu toevoegen?';
+
+	var individual = document.getElementById ('individual');
+	var preset = year + '-';					// de datum wordt vooraf ingevuld als yyyy-mm-dd
+	if (month < 10)
+		preset += '0';
+	preset += month + '-';
+	if (day < 10)
+		preset += '0';
+	preset += day;
+	individual.setAttribute ('data-preset', preset);
+	myQuestion ('qnewPat', 'Nog niet bekend', question, 'JA', 'NEE', nieuwePatientStep2, null);
+}
+
+function nieuwePatientStep2 ()
+{
+//	if (q)											// Yep, dus nu even het betreffende scherm opbouwen
+//	{
 		var individual = document.getElementById ('individual');
+		var preset = individual.getAttribute ('data-preset');
 		addEnterListener (indiEnter);
 		addBackListener (indiBack);
 		individual.setAttribute ('data-id', -1);
@@ -896,7 +906,7 @@ function nieuwePatient (year, month, day)
 		{
 			individual.style.opacity = '1';
 		}
-	}
+//	}
 }
 
 //------------------------------------------------------------------------------------------------

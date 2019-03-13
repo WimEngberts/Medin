@@ -195,9 +195,6 @@ function showListStep3 (db, id)
 				div.setAttribute ('onclick', 'onShowMed (' + id + ', ' + row['regel'] + ');');
 				szHTML = '<b>' + row['dispensedMedicationName'] + '</b><br />';
 				szHTML += n25['omschrijving'];
-//				szHTML += row['hoeveelheid'];
-//				szHTML += ' ';
-//				szHTML += row['codeUnit'];
 				if (row['text1'] != '')
 					szHTML += '<div class="warning"></div>';
 				div.innerHTML = szHTML;

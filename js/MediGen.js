@@ -158,13 +158,13 @@ function myAlert (szText, szHeader)
     Cover ('__myAlert', false);    						// onderliggende tekst even bedekken
     elemWrapper = document.createElement ('div');		// wrapper voor alles
     elemWrapper.id = '__myAlert';				// met deze ID. Kunnen we hem straks bij de OK knop terugvinden om weg te gooien
-    elemWrapper.style.cssText = 'position:absolute;width:80%;top:50%;left:50%;height:auto;background-color:#ffffff;padding:0;opacity:0;-moz-opacity:0;-khtml-opacity:0;border-radius:20px;overlow:hidden;';
+    elemWrapper.style.cssText = 'position:absolute;width:80%;top:50%;left:50%;height:auto;background-color:#ffffff;padding:0;opacity:0;-moz-opacity:0;-khtml-opacity:0;overlow:hidden;';
 	elemWrapper.style.overflow = 'hidden';
     elemWrapper.style.transition = 'opacity 0.5s ease';
     elemWrapper.style.webkitTransition = 'opacity 0.5s ease';
     elemDiv = document.createElement ('div');
     elemDiv.style.cssText = 'position:relative;width:100%;height:auto;padding-top:10px;padding-bottom:10px;border-bottom:solid 1px #afafaf;font-family:calibri, helvetica, sans-serif;'
-                          + 'font-size:large;text-align:left;color:#000000;background-color:#ffffff;padding-left:15px;border-radius:20px 20px 0 0;';
+                          + 'font-size:large;text-align:left;color:#000000;background-color:#ffffff;padding-left:15px;';
 	if (szHeader)
 		elemDiv.innerHTML = '<b>' + szHeader + '</b>';
 	else
@@ -172,16 +172,16 @@ function myAlert (szText, szHeader)
     elemWrapper.appendChild (elemDiv);
     elemDiv = document.createElement ('div');
     elemDiv.id = '__brAlertText';
-    elemDiv.style.cssText = 'position:relative;left:0px;right:0px;height:auto;padding-top:15px;padding-bottom:20px;border-bottom:solid 1px #afafaf;font-family:calibri, helvetica, sans-serif;'
+    elemDiv.style.cssText = 'position:relative;left:0px;right:0px;height:auto;padding-top:15px;padding-bottom:20px;font-family:calibri, helvetica, sans-serif;'
                           + 'text-align:left;color:#000000;background-color:#ffffff;padding-left:15px;padding-right:15px;';
 	elemDiv.style.fontSize = fontSize;
     elemDiv.innerHTML = szText;
     elemWrapper.appendChild (elemDiv);
     elemDiv = document.createElement ('div');
-    elemDiv.style.cssText = 'position:relative;width:100%;height:auto;padding-top:10px;padding-bottom:10px;border-bottom:solid 1px #afafaf;font-family:calibri, helvetica, sans-serif;'
-                          + 'font-size:medium;text-align:center;color:#000000;background-color:#ffffff;border-radius:0 0 20px 20px;';
+    elemDiv.style.cssText = 'position:relative;width:100%;height:auto;padding-top:10px;padding-bottom:7px;padding-right:20px;font-family:calibri, helvetica, sans-serif;'
+                          + 'font-size:medium;text-align:right;color:#0152a1;background-color:#ffffff;';
 	elemDiv.onclick = function () { onClickOK ('__myAlert'); };
-	elemDiv.innerHTML = '<b>OK</b>';
+	elemDiv.innerHTML = 'OK';
 	elemDiv.onmouseover = function ()
 	{
 		this.style.backgroundColor = '#afafaf';
@@ -643,6 +643,81 @@ function createList (name, title, szText, callback, cancelCallback, bInTable)
 	elemWrapper.style.marginTop = '-' + vHeight + 'px';
 	addEnterListener (onEnterPrescription);
 	addBackListener (onBackPrescription);
-	
+
+	return elemWrapper;
+}
+
+function myQuestion (id, szQuestion, szHeader, szButtonLeft, szButtonRight, leftCallback, rightCallback)
+{
+	var elemWrapper;
+	var elemDiv;
+	var elemText;
+	var szHTML = '';
+	var fontSize = 'small';
+
+	if (isLargeFont ())
+		fontSize = 'medium';
+
+	showMenu (0);										// menu mag nu even weg
+	Cover (id, true);									// onderliggende tekst even bedekken
+	elemWrapper = document.createElement ('div');		// wrapper voor alles
+	elemWrapper.id = id;								// met deze ID. Kunnen we hem straks bij de OK knop terugvinden om weg te gooien
+	elemWrapper.style.cssText = 'position:absolute;width:80%;top:50%;left:50%;height:auto;background-color:#ffffff;padding:0;opacity:0;-moz-opacity:0;-khtml-opacity:0;overflow:hidden;'; // border-radius: 20px;';
+	elemWrapper.style.transition = 'opacity 0.5s ease';
+	elemWrapper.style.webkitTransition = 'opacity 0.5s ease';
+	elemDiv = document.createElement ('div');
+//	elemDiv.style.cssText = 'position:relative;width:100%;height:auto;padding-top:10px;padding-bottom:10px;border-bottom:solid 1px #afafaf;font-family:calibri, helvetica, sans-serif;'
+	elemDiv.style.cssText = 'position:relative;width:100%;height:auto;padding:10px;border-bottom:solid 1px #afafaf;font-family:calibri, helvetica, sans-serif;'
+						  + 'font-size:large;text-align:left;color:#000000;background-color:#c7e0ff;padding-left:15px;border-bottom:solid 1px #a0a0a0;';		// border-radius:20px 20px 0 0;';
+	elemDiv.innerHTML = szHeader;
+	elemWrapper.appendChild (elemDiv);
+	elemText = document.createElement ('div');
+	elemText.id = '__text' + id;
+	elemText.style.cssText = 'position:relative;left:0px;right:0px;height:auto;padding-top:15px;padding-bottom:20px;padding-left:7px;padding-right:7px;font-family:calibri, helvetica, sans-serif;'
+						   + 'text-align:left;color:#000000;background-color:#ffffff;';
+	elemText.innerHTML = szQuestion;
+	elemWrapper.appendChild (elemText);
+
+	// ------------------------------------------------------------------------------------------------------
+	// de knoppenbalk
+	//
+	elemDiv = document.createElement ('div');
+	elemDiv.style.cssText = 'position:relative;width:100%;height:auto;padding:20px 0 7px 0;background-color:#ffffff;display:inline-block;float:right;vertical-align:bottom;';				// border-radius:0 0 20px 20px;';
+	elemWrapper.appendChild (elemDiv);
+
+	// ------------------------------------------------------------------------------------------------------
+	// Maak eerste de rechterknop
+	//
+	var elemButton = document.createElement ('div');
+	elemButton.style.cssText = 'float:right;height:auto;bottom:0px;padding-left:30px;padding-right:20px;font-family:calibri, helvetica, sans-serif;'
+							 + 'font-size:medium;color:#0152a1;background-color:#ffffff;vertical-align:bottom;margin:0;';
+	elemButton.onclick = function () { onCloseList (id, rightCallback); };
+	elemButton.innerHTML = szButtonRight;
+	elemDiv.appendChild (elemButton);
+
+	// ------------------------------------------------------------------------------------------------------
+	// En dan de linkerknop
+	//
+	elemButton = document.createElement ('div');
+	elemButton.style.cssText = 'float:right;display:inline-block;height:auto;bottom:0px;padding-right:30px;padding-left:20px;color:#0152a1;'
+							 + 'font-size:medium;font-family:calibri, helvetica, sans-serif;background-color:#ffffff;vertical-align:bottom;';
+	elemButton.onclick = function () { onCloseList (id, leftCallback); };
+	elemButton.innerHTML = szButtonLeft;
+	elemDiv.appendChild (elemButton);
+
+	elemWrapper.style.opacity = '1';
+	elemWrapper.style.mozOpacity = '1';
+	elemWrapper.style.khtmlOpacity = '1';
+
+	document.body.appendChild (elemWrapper);
+
+	var vWidth  = elemWrapper.offsetWidth;
+	var vHeight = elemWrapper.offsetHeight;
+	vWidth = parseInt (vWidth/2, 10);
+	vHeight = parseInt (vHeight/2, 10);
+	elemWrapper.style.marginLeft = '-' + vWidth + 'px';
+	elemWrapper.style.marginTop = '-' + vHeight + 'px';
+//	addEnterListener (onEnterPrescription);
+
 	return elemWrapper;
 }

@@ -325,41 +325,44 @@ function deleteStip ()
 		return ;
 	}
 	else
-		bDelete = confirm ('Weet u zeker dat u tijdstip "' + stipNaam + '" wilt verwijderen?');
-	if (bDelete)
+		myQuestion ('qDeleteStip', 'Weet u zeker dat u tijdstip "' + stipNaam + '" wilt verwijderen?', 'Let op!', 'JA', 'NEE', deleteStipStep2, null);
+}
+//		bDelete = confirm ('Weet u zeker dat u tijdstip "' + stipNaam + '" wilt verwijderen?');
+//	if (bDelete)
+function deleteStipStep2 ()
+
+{
+	db.transaction(function(tx)
 	{
-		db.transaction(function(tx)
+		var dataPerson = '';
+		var dataStip = '';
+		var stip = document.getElementById ('tijdStip');
+		dataPerson = stip.getAttribute ('data-person');
+		dataStip   = stip.getAttribute ('data-stip');
+		tx.executeSql('DELETE FROM tijden WHERE personID = ' + dataPerson + ' AND tijdID = ' + dataStip, [], function (tx, results)
 		{
 			var dataPerson = '';
 			var dataStip = '';
 			var stip = document.getElementById ('tijdStip');
 			dataPerson = stip.getAttribute ('data-person');
 			dataStip   = stip.getAttribute ('data-stip');
-			tx.executeSql('DELETE FROM tijden WHERE personID = ' + dataPerson + ' AND tijdID = ' + dataStip, [], function (tx, results)
+			tx.executeSql('DELETE FROM innames WHERE personID = ' + dataPerson + ' AND tijdID = ' + dataStip, [], function (tx, results)
 			{
-				var dataPerson = '';
-				var dataStip = '';
-				var stip = document.getElementById ('tijdStip');
-				dataPerson = stip.getAttribute ('data-person');
-				dataStip   = stip.getAttribute ('data-stip');
-				tx.executeSql('DELETE FROM innames WHERE personID = ' + dataPerson + ' AND tijdID = ' + dataStip, [], function (tx, results)
-				{
-					stipCancel ();
-					fillCalender ();
-				}), function (tx, error)
-				{
-					alert ('er is een fout opgetreden\r\n' + error.message);
-				}, function ()
-				{
-				};
+				stipCancel ();
+				fillCalender ();
 			}), function (tx, error)
 			{
 				alert ('er is een fout opgetreden\r\n' + error.message);
 			}, function ()
 			{
 			};
-		});
-	}
+		}), function (tx, error)
+		{
+			alert ('er is een fout opgetreden\r\n' + error.message);
+		}, function ()
+		{
+		};
+	});
 }
 
 function openTijdstip (bNieuw)

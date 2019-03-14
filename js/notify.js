@@ -91,14 +91,4 @@ function setNotifications ()
 		{
 		};
 	});
-
-	cordova.plugins.notification.local.schedule({
-		id: 9,
-		title: "Zou je niet eens iets gaan innemen?",
-		text: "Nou ja, zie eigenlijk ook maar!",
-		sound:true,
-		foreground: true,
-		trigger: { in: 5, unit: 'second' },
-		actions: [ { id: 'actionclick', launch: true, title: 'Click me' } ]
-	});
 }

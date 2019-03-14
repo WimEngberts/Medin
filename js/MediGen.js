@@ -17,7 +17,7 @@ var g_bWarnAboutList	= false;
 function onDeviceReady()
 {
 	g_bDeviceIsReady = true;
-	
+
 //	alert ('The device is ready');
 
 	db = window.openDatabase("Medin.db", "1.0", "Medin", 200000);
@@ -34,8 +34,15 @@ function onDeviceReady()
 		alert ('no database available!');
 	setFontSizes ();
 	getPincode ();
-	setNextNotification ();
 	setPlus ();
+}
+
+function onDeviceReady2()
+{
+	g_bDeviceIsReady = true;
+
+	alert ('The device is ready');
+	setNextNotification ();
 }
 
 function addEnterListener (listenFunction)
@@ -115,7 +122,7 @@ function init()
 
 	onDeviceReady ();
 //	alert ('now waiting for deviceready');
-//	document.addEventListener ("deviceready", onDeviceReady, false);
+	document.addEventListener ("deviceready", onDeviceReady2, false);
 }
 
 function isDeviceReady ()

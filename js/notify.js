@@ -3,8 +3,10 @@ function setNextNotification ()
 
 	cordova.plugins.notification.local.schedule(
 	{
+		id: 1,
 		title: 'Wellicht iets innemen?',
 		text: 'Nou ja, zie ook maar!',
+		foreground: true,
 		trigger: { in: 1, unit: 'minute' }
 	});
 	/*

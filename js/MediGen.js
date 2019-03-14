@@ -152,45 +152,65 @@ function myAlert (szText, szHeader)
 	var fontSize = 'small';
 
 	if (isLargeFont ())
-//	if (document.getElementById ('largeFont').className == 'checked')
 		fontSize = 'medium';
 
-    Cover ('__myAlert', false);    						// onderliggende tekst even bedekken
-    elemWrapper = document.createElement ('div');		// wrapper voor alles
-    elemWrapper.id = '__myAlert';				// met deze ID. Kunnen we hem straks bij de OK knop terugvinden om weg te gooien
-    elemWrapper.style.cssText = 'position:absolute;width:80%;top:50%;left:50%;height:auto;background-color:#ffffff;padding:0;opacity:0;-moz-opacity:0;-khtml-opacity:0;overlow:hidden;';
+	Cover ('__myAlert', false);    						// onderliggende tekst even bedekken
+	elemWrapper = document.createElement ('div');		// wrapper voor alles
+	elemWrapper.id = '__myAlert';						// met deze ID. Kunnen we hem straks bij de OK knop terugvinden om weg te gooien
+	elemWrapper.style.cssText = 'position:absolute;width:80%;top:50%;left:50%;height:auto;background-color:#ffffff;padding:0;opacity:0;-moz-opacity:0;-khtml-opacity:0;overlow:hidden;';
 	elemWrapper.style.overflow = 'hidden';
-    elemWrapper.style.transition = 'opacity 0.5s ease';
-    elemWrapper.style.webkitTransition = 'opacity 0.5s ease';
+	elemWrapper.style.transition = 'opacity 0.5s ease';
+	elemWrapper.style.webkitTransition = 'opacity 0.5s ease';
+
+	//------------------------------------------------------------------------------------------------
+	// De header
+	//
     elemDiv = document.createElement ('div');
     elemDiv.style.cssText = 'position:relative;width:100%;height:auto;padding-top:10px;padding-bottom:10px;border-bottom:solid 1px #afafaf;font-family:calibri, helvetica, sans-serif;'
-                          + 'font-size:large;text-align:left;color:#000000;background-color:#ffffff;padding-left:15px;';
+                          + 'font-size:large;text-align:left;color:#000000;background-color:#c7e0ff;padding-left:15px;';
 	if (szHeader)
 		elemDiv.innerHTML = '<b>' + szHeader + '</b>';
 	else
 		elemDiv.innerHTML = '<b>Let op!</b>';
-    elemWrapper.appendChild (elemDiv);
-    elemDiv = document.createElement ('div');
-    elemDiv.id = '__brAlertText';
-    elemDiv.style.cssText = 'position:relative;left:0px;right:0px;height:auto;padding-top:15px;padding-bottom:20px;font-family:calibri, helvetica, sans-serif;'
-                          + 'text-align:left;color:#000000;background-color:#ffffff;padding-left:15px;padding-right:15px;';
+	elemWrapper.appendChild (elemDiv);
+
+	//------------------------------------------------------------------------------------------------
+	// De melding tekst
+	//
+	elemDiv = document.createElement ('div');
+	elemDiv.id = '__brAlertText';
+	elemDiv.style.cssText = 'position:relative;left:0px;right:0px;height:auto;padding-top:15px;padding-bottom:20px;font-family:calibri, helvetica, sans-serif;'
+						  + 'text-align:left;color:#000000;background-color:#ffffff;padding-left:15px;padding-right:15px;';
 	elemDiv.style.fontSize = fontSize;
-    elemDiv.innerHTML = szText;
-    elemWrapper.appendChild (elemDiv);
-    elemDiv = document.createElement ('div');
-    elemDiv.style.cssText = 'position:relative;width:100%;height:auto;padding-top:10px;padding-bottom:7px;padding-right:20px;font-family:calibri, helvetica, sans-serif;'
-                          + 'font-size:medium;text-align:right;color:#0152a1;background-color:#ffffff;';
+	elemDiv.innerHTML = szText;
+	elemWrapper.appendChild (elemDiv);
+
+	// ------------------------------------------------------------------------------------------------------
+	// de knoppenbalk
+	//
+	elemDiv = document.createElement ('div');
+	elemDiv.style.cssText = 'position:relative;width:100%;height:auto;padding:20px 0 7px 0;background-color:#ffffff;display:inline-block;float:right;vertical-align:bottom;';
+	elemWrapper.appendChild (elemDiv);
+
+	// ------------------------------------------------------------------------------------------------------
+	// De OK knop
+	//
+	var elemButton = document.createElement ('div');
+	elemButton.style.cssText = 'float:right;height:auto;bottom:0px;padding-left:30px;padding-right:20px;font-family:calibri, helvetica, sans-serif;'
+							 + 'font-size:medium;color:#0152a1;background-color:#ffffff;vertical-align:bottom;margin:0;';
+	elemButton.onclick = function () { onClickOK ('__myAlert'); };
+	elemButton.innerHTML = 'OK';
+	elemDiv.appendChild (elemButton);
+
+/*	//------------------------------------------------------------------------------------------------
+	// De OK knop
+	//
+	elemDiv = document.createElement ('div');
+	elemDiv.style.cssText = 'position:relative;width:100%;height:auto;padding-top:10px;padding-bottom:7px;padding-right:20px;font-family:calibri, helvetica, sans-serif;'
+						  + 'font-size:medium;text-align:right;color:#0152a1;background-color:#ffffff;';
 	elemDiv.onclick = function () { onClickOK ('__myAlert'); };
 	elemDiv.innerHTML = 'OK';
-	elemDiv.onmouseover = function ()
-	{
-		this.style.backgroundColor = '#afafaf';
-	};
-	elemDiv.onmouseout = function ()
-	{
-		this.style.backgroundColor = '#ffffff';
-	};
-	elemWrapper.appendChild (elemDiv);
+	elemWrapper.appendChild (elemDiv); */
 
 	elemWrapper.style.opacity = '1';
 	elemWrapper.style.mozOpacity = '1';

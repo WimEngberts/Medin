@@ -29,7 +29,8 @@
 	<preference name="iosPersistentFileLocation" value="Compatibility" />
 
 	<plugin spec="https://github.com/phonegap/phonegap-plugin-barcodescanner" source="git" />
-	<plugin spec="https://github.com/phonegap/phonegap-plugin-local-notification" source="git" />
+<!--	<plugin spec="https://github.com/phonegap/phonegap-plugin-local-notification" source="git" /> -->
+	<plugin spec="https://github.com/katzer/cordova-plugin-local-notifications" source="git" />
 <!--	<plugin spec="https://github.com/apache/cordova-plugin-statusbar" source="git" /> -->
 <!--	<plugin spec="https://github.com/napolitano/cordova-plugin-intent" source="git" /> -->
 

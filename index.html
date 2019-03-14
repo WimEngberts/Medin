@@ -100,66 +100,6 @@
 			<div id="individualButton" class="ok okWrap button" onmouseup="indiOK(-1,0);"><b>OK</b></div>
 		</div>
 		<!--
-			Verwijderen van een persoon en/of de medicatielijst(en) van een persoon
-		 -->
-		<!--
-			Nieuw tijdstip of wijzigen bestaand tijdstip
-		 -->
-		<div id="tijdStip">
-			<div class="stipHeader popHeader"><div id="stipText"><b>Wijzigen tijdstip</b></div>
-				<div class="individualClose" onmouseup="stipCancel();"></div>
-			</div>
-			<div id="stipBody">
-				<table width="100%" style="border-collapse:collapse;">
-					<tr>
-						<td style="padding-right:10px;">Naam</td>
-						<td><input id="stipNaam" type="text" /></td>
-						<td><div id="stipDelete" onclick="deleteStip();"></div></td>
-					</tr>
-					<tr>
-						<td style="padding-right:10px;">Tijd</td>
-						<td colspan="2"><input id="stipTijd" type="time" /></td>
-					</tr>
-					<tr><td colspan="2">&nbsp;</td></tr>
-					<tr>
-						<td>Innemen op</td>
-						<td colspan="2">
-							<table width="100%" style="border-collapse:collapse">
-								<tr>
-									<td><input id="maandag" type="checkbox" name="iedere" value="0" />
-										<label for="maandag"><span></span>Maandag</label></td>
-									<td><input id="vrijdag" type="checkbox" name="iedere" value="0" />
-										<label for="vrijdag"><span></span>Vrijdag</label></td>
-								</tr>
-								<tr>
-									<td><input id="dinsdag" type="checkbox" name="iedere" value="0" />
-										<label for="dinsdag"><span></span>Dinsdag</label></td>
-									<td><input id="zaterdag" type="checkbox" name="iedere" value="0" />
-										<label for="zaterdag"><span></span>Zaterdag</label></td>
-								</tr>
-								<tr>
-									<td><input id="woensdag" type="checkbox" name="iedere" value="0" />
-										<label for="woensdag"><span></span>Woensdag</label></td>
-									<td><input id="zondag" type="checkbox" name="iedere" value="0" />
-										<label for="zondag"><span></span>Zondag</label></td>
-								</tr>
-								<tr>
-									<td><input id="donderdag" type="checkbox" name="iedere" value="0" />
-										<label for="donderdag"><span></span>Donderdag</label></td>
-									<td>&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>
-				</table>
-			</div>
-			<div class="okWrap">
-				<div class="ok2 button" onmouseup="stipOK();"><b>OK</b></div>
-				<div class="ok3 button" onmouseup="stipCancel();"><b>Annuleer</b></div>
-			</div>
-		</div>
-
-		<!--
 			De configuratie settings
 		 -->
 		<div id="config">
@@ -220,6 +160,63 @@
 			<div class="okWrap">
 				<div class="ok2 button" onmouseup="jsonLoad ();"><b>Laden</b></div>
 				<div class="ok3 button" onmouseup="jsonCancel();"><b>Annuleer</b></div>
+			</div>
+		</div>
+
+		<!--
+			Nieuw tijdstip of wijzigen bestaand tijdstip
+		 -->
+		<div id="tijdStip">
+			<div class="stipHeader popHeader"><div id="stipText"><b>Wijzigen tijdstip</b></div>
+				<div class="individualClose" onmouseup="stipCancel();"></div>
+			</div>
+			<div id="stipBody">
+				<table width="100%" style="border-collapse:collapse;">
+					<tr>
+						<td style="padding-right:10px;">Naam</td>
+						<td><input id="stipNaam" type="text" /></td>
+						<td><div id="stipDelete" onclick="deleteStip();"></div></td>
+					</tr>
+					<tr>
+						<td style="padding-right:10px;">Tijd</td>
+						<td colspan="2"><input id="stipTijd" type="time" /></td>
+					</tr>
+					<tr><td colspan="2">&nbsp;</td></tr>
+					<tr>
+						<td>Innemen op</td>
+						<td colspan="2">
+							<table width="100%" style="border-collapse:collapse">
+								<tr>
+									<td><input id="maandag" type="checkbox" name="iedere" value="0" />
+										<label for="maandag"><span></span>Maandag</label></td>
+									<td><input id="vrijdag" type="checkbox" name="iedere" value="0" />
+										<label for="vrijdag"><span></span>Vrijdag</label></td>
+								</tr>
+								<tr>
+									<td><input id="dinsdag" type="checkbox" name="iedere" value="0" />
+										<label for="dinsdag"><span></span>Dinsdag</label></td>
+									<td><input id="zaterdag" type="checkbox" name="iedere" value="0" />
+										<label for="zaterdag"><span></span>Zaterdag</label></td>
+								</tr>
+								<tr>
+									<td><input id="woensdag" type="checkbox" name="iedere" value="0" />
+										<label for="woensdag"><span></span>Woensdag</label></td>
+									<td><input id="zondag" type="checkbox" name="iedere" value="0" />
+										<label for="zondag"><span></span>Zondag</label></td>
+								</tr>
+								<tr>
+									<td><input id="donderdag" type="checkbox" name="iedere" value="0" />
+										<label for="donderdag"><span></span>Donderdag</label></td>
+									<td>&nbsp;</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="okWrap">
+				<div class="ok2 button" onmouseup="stipOK();"><b>OK</b></div>
+				<div class="ok3 button" onmouseup="stipCancel();"><b>Annuleer</b></div>
 			</div>
 		</div>
 

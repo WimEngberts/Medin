@@ -1,3 +1,5 @@
+/*
+
 function setNextNotification ()
 {
 
@@ -9,37 +11,54 @@ function setNextNotification ()
 		foreground: true,
 		trigger: { in: 1, unit: 'minute' }
 	});
-	/*
-	if (window.Notification)
+}
+*/
+function setNextNotification ()
+{
+	cordova.plugin.notification.local.hasPermission(function (granted)
 	{
-		var granted = loadSetting ('notify');
-		if (!granted || granted != 'granted')
+		if (granted == false)
 		{
-			Notification.requestPermission(function (permission)
+
+			console.warn("No permission");
+			// If app doesnt have permission request it
+			cordova.plugin.notification.local.registerPermission(function (granted)
 			{
-				saveSetting ('notify',  permission);
-				// If the user accepts, let’s create a notification
-				if (permission == 'granted')
+				console.warn("Ask for permission");
+				if (granted == true)
 				{
-					var notify = new Notification('Medin', {
-						tag: 'Een Medin notificatie!!', 
-						body: 'Medin heeft u iets heeeeel belangrijks te zeggen!!' 
-					});
-					notify.onshow  = function() { alert('show'); };
-					notify.onclose = function() { alert('close'); };
-					notify.onclick = function() { alert('click'); };
+					console.warn("Permission accepted");
+					// If app is given permission try again
+					testNotifications();
+
 				}
+				else
+				{
+					alert("We need permission to show you notifications");
+				}
+
 			});
 		}
 		else
-		{
-			var notify = new Notification('Medin', {
-				tag: 'Een Medin notificatie!!', 
-				body: 'Medin heeft u iets heeeeel belangrijks te zeggen!!' 
-			}); 
-/*			notify.onshow  = function() { alert('show'); };
-			notify.onclose = function() { alert('close'); };
-			notify.onclick = function() { alert('click'); };
-		}
-	} */
+			testNotifications ();
+	});
+}
+
+function testNotifications ()
+{
+	var now = new Date();
+
+	console.warn("sending notification");
+
+/*	var isAndroid = false;
+
+	if (device.platform === "Android")
+		isAndroid = true; */
+
+	cordova.plugin.notification.local.schedule({
+		id: 9,
+		title: "Zou je niet eens iets gaan innemen?",
+		text: "Nou ja, zie eigenlijk ook maar!",
+		at: new Date (new Date ().getTime() + 10)
+	});
 }

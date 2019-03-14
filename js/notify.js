@@ -15,9 +15,12 @@ function setNextNotification ()
 */
 function setNextNotification ()
 {
-	
+
+	showMenu (0);
+	alert ('testing notifications');
 	cordova.plugins.notification.local.hasPermission(function (granted)
 	{
+		alert ('checked for permission');
 		if (granted == false)
 		{
 
@@ -46,19 +49,15 @@ function setNextNotification ()
 
 function testNotifications ()
 {
-	var now = new Date();
 
-	console.warn("sending notification");
-
-/*	var isAndroid = false;
-
-	if (device.platform === "Android")
-		isAndroid = true; */
-
+	alert ('we have permission!');
 	cordova.plugins.notification.local.schedule({
 		id: 9,
 		title: "Zou je niet eens iets gaan innemen?",
 		text: "Nou ja, zie eigenlijk ook maar!",
-		at: new Date (new Date ().getTime() + 10)
+		sound:true,
+		foreground: true,
+		trigger: { in: 5, unit: 'second' },
+		actions: [ { id: 'actionclick', launch: true, title: 'Click me' } ]
 	});
 }

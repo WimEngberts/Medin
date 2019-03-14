@@ -41,7 +41,8 @@ function onDeviceReady2()
 {
 	g_bDeviceIsReady = true;
 
-	setNextNotification ();
+/*	alert ('The device is ready');
+	setNextNotification (); */
 }
 
 function addEnterListener (listenFunction)

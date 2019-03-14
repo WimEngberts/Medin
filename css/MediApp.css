@@ -601,6 +601,17 @@ body
 	background-size:30px;
 }
 
+.testicon
+{
+	position:absolute;
+	left:10px;
+	top:9px;
+	height:30px;
+	width:30px;
+	background:transparent url('../img/testicon.png') center no-repeat;
+	background-size:30px;
+}
+
 .settings
 {
 	position:absolute;

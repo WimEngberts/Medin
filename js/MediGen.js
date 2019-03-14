@@ -41,7 +41,6 @@ function onDeviceReady2()
 {
 	g_bDeviceIsReady = true;
 
-	alert ('The device is ready');
 	setNextNotification ();
 }
 

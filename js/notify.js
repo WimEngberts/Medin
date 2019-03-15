@@ -128,7 +128,7 @@ function setNotifications ()
 							text: medicijn,
 							sound:true,
 							foreground: true,
-							smallIcon: 'res://img/smallicon',
+//							smallIcon: 'res://img/smallicon',
 							trigger: { every: { hour: hour, minute: minute } }
 //							trigger: { at: new Date (now.getFullYear (), now.getMonth (), now.getDate (), hour, minute) },
 //							actions: [ { id: 'actionclick', launch: true, title: 'Click me' } ]

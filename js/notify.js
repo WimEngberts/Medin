@@ -55,7 +55,12 @@ function setNextNotifications ()
 							setNotifications ();
 					});
 				}
-			}
+			}), function (tx, error)
+			{
+				alert ('er is een fout opgetreden\r\n' + error.message);
+			}, function ()
+			{
+			};
 		}), function (tx, error)
 		{
 			alert ('er is een fout opgetreden\r\n' + error.message);
@@ -82,7 +87,7 @@ function setNotifications ()
 				var yep = false;
 				var naam = '';
 				var tijd = results.rows.item (t);						// Deze bijvoorbeeld
-				for (var (i = 0; i < g_notiPersons.length; i++)			// van wie is deze?
+				for (var i = 0; i < g_notiPersons.length; i++)			// van wie is deze?
 				{
 					var person = g_notiPersons.item(i);
 					if (   person['id'] == tijd['personID']				// Aha, mevrouw Jansen

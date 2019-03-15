@@ -218,6 +218,7 @@ function checkListInCalenderStep3 (userID, listID)
 function onCloseCheck (div)
 {
 	fillCalender ();
+	setNextNotifications ();
 }
 
 function deleteFromCalender (person, tijd, prk)
@@ -240,6 +241,7 @@ function refreshDistribution ()
 {
 	closeAll ('lijssie');
 	checkListInCalender ();
+	setNextNotifications ();
 }
 
 function distriCancel ()
@@ -368,6 +370,7 @@ function closeAddAlarm (div)
 
 			tx.executeSql(sqlStatement, [], function (tx, results)
 			{
+				setNextNotifications ();
 			}), function (tx, error)
 			{
 				alert ('er is een fout opgetreden\r\n' + error.message);

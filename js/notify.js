@@ -10,7 +10,6 @@ function setNextNotifications ()
 //	cordova.plugins.notification.local.cancelAll ();						// Gooi alle bestaande notifications eerst weg
 	cordova.plugins.notification.local.cancelAll(function()
 	{
-		alert("all notifications have been cancelled");
 	}, this);
 	db.transaction(function(tx)
 	{
@@ -58,7 +57,6 @@ function setNextNotifications ()
 						else
 							setNotifications ();
 					});
-					setNotifications ();
 				}
 			}), function (tx, error)
 			{
@@ -87,6 +85,7 @@ function setNotifications ()
 		tx.executeSql('SELECT * FROM tijden ORDER BY personID', [], function (tx, results)
 		{
 			var count = 0;
+			var now = new Date ();
 			for (var t = 0; t < results.rows.length; t++)				// OK, we gaan nu alle tijdstippen langs
 			{
 				var yep = false;
@@ -128,16 +127,15 @@ function setNotifications ()
 							text: medicijn,
 							sound:true,
 							foreground: true,
-//							smallIcon: 'res://img/smallicon',
-							trigger: { every: { hour: hour, minute: minute } }
-//							trigger: { at: new Date (now.getFullYear (), now.getMonth (), now.getDate (), hour, minute) },
+							smallIcon: 'res://img/smallicon',
+//							trigger: { every: { hour: hour, minute: minute } }
+							trigger: { at: new Date (now.getFullYear (), now.getMonth (), now.getDate (), hour, minute) },
 //							actions: [ { id: 'actionclick', launch: true, title: 'Click me' } ]
 						});
 						count += 1;
 					}
 				}
 			}
-			alert ('added ' + count + ' notifications');
 		}), function (tx, error)
 		{
 			alert ('er is een fout opgetreden\r\n' + error.message);

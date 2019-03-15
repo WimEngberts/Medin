@@ -1,4 +1,4 @@
-var g_Innames;
+var g_notiInnames;
 var g_notiPersons;
 
 // -------------------------------------------------------------------------------------------------
@@ -7,7 +7,11 @@ var g_notiPersons;
 function setNextNotifications ()
 {
 
-	cordova.plugins.notification.local.cancelAll ();						// Gooi alle bestaande notifications eerst weg
+//	cordova.plugins.notification.local.cancelAll ();						// Gooi alle bestaande notifications eerst weg
+	cordova.plugins.notification.local.cancelAll(function()
+	{
+		alert("all notifications have been cancelled");
+	}, this);
 	db.transaction(function(tx)
 	{
 		tx.executeSql('SELECT * FROM person', [], function (tx, results)
@@ -15,11 +19,11 @@ function setNextNotifications ()
 			g_notiPersons = results.rows;									// De geregistreerde personen
 			tx.executeSql('SELECT * FROM innames', [], function (tx, results)			// Halen we eerst alle geregistreerde innames op
 			{
-				var g_Innames = results.rows;
+				g_notiInnames = results.rows;
 				var any = false;														// Want als er niets is geregistreerd, dan gaan we ook nog niets registreren!
-				for (var i = 0; i < g_Innames.length; i++)								// Ga ze dan even langs
+				for (var i = 0; i < g_notiInnames.length; i++)								// Ga ze dan even langs
 				{
-					var inname = g_Innames.item (i);
+					var inname = g_notiInnames.item (i);
 					for (var j = 0; j < g_notiPersons.length; j++)
 					{
 						var person = g_notiPersons.item (j);
@@ -54,6 +58,7 @@ function setNextNotifications ()
 						else
 							setNotifications ();
 					});
+					setNotifications ();
 				}
 			}), function (tx, error)
 			{
@@ -104,9 +109,9 @@ function setNotifications ()
 					var hour = parseInt (stip[0]);
 					var minute = parseInt (stip[1]);
 
-					for (var i = 0; i < g_Innames.length; i++)			// En welke medicijnen gaan we dan innemen?
+					for (var i = 0; i < g_notiInnames.length; i++)			// En welke medicijnen gaan we dan innemen?
 					{
-						var inname = g_Innames.item (i);
+						var inname = g_notiInnames.item (i);
 						if (inname['tijdID'] == tijd['tijdID'])			// OK, deze dus
 						{
 							if (medicijn != '')

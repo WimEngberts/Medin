@@ -86,6 +86,7 @@ function setNotifications ()
 		{
 			var count = 0;
 			var now = new Date ();
+			var notifs [];
 			for (var t = 0; t < results.rows.length; t++)				// OK, we gaan nu alle tijdstippen langs
 			{
 				var yep = false;
@@ -120,22 +121,24 @@ function setNotifications ()
 					}
 					if (medicijn != '')									// Is er iets geregistreerd op dit tijdstip?
 					{
-						cordova.plugins.notification.local.schedule(	// OK, voeg dan een notification toe
+						notifs[count] =
 						{
 							id: stip['tijdID'],
 							title: naam + ', tijd voor uw medicijn',
 							text: medicijn,
 							sound:true,
 							foreground: true,
-							smallIcon: 'res://img/smallicon',
+//							smallIcon: 'res://img/smallicon',
 //							trigger: { every: { hour: hour, minute: minute } }
-							trigger: { at: new Date (now.getFullYear (), now.getMonth (), now.getDate (), hour, minute) },
+							trigger: { at: new Date (now.getFullYear (), now.getMonth (), now.getDate (), hour, minute) }
 //							actions: [ { id: 'actionclick', launch: true, title: 'Click me' } ]
-						});
+						};
 						count += 1;
 					}
 				}
 			}
+			if (count > 0)
+				cordova.plugins.notification.local.schedule(notifs);	// OK, voeg dan een notification toe
 		}), function (tx, error)
 		{
 			alert ('er is een fout opgetreden\r\n' + error.message);

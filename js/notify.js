@@ -7,7 +7,7 @@ var g_notiPersons;
 function setNextNotifications ()
 {
 
-	if (typeof cordova != 'undefined' && !cordova)	// Aha, we draaien op een mobiel!
+	if (typeof cordova != 'undefined' && cordova)						// Aha, we draaien op een mobiel!
 	{
 		cordova.plugins.notification.local.cancelAll(function()
 		{
@@ -33,9 +33,9 @@ function setNextNotifications ()
 							any = true;
 					}
 				}
-				if (any)																// Er is tenminste één inname voor iemand die ook de kalender gebruikt
+				if (any)															// Er is tenminste één inname voor iemand die ook de kalender gebruikt
 				{
-					if (typeof cordova != 'undefined' && !cordova)	// Aha, we draaien op een mobiel!
+					if (typeof cordova != 'undefined' && cordova)					// Aha, we draaien op een mobiel!
 					{
 						cordova.plugins.notification.local.hasPermission(function (granted)	// Mogen we wel notifications doen?
 						{
@@ -145,7 +145,7 @@ function setNotifications ()
 			}
 			if (count > 0)
 			{
-				if (typeof cordova != 'undefined' && !cordova)				// Aha, we draaien op een mobiel!
+				if (typeof cordova != 'undefined' && cordova)				// Aha, we draaien op een mobiel!
 					cordova.plugins.notification.local.schedule(notifs);	// OK, voeg dan een notification toe
 				else
 				{

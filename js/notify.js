@@ -86,7 +86,7 @@ function setNotifications ()
 		{
 			var count = 0;
 			var now = new Date ();
-			var notifs [];
+			var notifs = [];
 			for (var t = 0; t < results.rows.length; t++)				// OK, we gaan nu alle tijdstippen langs
 			{
 				var yep = false;

@@ -561,21 +561,6 @@ function handleQRCode (QRCode, bScanned)
 					myAlert (  'De opgegeven medicatielijst voor de gebruiker met geboortedatum '
 							 + globalShowDate
 							 + ' kon niet worden gevonden of is verlopen.');
-/*				else
-				{
-					try
-					{
-						receivedList = JSON.parse(this.responseText);
-						log ('parsed JSON data');
-						receivedList['birthdate'] = globalBirthDate;
-						log ('added global birthdate: \'' + receivedList.birthdate + '\', start processing data');
-						ProcessReceivedData ();
-					}
-					catch (objError)
-					{
-						myAlert ('Er is een ongeldig medicatie bestand ontvangen');
-					}
-				} */
 			}
 		};
 

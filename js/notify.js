@@ -7,10 +7,12 @@ var g_notiPersons;
 function setNextNotifications ()
 {
 
-//	cordova.plugins.notification.local.cancelAll ();						// Gooi alle bestaande notifications eerst weg
-	cordova.plugins.notification.local.cancelAll(function()
+	if (typeof cordova != 'undefined' && !cordova)	// Aha, we draaien op een mobiel!
 	{
-	}, this);
+		cordova.plugins.notification.local.cancelAll(function()
+		{
+		}, this);
+	}
 	db.transaction(function(tx)
 	{
 		tx.executeSql('SELECT * FROM person', [], function (tx, results)
@@ -33,30 +35,35 @@ function setNextNotifications ()
 				}
 				if (any)																// Er is tenminste één inname voor iemand die ook de kalender gebruikt
 				{
-					cordova.plugins.notification.local.hasPermission(function (granted)	// Mogen we wel notifications doen?
+					if (typeof cordova != 'undefined' && !cordova)	// Aha, we draaien op een mobiel!
 					{
-						if (granted == false)											// (nog) niet
+						cordova.plugins.notification.local.hasPermission(function (granted)	// Mogen we wel notifications doen?
 						{
-
-							// If app doesnt have permission request it
-							cordova.plugins.notification.local.registerPermission(function (granted)
+							if (granted == false)											// (nog) niet
 							{
-								if (granted == true)
-								{
-									// If app is given permission try again
-									setNotifications();
 
-								}
-								else
+								// If app doesnt have permission request it
+								cordova.plugins.notification.local.registerPermission(function (granted)
 								{
-									myAlert ('Medin heeft toestemming nodig om uw medicijnwekker te kunnen activeren');
-								}
+									if (granted == true)
+									{
+										// If app is given permission try again
+										setNotifications();
 
-							});
-						}
-						else
-							setNotifications ();
-					});
+									}
+									else
+									{
+										myAlert ('Medin heeft toestemming nodig om uw medicijnwekker te kunnen activeren');
+									}
+
+								});
+							}
+							else
+								setNotifications ();
+						});
+					}
+					else											// Een gewone browser op een PC
+						setNotifications ();						// Alleen ter test dus
 				}
 			}), function (tx, error)
 			{
@@ -123,22 +130,32 @@ function setNotifications ()
 					{
 						notifs[count] =
 						{
-							id: stip['tijdID'],
+							id: tijd['tijdID'],
 							title: naam + ', tijd voor uw medicijn',
 							text: medicijn,
 							sound:true,
 							foreground: true,
 //							smallIcon: 'res://img/smallicon',
-//							trigger: { every: { hour: hour, minute: minute } }
-							trigger: { at: new Date (now.getFullYear (), now.getMonth (), now.getDate (), hour, minute) }
-//							actions: [ { id: 'actionclick', launch: true, title: 'Click me' } ]
+							trigger: { every: { hour: hour, minute: minute } }
+//							trigger: { at: new Date (now.getFullYear (), now.getMonth (), now.getDate (), hour, minute) }
 						};
 						count += 1;
 					}
 				}
 			}
 			if (count > 0)
-				cordova.plugins.notification.local.schedule(notifs);	// OK, voeg dan een notification toe
+			{
+				if (typeof cordova != 'undefined' && !cordova)				// Aha, we draaien op een mobiel!
+					cordova.plugins.notification.local.schedule(notifs);	// OK, voeg dan een notification toe
+				else
+				{
+					document.getElementById ('debugWindow').innerHTML = '';
+					log ('setting ' + count + ' notifications:');
+					for (var i = 0; i < count; i++)
+						log (JSON.stringify(notifs[i], null, 4));
+					setVisibility ('debug', true);
+				}
+			}
 		}), function (tx, error)
 		{
 			alert ('er is een fout opgetreden\r\n' + error.message);

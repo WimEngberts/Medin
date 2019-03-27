@@ -43,7 +43,14 @@ function onDeviceReady2()
 
 /*	alert ('The device is ready'); */
 //	setNextNotifications ();
-	alert (JSON.stringify(cordova.plugins.notification.local.launchDetails, null, 4));
+//	alert (JSON.stringify(cordova.plugins.notification.local.launchDetails, null, 4));
+	var launch = cordova.plugins.notification.local.launchDetails;
+	if (launch != undefined)				// We zijn via een notification binnengekomen
+	{
+		var id = parseInt (launch.id/10);
+		var day = parseInt (launch.id%10);
+		showMedicijn (id, day);
+	}
 }
 
 function addEnterListener (listenFunction)

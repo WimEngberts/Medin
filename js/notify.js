@@ -197,3 +197,44 @@ function setNotifications ()
 		};
 	});
 }
+
+function showMedicijn (id, day)
+{
+	db.transaction(function(tx)
+	{
+		tx.executeSql('SELECT * FROM innames WHERE tijdID=' + id, [], function (tx, results)
+		{
+			setVisibility ('pincode', false);
+			var szHTML = '';
+			var colorName = 'grey';
+			if (results.rows.length > 0)
+			{
+				for (var i = 0; i < results.rows.length; i++)
+				{
+					var inname = results.rows.item (i);
+					szHTML += '<div class=\"addRow ' + colorName + '\">';
+					szHTML += inname['naam'];
+					szHTML += '</div>';
+					if (colorName == 'grey')
+						colorName = 'white';
+					else
+						colorName = 'grey';
+				}
+			}
+			else
+				szHTML = '<p>Helaas hebben wij het nu in te nemen medicijn niet meer terug kunnen vinden</p>';
+			createList ('notify, 'Uw innames op dit moment', szHTML, quitApp, null, false);
+		}), function (tx, error)
+		{
+			alert ('er is een fout opgetreden\r\n' + error.message);
+		}, function ()
+		{
+		};
+	});
+}
+
+function quitApp ()
+{
+	navigator.app.exitApp();
+}
+

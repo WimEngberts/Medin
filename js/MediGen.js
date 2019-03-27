@@ -42,7 +42,8 @@ function onDeviceReady2()
 	g_bDeviceIsReady = true;
 
 /*	alert ('The device is ready'); */
-	setNextNotifications ();
+//	setNextNotifications ();
+	alert (cordova.plugins.notification.local.launchDetails);
 }
 
 function addEnterListener (listenFunction)

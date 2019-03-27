@@ -144,7 +144,7 @@ function setNotifications ()
 								text: medicijn,
 								sound:true,
 								foreground: true,
-								smallIcon: 'file://img/smallicon',
+								smallIcon: 'res://smallicon',
 								trigger: { every: { hour: hour, minute: minute } }		// Gewoon, altijd op deze tijd
 							};
 							count += 1;
@@ -166,7 +166,7 @@ function setNotifications ()
 										text: medicijn,
 										sound:true,
 										foreground: true,
-										smallIcon: 'file://img/smallicon',
+										smallIcon: 'res://smallicon',
 										trigger: { every: { weekday: weekday, hour: hour, minute: minute } }
 									};
 									count += 1;
@@ -178,14 +178,8 @@ function setNotifications ()
 			}
 			if (count > 0)
 			{
-				if (typeof cordova != 'undefined' && cordova)				// Aha, we draaien op een mobiel!
-				{
-					cordova.plugins.notification.local.schedule(notifs);	// OK, voeg dan een notification toe
-					var defaults = cordova.plugins.notification.local.getDefaults();
-					document.getElementById ('debugWindow').innerHTML = '';
-					log (JSON.stringify(defaults, null, 4));
-					setVisibility ('debug', true);
-				}
+				if (typeof cordova != 'undefined' && cordova)				// Mooi, we draaien op een mobiel!
+					cordova.plugins.notification.local.schedule(notifs);	// OK, voeg dan de notifications toe
 				else
 				{
 					document.getElementById ('debugWindow').innerHTML = '';

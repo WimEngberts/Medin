@@ -39,7 +39,7 @@ function setNextNotifications ()
 					{
 						cordova.plugins.notification.local.hasPermission(function (granted)	// Mogen we wel notifications doen?
 						{
-							if (granted == false)											// (nog) niet
+							if (granted == false)									// (nog) niet
 							{
 
 								// If app doesnt have permission request it
@@ -128,18 +128,51 @@ function setNotifications ()
 					}
 					if (medicijn != '')									// Is er iets geregistreerd op dit tijdstip?
 					{
-						notifs[count] =
+						var every = true;
+						var periodiciteit = tijd['periodiciteit'];
+						for (var i = 0; i < periodiciteit.length; i++)
 						{
-							id: tijd['tijdID'],
-							title: naam + ', tijd voor uw medicijn',
-							text: medicijn,
-							sound:true,
-							foreground: true,
-//							smallIcon: 'res://img/smallicon',
-							trigger: { every: { hour: hour, minute: minute } }
-//							trigger: { at: new Date (now.getFullYear (), now.getMonth (), now.getDate (), hour, minute) }
-						};
-						count += 1;
+							if (periodiciteit[i] != '1')
+								every = false;
+						}
+						if (every)										// Iedere dag innemen iss eenvoudig
+						{
+							notifs[count] =
+							{
+								id: tijd['tijdID'],
+								title: naam + ', tijd voor uw medicijn',
+								text: medicijn,
+								sound:true,
+								foreground: true,
+//								smallIcon: 'res://img/smallicon',
+								trigger: { every: { hour: hour, minute: minute } }		// Gewoon, altijd op deze tijd
+							};
+							count += 1;
+						}
+						else												// Alleen op bepaalde dagen:
+						{
+							for (var i = 0; i < periodiciteit.length; i++)	// Dan moeten we ook de dag van de week instellen.
+							{
+								if (periodiciteit[i] == '1')				// Op deze dag bijvoorbeeld?
+								{
+									var weekday = i+2;						// zondag = 1, maandag = 2, etc. Wij beginnen echter met maandag = 0, dinsdag = 1, etc.
+
+									if (i == 6)								// Zondag
+										weekday = 1;
+									notifs[count] =
+									{
+										id: tijd['tijdID'],
+										title: naam + ', tijd voor uw medicijn',
+										text: medicijn,
+										sound:true,
+										foreground: true,
+//										smallIcon: 'res://img/smallicon',
+										trigger: { every: { weekday: weekday, hour: hour, minute: minute } }
+									};
+									count += 1;
+								}
+							}
+						}
 					}
 				}
 			}

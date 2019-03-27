@@ -205,25 +205,38 @@ function showMedicijn (id, day)
 		tx.executeSql('SELECT * FROM innames WHERE tijdID=' + id, [], function (tx, results)
 		{
 			setVisibility ('pincode', false);
-			var szHTML = '';
+			var szHTML = '<p>Helaas hebben wij het nu in te nemen medicijn niet meer terug kunnen vinden</p>';
 			var colorName = 'grey';
 			if (results.rows.length > 0)
 			{
-				for (var i = 0; i < results.rows.length; i++)
+				szHTML = '';
+				g_notiInnames = results;
+				tx.executeSql('SELECT * FROM person WHERE id=' + results.rows.item(0)['personID'], [], function (tx, results)
 				{
-					var inname = results.rows.item (i);
-					szHTML += '<div class=\"addRow ' + colorName + '\">';
-					szHTML += inname['naam'];
-					szHTML += '</div>';
-					if (colorName == 'grey')
-						colorName = 'white';
-					else
-						colorName = 'grey';
-				}
+					var naam = 'Onbekend';
+					if (results.rows.length > 0)
+						naam = results.rows.item(0)['naam'];
+					for (var i = 0; i < g_notiInnames.rows.length; i++)
+					{
+						var inname = g_notiInnames.rows.item (i);
+						szHTML += '<div class=\"addRow ' + colorName + '\">';
+						szHTML += inname['naam'];
+						szHTML += '</div>';
+						if (colorName == 'grey')
+							colorName = 'white';
+						else
+							colorName = 'grey';
+					}
+					createList ('notify', naam + ', uw innames op dit moment', szHTML, quitApp, null, false);
+				}), function (tx, error)
+				{
+					alert ('er is een fout opgetreden\r\n' + error.message);
+				}, function ()
+				{
+				};
 			}
 			else
-				szHTML = '<p>Helaas hebben wij het nu in te nemen medicijn niet meer terug kunnen vinden</p>';
-			createList ('notify', 'Uw innames op dit moment', szHTML, quitApp, null, false);
+				createList ('notify', 'Uw innames op dit moment', szHTML, quitApp, null, false);
 		}), function (tx, error)
 		{
 			alert ('er is een fout opgetreden\r\n' + error.message);

@@ -439,11 +439,13 @@ function stipBack (e)
 
 function isDayChecked (dayName)
 {
-	var r = false;
-	
+	var r = '';
+
 	if (document.getElementById (dayName).checked)
-		r = true;
-	
+		r = '1';
+	else
+		r = '0';
+
 	return r;
 }
 
@@ -452,60 +454,17 @@ function stipOK ()
 	var periodiciteit = '';
 	var stipNaam;
 	var stipTijd;
-	var ooit = false;
 
 	stipNaam = document.getElementById ('stipNaam').value;
 	stipTijd = document.getElementById ('stipTijd').value;
 
-	if (isDayChecked ('maandag'))
-	{
-		ooit = true;
-		periodiciteit += '1';
-	}
-	else
-		periodiciteit += '0';
-	if (isDayChecked ('dinsdag'))
-	{
-		ooit = true;
-		periodiciteit += '1';
-	}
-	else
-		periodiciteit += '0';
-	if (isDayChecked ('woensdag'))
-	{
-		ooit = true;
-		periodiciteit += '1';
-	}
-	else
-		periodiciteit += '0';
-	if (isDayChecked ('donderdag'))
-	{
-		ooit = true;
-		periodiciteit += '1';
-	}
-	else
-		periodiciteit += '0';
-	if (isDayChecked ('vrijdag'))
-	{
-		ooit = true;
-		periodiciteit += '1';
-	}
-	else
-		periodiciteit += '0';
-	if (isDayChecked ('zaterdag'))
-	{
-		ooit = true;
-		periodiciteit += '1';
-	}
-	else
-		periodiciteit += '0';
-	if (isDayChecked ('zondag'))
-	{
-		ooit = true;
-		periodiciteit += '1';
-	}
-	else
-		periodiciteit += '0';
+	periodiciteit += isDayChecked ('maandag'  )
+	periodiciteit += isDayChecked ('dinsdag'  )
+	periodiciteit += isDayChecked ('woensdag' )
+	periodiciteit += isDayChecked ('donderdag')
+	periodiciteit += isDayChecked ('vrijdag'  )
+	periodiciteit += isDayChecked ('zaterdag' )
+	periodiciteit += isDayChecked ('zondag'   )
 
 	if (stipNaam == '')
 		myAlert (  'U hebt nog geen naam ingevuld voor dit tijdstip.<br />'
@@ -513,7 +472,7 @@ function stipOK ()
 	else if (stipTijd == '')
 		myAlert ('U hebt nog geen tijd ingevuld voor dit tijdstip.<br />'
 				 + 'Tijden worden ingevuld als bijvoorbeeld 8:00, 13:30 en dergelijke');
-	else if (!ooit)
+	else if (periodiciteit == '0000000')
 		myAlert (  'Er zijn geen dagen aangekruist waarop dit tijdstip van toepassing is<br />'
 				 + 'U moet tenminste één dag selecteren');
 	else
@@ -544,6 +503,7 @@ function stipOK ()
 			{
 				stipCancel ();
 				fillCalender ();
+				setNextNotifications ();
 			}, function (tx, error)
 			{
 				alert ('er is een fout opgetreden\r\n' + error.message);

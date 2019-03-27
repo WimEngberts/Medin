@@ -139,12 +139,12 @@ function setNotifications ()
 						{
 							notifs[count] =
 							{
-								id: tijd['tijdID'],
+								id: tijd['tijdID'] * 10,
 								title: naam + ', tijd voor uw medicijn',
 								text: medicijn,
 								sound:true,
 								foreground: true,
-//								smallIcon: 'res://img/smallicon',
+								smallIcon: 'file://img/smallicon',
 								trigger: { every: { hour: hour, minute: minute } }		// Gewoon, altijd op deze tijd
 							};
 							count += 1;
@@ -161,12 +161,12 @@ function setNotifications ()
 										weekday = 1;
 									notifs[count] =
 									{
-										id: tijd['tijdID'],
+										id: (tijd['tijdID'] * 10) + weekday,	// Aangezien we hier dezelfde tijd voor meerdere dagen kunnen hebben moeten we de id uniek maken
 										title: naam + ', tijd voor uw medicijn',
 										text: medicijn,
 										sound:true,
 										foreground: true,
-//										smallIcon: 'res://img/smallicon',
+										smallIcon: 'file://img/smallicon',
 										trigger: { every: { weekday: weekday, hour: hour, minute: minute } }
 									};
 									count += 1;
@@ -179,7 +179,13 @@ function setNotifications ()
 			if (count > 0)
 			{
 				if (typeof cordova != 'undefined' && cordova)				// Aha, we draaien op een mobiel!
+				{
 					cordova.plugins.notification.local.schedule(notifs);	// OK, voeg dan een notification toe
+					var defaults = cordova.plugins.notification.local.getDefaults();
+					document.getElementById ('debugWindow').innerHTML = '';
+					log (JSON.stringify(defaults, null, 4));
+					setVisibility ('debug', true);
+				}
 				else
 				{
 					document.getElementById ('debugWindow').innerHTML = '';

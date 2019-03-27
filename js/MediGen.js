@@ -600,7 +600,7 @@ function formatTijd (d)
 	return r;
 }
 
-function createList (name, title, szText, callback, cancelCallback, bInTable, bfullCover)
+function createList (name, title, szText, callback, cancelCallback, bInTable)
 {
 
 	var elemWrapper;
@@ -613,10 +613,7 @@ function createList (name, title, szText, callback, cancelCallback, bInTable, bf
 		fontSize = 'medium';
 
 	showMenu (0);
-	if (bfullCover == true)
-		fullCover (name, true);
-	else
-		Cover (name, true);								// onderliggende tekst even bedekken
+	Cover (name, true);									// onderliggende tekst even bedekken
 	elemWrapper = document.createElement ('div');		// wrapper voor alles
 	elemWrapper.id = name;								// met deze ID. Kunnen we hem straks bij de OK knop terugvinden om weg te gooien
 	elemWrapper.style.cssText = 'position:absolute;width:92%;top:50%;left:50%;height:auto;background-color:#ffffff;padding:0;opacity:0;-moz-opacity:0;-khtml-opacity:0;overflow:hidden;border-radius: 20px;';
@@ -703,7 +700,7 @@ function createList (name, title, szText, callback, cancelCallback, bInTable, bf
 	return elemWrapper;
 }
 
-function myQuestion (id, szQuestion, szHeader, szButtonLeft, szButtonRight, leftCallback, rightCallback)
+function myQuestion (id, szQuestion, szHeader, szButtonLeft, szButtonRight, leftCallback, rightCallback, bFullCover)
 {
 	var elemWrapper;
 	var elemDiv;
@@ -715,7 +712,10 @@ function myQuestion (id, szQuestion, szHeader, szButtonLeft, szButtonRight, left
 		fontSize = 'medium';
 
 	showMenu (0);										// menu mag nu even weg
-	Cover (id, true);									// onderliggende tekst even bedekken
+	if (bFullCover == true)
+		fullCover (id, true);
+	else
+		Cover (id, true);									// onderliggende tekst even bedekken
 	elemWrapper = document.createElement ('div');		// wrapper voor alles
 	elemWrapper.id = id;								// met deze ID. Kunnen we hem straks bij de OK knop terugvinden om weg te gooien
 	elemWrapper.style.cssText = 'position:absolute;width:80%;top:50%;left:50%;height:auto;background-color:#ffffff;padding:0;opacity:0;-moz-opacity:0;-khtml-opacity:0;overflow:hidden;'; // border-radius: 20px;';

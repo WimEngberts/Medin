@@ -227,7 +227,7 @@ function showMedicijn (id, day)
 						else
 							colorName = 'grey';
 					}
-					createList ('notify', naam + ', uw innames op dit moment', szHTML, quitApp, null, false, true);
+					myQuestion ('notify', szHTML, naam + ', uw innames op dit moment', 'Inloggen', 'OK', notiLogin, quitApp, true);
 				}), function (tx, error)
 				{
 					alert ('er is een fout opgetreden\r\n' + error.message);
@@ -236,7 +236,7 @@ function showMedicijn (id, day)
 				};
 			}
 			else
-				createList ('notify', 'Uw innames op dit moment', szHTML, quitApp, null, false, true);
+				myQuestion ('notify', szHTML, 'Uw innames op dit moment', 'Inloggen', 'OK', notiLogin, quitApp, true);
 		}), function (tx, error)
 		{
 			alert ('er is een fout opgetreden\r\n' + error.message);
@@ -251,3 +251,7 @@ function quitApp ()
 	navigator.app.exitApp();
 }
 
+function notiLogin ()
+{
+	setVisibility ('pincode', true);
+}

@@ -227,7 +227,7 @@ function showMedicijn (id, day)
 						else
 							colorName = 'grey';
 					}
-					createList ('notify', naam + ', uw innames op dit moment', szHTML, quitApp, null, false);
+					createList ('notify', naam + ', uw innames op dit moment', szHTML, quitApp, null, false, true);
 				}), function (tx, error)
 				{
 					alert ('er is een fout opgetreden\r\n' + error.message);
@@ -236,7 +236,7 @@ function showMedicijn (id, day)
 				};
 			}
 			else
-				createList ('notify', 'Uw innames op dit moment', szHTML, quitApp, null, false);
+				createList ('notify', 'Uw innames op dit moment', szHTML, quitApp, null, false, true);
 		}), function (tx, error)
 		{
 			alert ('er is een fout opgetreden\r\n' + error.message);

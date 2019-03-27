@@ -157,6 +157,24 @@ function Cover (szName, bRespond)
 }
 
 //------------------------------------------------------------------------------------------------------
+// Bedek alle onderliggende zaken met een niet-transparante waas
+// Deze krijgt standaard als id '__brCover' plus de opgegeven naam. Die wordt later weggegooid bij de OK knop.
+//
+function fullCover (szName, bRespond)
+{
+
+	elemCover = document.createElement ('div');
+
+	elemCover.style.cssText = 'position:absolute;left:0px;right:0px;top:0px;bottom:0px;background:#707070;';
+	elemCover.id = '__brCover'+szName;
+	elemCover.style.transition = 'opacity 0.5s ease';
+	elemCover.style.webkitTransition = 'opacity 0.5s ease';
+	if (bRespond)
+		elemCover.onclick = 'closemenu();';
+	document.body.appendChild (elemCover);
+}
+
+//------------------------------------------------------------------------------------------------------
 // Geef een alert
 //
 function myAlert (szText, szHeader)
@@ -582,7 +600,7 @@ function formatTijd (d)
 	return r;
 }
 
-function createList (name, title, szText, callback, cancelCallback, bInTable)
+function createList (name, title, szText, callback, cancelCallback, bInTable, bfullCover)
 {
 
 	var elemWrapper;
@@ -595,7 +613,10 @@ function createList (name, title, szText, callback, cancelCallback, bInTable)
 		fontSize = 'medium';
 
 	showMenu (0);
-	Cover (name, true);								// onderliggende tekst even bedekken
+	if (bfullCover == true)
+		fullCover (name, true);
+	else
+		Cover (name, true);								// onderliggende tekst even bedekken
 	elemWrapper = document.createElement ('div');		// wrapper voor alles
 	elemWrapper.id = name;								// met deze ID. Kunnen we hem straks bij de OK knop terugvinden om weg te gooien
 	elemWrapper.style.cssText = 'position:absolute;width:92%;top:50%;left:50%;height:auto;background-color:#ffffff;padding:0;opacity:0;-moz-opacity:0;-khtml-opacity:0;overflow:hidden;border-radius: 20px;';

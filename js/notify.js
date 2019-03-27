@@ -223,7 +223,7 @@ function showMedicijn (id, day)
 			}
 			else
 				szHTML = '<p>Helaas hebben wij het nu in te nemen medicijn niet meer terug kunnen vinden</p>';
-			createList ('notify, 'Uw innames op dit moment', szHTML, quitApp, null, false);
+			createList ('notify', 'Uw innames op dit moment', szHTML, quitApp, null, false);
 		}), function (tx, error)
 		{
 			alert ('er is een fout opgetreden\r\n' + error.message);

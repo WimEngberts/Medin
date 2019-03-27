@@ -43,7 +43,7 @@ function onDeviceReady2()
 
 /*	alert ('The device is ready'); */
 //	setNextNotifications ();
-	alert (cordova.plugins.notification.local.launchDetails);
+	alert (JSON.stringify(cordova.plugins.notification.local.launchDetails, null, 4));
 }
 
 function addEnterListener (listenFunction)

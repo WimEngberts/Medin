@@ -481,11 +481,11 @@ body
 {
 	position:absolute;
 	left:0px;
-	top:0px;
-	height:50px;
+	top:5px;
+	height:45px;
 	width:50px;
-	background:transparent url('../img/left-blue.png') center no-repeat;
-	background-size:50px;
+	background:transparent url('../img/backArrow.png') center no-repeat;
+	background-size:30px;
 	display:none;
 }
 
@@ -908,6 +908,7 @@ body
 	height:50px;
 	line-height:50px;
 	padding-left:10px;
+	background-color:#c7e0ff;
 }
 
 .individualClose
@@ -990,15 +991,16 @@ body
 	width:86%;
 	top:20%;
 	left:7%;
-	height:60%;
+	height:auto;
 	padding:0px;
-    transition: all 0.4s ease;
-    -webkit-transition: all 0.4s ease; /* For Safari 3.1 to 6.0 */
+	transition: all 0.4s ease;
+	-webkit-transition: all 0.4s ease; /* For Safari 3.1 to 6.0 */
 	display:none;
 	background-color:white;
 	color:black;
 	opacity:0;
 	border-radius:20px;
+	border:solid 1px #a0a0a0;
 	overflow:hidden;
 }
 

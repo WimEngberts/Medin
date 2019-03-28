@@ -17,19 +17,19 @@ function setNextNotifications ()
 	{
 		tx.executeSql('SELECT * FROM person', [], function (tx, results)
 		{
-			g_notiPersons = results.rows;									// De geregistreerde personen
-			tx.executeSql('SELECT * FROM innames', [], function (tx, results)			// Halen we eerst alle geregistreerde innames op
+			g_notiPersons = results.rows;											// De geregistreerde personen
+			tx.executeSql('SELECT * FROM innames', [], function (tx, results)		// Halen we eerst alle geregistreerde innames op
 			{
 				g_notiInnames = results.rows;
-				var any = false;														// Want als er niets is geregistreerd, dan gaan we ook nog niets registreren!
-				for (var i = 0; i < g_notiInnames.length; i++)								// Ga ze dan even langs
+				var any = false;													// Want als er niets is geregistreerd, dan gaan we ook nog niets registreren!
+				for (var i = 0; i < g_notiInnames.length; i++)						// Ga ze dan even langs
 				{
 					var inname = g_notiInnames.item (i);
 					for (var j = 0; j < g_notiPersons.length; j++)
 					{
 						var person = g_notiPersons.item (j);
 						if (   person['id'] == inname['personID']					// inname voor deze persoon
-							&& person['warnCalender'] == 1)								// en die gebruikt de kalender
+							&& person['warnCalender'] == 1)							// en die gebruikt de kalender
 							any = true;
 					}
 				}
@@ -42,7 +42,9 @@ function setNextNotifications ()
 							if (granted == false)									// (nog) niet
 							{
 
+								// ----------------------------------------------------------------------
 								// If app doesnt have permission request it
+								//
 								cordova.plugins.notification.local.registerPermission(function (granted)
 								{
 									if (granted == true)
@@ -116,7 +118,7 @@ function setNotifications ()
 					var hour = parseInt (stip[0]);
 					var minute = parseInt (stip[1]);
 
-					for (var i = 0; i < g_notiInnames.length; i++)			// En welke medicijnen gaan we dan innemen?
+					for (var i = 0; i < g_notiInnames.length; i++)		// En welke medicijnen gaan we dan innemen?
 					{
 						var inname = g_notiInnames.item (i);
 						if (inname['tijdID'] == tijd['tijdID'])			// OK, deze dus
@@ -135,7 +137,7 @@ function setNotifications ()
 							if (periodiciteit[i] != '1')
 								every = false;
 						}
-						if (every)										// Iedere dag innemen iss eenvoudig
+						if (every)										// Iedere dag innemen is eenvoudig
 						{
 							notifs[count] =
 							{
@@ -144,7 +146,7 @@ function setNotifications ()
 								text: medicijn,
 								sound:true,
 								foreground: true,
-								smallIcon: 'res://smallicon',
+//								smallIcon: 'res://smallicon',
 								trigger: { every: { hour: hour, minute: minute } }		// Gewoon, altijd op deze tijd
 							};
 							count += 1;
@@ -166,7 +168,7 @@ function setNotifications ()
 										text: medicijn,
 										sound:true,
 										foreground: true,
-										smallIcon: 'res://smallicon',
+//										smallIcon: 'res://smallicon',
 										trigger: { every: { weekday: weekday, hour: hour, minute: minute } }
 									};
 									count += 1;
@@ -204,7 +206,6 @@ function showMedicijn (id, day)
 	{
 		tx.executeSql('SELECT * FROM innames WHERE tijdID=' + id, [], function (tx, results)
 		{
-			setVisibility ('pincode', false);
 			var szHTML = '<p>Helaas hebben wij het nu in te nemen medicijn niet meer terug kunnen vinden</p>';
 			var colorName = 'white';
 			if (results.rows.length > 0)

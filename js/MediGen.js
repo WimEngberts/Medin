@@ -50,12 +50,15 @@ function onDeviceReady2()
 		}
 		else
 		{
-			var splash = document.getElementById ('splash');
-			splash.style.opacity = '0';
-			splash.style.mozOpacity = '0';
-			setTimeout(function() { setVisibility ('splash', false); }, 500);
+			setTimeout (function()
+			{
+				var splash = document.getElementById ('splash');
+				splash.style.opacity = '0';
+				splash.style.mozOpacity = '0';
+				setTimeout(function() { setVisibility ('splash', false); }, 500);
+			}, 1500);
 		}
-	}, 1000);
+	}, 500);
 }
 
 function addEnterListener (listenFunction)
@@ -137,13 +140,13 @@ function init()
 //	alert ('now waiting for deviceready');
 	if (typeof cordova == 'undefined' || !cordova)						// Aha, we draaien op een PC
 	{
-	setTimeout(function()
-	{
-		var splash = document.getElementById ('splash');
-		splash.style.opacity = '0';
-		splash.style.mozOpacity = '0';
-		setTimeout(function() { setVisibility ('splash', false); }, 500);
-	}, 1000);
+		setTimeout(function()
+		{
+			var splash = document.getElementById ('splash');
+			splash.style.opacity = '0';
+			splash.style.mozOpacity = '0';
+			setTimeout(function() { setVisibility ('splash', false); }, 500);
+		}, 2000);
 	}
 
 	document.addEventListener ("deviceready", onDeviceReady2, false);

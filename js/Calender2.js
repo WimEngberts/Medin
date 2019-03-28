@@ -240,7 +240,8 @@ function deleteFromCalender (person, tijd, prk)
 function refreshDistribution ()
 {
 	closeAll ('lijssie');
-	checkListInCalender ();
+//	checkListInCalender ();
+	showList ();
 	setNextNotifications ();
 }
 

@@ -88,7 +88,7 @@ function initTables (db)
 //-------------------------------------------------------------------------------------
 // Toon de juiste medicatielijst. Stap1: vind een geselecteerde gebruiker
 //
-function showList (db)
+function showList ()
 {
 	var overzicht = document.getElementById ('overzicht');
 	var div = overzicht.childNodes;
@@ -109,8 +109,18 @@ function showList (db)
 				row = results.rows.item(0);
 				document.getElementById ('itemHeader').innerHTML = '<b>Medicatielijst van ' + row['naam'] + '</b>';
 				currentUser = row['naam'];
+				g_Person = row['id'];
 				log ('selected user = ' + row['id'] + ', ' + row['naam']);
-				showListStep2 (db, row['id']);
+				tx.executeSql('SELECT * FROM innames WHERE personID = ' + g_Person, [], function (tx, results)
+				{
+					g_notiInnames = results.rows;
+					showListStep2 (g_Person);
+				}), function (tx, error)
+				{
+					alert ('er is een fout opgetreden\r\n' + error.message);
+				}, function ()
+				{
+				};
 			}
 			else
 				document.getElementById ('itemHeader').innerHTML = '<b>Er is nog niemand geselecteerd</b>';
@@ -127,7 +137,7 @@ function showList (db)
 // Toon de juiste medicatielijst. Stap2: vindt de meest recente lijst van de geselecteerde
 // gebruiker (zo er al een lijst is)
 //
-function showListStep2 (db, id)
+function showListStep2 (id)
 {
 
 	db.transaction(function(tx)
@@ -148,7 +158,7 @@ function showListStep2 (db, id)
 				log ('most recent list = ' + row['id'] + ', ' + d);
 				szHTML += '<br><span class="standard">' + row['apotheek'] + ', ' + d + ', ' + row['listTijd'] + '</span>';
 				document.getElementById ('itemHeader').innerHTML = szHTML;
-				showListStep3 (db, row['id']);
+				showListStep3 (row['id']);
 			}
 		}), function (tx, error)
 		{
@@ -162,7 +172,7 @@ function showListStep2 (db, id)
 //-------------------------------------------------------------------------------------
 // Toon de juiste medicatielijst. Stap3: Toon nu de gevonden, meest recente, lijst
 //
-function showListStep3 (db, id)
+function showListStep3 (id)
 {
 
 	db.transaction(function(tx)
@@ -188,16 +198,34 @@ function showListStep3 (db, id)
 				if (i == 0)
 					id = row['lijst'];
 				var div = document.createElement ('div');
-				var className = 'item standard';
+				div.className = 'item standard';
+				var className = 'innerItem standard';
 				if (bGrey)
 					className += ' greyLetters';
-				div.className = className;
-				div.setAttribute ('onclick', 'onShowMed (' + id + ', ' + row['regel'] + ');');
-				szHTML = '<b>' + row['dispensedMedicationName'] + '</b><br />';
+
+				szHTML = '<div onclick="onShowMed(' + id + ',' + row['regel'] + ');" class="' + className + '"><b>' + row['dispensedMedicationName'] + '</b><br />';
 				szHTML += n25['omschrijving'];
-				if (row['text1'] != '')
-					szHTML += '<div class="warning"></div>';
+				szHTML += '</div>';
+				if (!bGrey)												// We gaan de wekker opties geven als dit medicijn nog geldig is
+				{
+					var bExists = false;
+					for (var j = 0; j < g_notiInnames.length; j++)
+					{
+						inname = g_notiInnames.item(j);
+						if (inname['prk'] == row['prk'])
+							bExists = true;
+					}
+					szHTML += '<div onclick="addToCalender(' + row['lijst'] + ',' + row['regel'] + ');" class="';
+					if (bExists)
+						szHTML += 'editAlarm';
+					else
+						szHTML += 'addAlarm';
+					szHTML += '"></div>';
+				}
 				div.innerHTML = szHTML;
+//				if (row['text1'] != '')
+//					szHTML += '<div class="warning"></div>';
+//				div.innerHTML = szHTML;
 				overzicht.appendChild (div);
 			}
 			setFontSizes ();

@@ -206,7 +206,7 @@ function showMedicijn (id, day)
 		{
 			setVisibility ('pincode', false);
 			var szHTML = '<p>Helaas hebben wij het nu in te nemen medicijn niet meer terug kunnen vinden</p>';
-			var colorName = 'grey';
+			var colorName = 'white';
 			if (results.rows.length > 0)
 			{
 				szHTML = '';
@@ -253,5 +253,8 @@ function quitApp ()
 
 function notiLogin ()
 {
-	setVisibility ('pincode', true);
+	var splash = document.getElementById ('splash');
+	splash.style.opacity = '0';
+	splash.style.mozOpacity = '0';
+	setTimeout(function() { setVisibility ('splash', false); }, 500);
 }

@@ -18,8 +18,6 @@ function onDeviceReady()
 {
 	g_bDeviceIsReady = true;
 
-//	alert ('The device is ready');
-
 	db = window.openDatabase("Medin.db", "1.0", "Medin", 200000);
 	if (db)
 	{
@@ -41,16 +39,23 @@ function onDeviceReady2()
 {
 	g_bDeviceIsReady = true;
 
-/*	alert ('The device is ready'); */
-//	setNextNotifications ();
-//	alert (JSON.stringify(cordova.plugins.notification.local.launchDetails, null, 4));
-	var launch = cordova.plugins.notification.local.launchDetails;
-	if (launch != undefined)				// We zijn via een notification binnengekomen
+	setTimeout(function()
 	{
-		var id = parseInt (launch.id/10);
-		var day = parseInt (launch.id%10);
-		showMedicijn (id, day);
-	}
+		var launch = cordova.plugins.notification.local.launchDetails;
+		if (launch != undefined)				// We zijn via een notification binnengekomen
+		{
+			var id = parseInt (launch.id/10);
+			var day = parseInt (launch.id%10);
+			showMedicijn (id, day);
+		}
+		else
+		{
+			var splash = document.getElementById ('splash');
+			splash.style.opacity = '0';
+			splash.style.mozOpacity = '0';
+			setTimeout(function() { setVisibility ('splash', false); }, 500);
+		}
+	}, 1000);
 }
 
 function addEnterListener (listenFunction)
@@ -130,6 +135,17 @@ function init()
 
 	onDeviceReady ();
 //	alert ('now waiting for deviceready');
+	if (typeof cordova == 'undefined' || !cordova)						// Aha, we draaien op een PC
+	{
+	setTimeout(function()
+	{
+		var splash = document.getElementById ('splash');
+		splash.style.opacity = '0';
+		splash.style.mozOpacity = '0';
+		setTimeout(function() { setVisibility ('splash', false); }, 500);
+	}, 1000);
+	}
+
 	document.addEventListener ("deviceready", onDeviceReady2, false);
 }
 

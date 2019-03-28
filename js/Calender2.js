@@ -308,9 +308,10 @@ function addToCalender (listID, regel)
 						var div = createList ('toevoegen', title, szHTML, closeAddAlarm, cancelAlarm, false);
 						div.setAttribute ('data-user' , g_Person);
 						div.setAttribute ('data-prk' ,  g_Medicatie['prk']);
-						div.setAttribute ('data-naam' , g_Medicatie['dispensedMedicationName']);
+						div.setAttribute ('data-naam' , g_Medicatie['dispensedMedicationName'].replace (/\'/g, "''"));
 						div.setAttribute ('data-start', g_Medicatie['startGebruik']);
 						div.setAttribute ('data-stop' , g_Medicatie['eindGebruik']);
+						div.setAttribute ('data-nhg'  , g_Medicatie['nhg25']);
 					}), function (tx, error)
 					{
 						alert ('er is een fout opgetreden\r\n' + error.message);
@@ -351,10 +352,11 @@ function closeAddAlarm (div)
 	db.transaction(function(tx)
 	{
 		var personID = div.getAttribute ('data-user');
-		var naam = div.getAttribute ('data-naam');
-		var prk = div.getAttribute ('data-prk');
-		var start = div.getAttribute ('data-start');
-		var stop = div.getAttribute ('data-stop');
+		var naam     = div.getAttribute ('data-naam');
+		var prk      = div.getAttribute ('data-prk');
+		var start    = div.getAttribute ('data-start');
+		var stop     = div.getAttribute ('data-stop');
+		var nhg25    = div.getAttribute ('data-nhg');
 		var sqlStatement = '';
 
 		var tijden = document.getElementsByClassName ('timeline');
@@ -364,8 +366,8 @@ function closeAddAlarm (div)
 			var id = tijd.getAttribute ('data-tijd');
 
 			if (tijd.className == 'timeSelected timeline')
-				sqlStatement =   'INSERT OR IGNORE INTO innames (personID,tijdID,prk,naam,eigen,nDosis,dosis,startGebruik,eindGebruik) '
-			                   + 'VALUES(' + personID + ',' + id + ',\'' + prk + '\',\'' + naam + '\',0,1,\'1\',\'' + start + '\', \'' + stop + '\')';
+				sqlStatement = 'INSERT OR IGNORE INTO innames (personID,tijdID,prk,naam,eigen,nDosis,dosis,startGebruik,eindGebruik,nhg25) '
+			                 + 'VALUES(' + personID + ',' + id + ',\'' + prk + '\',\'' + naam + '\',0,1,\'1\',\'' + start + '\', \'' + stop + '\', \'' + nhg25 + '\')';
 			else
 				sqlStatement = 'DELETE FROM innames WHERE personID=' + personID + ' AND tijdID=' + id + ' AND prk=\'' + prk + '\'';
 

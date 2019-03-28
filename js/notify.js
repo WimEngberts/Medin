@@ -220,8 +220,11 @@ function showMedicijn (id, day)
 					for (var i = 0; i < g_notiInnames.rows.length; i++)
 					{
 						var inname = g_notiInnames.rows.item (i);
-						szHTML += '<div class=\"addRow ' + colorName + '\">';
+						szHTML += '<div class=\"addRow ' + colorName + '\"><b>';
 						szHTML += inname['naam'];
+						szHTML += '</b><br />';
+						var n25 = nhg25 (inname['nhg25']);
+						szHTML += n25['omschrijving'];
 						szHTML += '</div>';
 						if (colorName == 'grey')
 							colorName = 'white';

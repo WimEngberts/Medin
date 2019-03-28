@@ -71,12 +71,14 @@ function initTables (db)
 															+ 'dosis TEXT,'							// in deze hoeveelheid (tekstueel)
 															+ 'startGebruik TEXT,'					// datum start gebruik
 															+ 'eindGebruik TEXT,'					// datum eind gebruik
+															+ 'nhg25 TEXT,'							// inname, gecodeerd
 															+ 'UNIQUE (personID, tijdID, prk))');	// Deze combi moet uniek zijn. Niet tweemaal hetzelfde medicijn op dezelfde tijd
 	});
 	db.transaction (function (tx)
 	{
 		tx.executeSql ('ALTER TABLE innames ADD COLUMN startGebruik TEXT');							// datum start gebruik
 		tx.executeSql ('ALTER TABLE innames ADD COLUMN eindGebruik TEXT');							// datum eind gebruik
+		tx.executeSql ('ALTER TABLE innames ADD COLUMN nhg25 TEXT');								// inname, gecodeerd
 	});
 	db.transaction (function (tx)
 	{
@@ -223,9 +225,6 @@ function showListStep3 (id)
 					szHTML += '"></div>';
 				}
 				div.innerHTML = szHTML;
-//				if (row['text1'] != '')
-//					szHTML += '<div class="warning"></div>';
-//				div.innerHTML = szHTML;
 				overzicht.appendChild (div);
 			}
 			setFontSizes ();
@@ -265,6 +264,8 @@ function onShowMed (lijst, regel)
 	                   +  '<tr><td>Voorschrijver</td><td>:</td><td>'		+ voorschrijver	+ '</td></tr>';
 				if (row['iterationCredit'] > 0)
 					szHTML += '<tr><td>Herhalingen</td><td>:</td><td>'		+ row['iterationCredit']	+ '</td></tr>';
+				if (row['iterationDate'] != '')
+					szHTML += addDate (row['iterationDate'], 'Herhalingdatum', 0);
 				if (row['text1'] != '')
 				{
 					szHTML += '<tr><td>Melding</td><td>:</td><td>'			+ row['text1'];

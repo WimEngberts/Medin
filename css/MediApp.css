@@ -410,18 +410,21 @@ body
 	right:0px;
 	display:block;
 	border-bottom:solid 1px #a6a6a6;
-	padding-right:34px;
+/*	padding-right:34px;
 	padding-left:20px;
 	padding-top:12px;
 	padding-bottom:12px;
-	vertical-align:center;
+	vertical-align:center; */
 	background:#ffffff;
+}
+
+.innerItem
+{
 	position:relative;
 	left:0px;
-	right:0px;
+	right:43px;
 	display:block;
-	border-bottom:solid 1px #a6a6a6;
-	padding-right:34px;
+	padding-right:5px;
 	padding-left:20px;
 	padding-top:12px;
 	padding-bottom:12px;
@@ -494,6 +497,11 @@ body
 	background-color:#bfbfbf;
 }
 
+.innerItem:hover
+{
+	background-color:#bfbfbf;
+}
+
 .warning
 {
 	position:absolute;
@@ -504,6 +512,30 @@ body
 	margin-top:-15px;
 	background:transparent url('../img/i.png') center no-repeat;
     background-size:36px;
+}
+
+.addAlarm
+{
+	position:absolute;
+	right:5px;
+	width: 36px;
+	height:36px;
+	top:50%;
+	margin-top:-15px;
+	background:transparent url('../img/addalarm.png') center no-repeat;
+	background-size:36px;
+}
+
+.editAlarm
+{
+	position:absolute;
+	right:5px;
+	width: 36px;
+	height:36px;
+	top:50%;
+	margin-top:-15px;
+	background:transparent url('../img/editalarm.png') center no-repeat;
+	background-size:36px;
 }
 
 #menuBox
@@ -1321,4 +1353,49 @@ body
 	right:0px;
 	height:50px;
 	background:#ffffff;
+}
+
+#splash
+{
+	position:absolute;
+	left:0;
+	right:0;
+	top:0;
+	bottom:0;
+	background-color:#ffffff;
+	transition: opacity 0.5s ease;
+	-webkit-transition: opacity 0.5s ease; /* For Safari 3.1 to 6.0 */
+}
+
+#logo
+{
+	display:block;
+	margin-top:50%;
+	width:100%;
+	top:25%;
+	float:left;
+	background:transparent url('../res/icon/android/drawable-xxxhdpi-icon.png') center no-repeat;
+	background-size:192px;
+	height:192px;
+}
+
+#medinName
+{
+	display:block;
+	width:100%;
+	clear:both;
+	font-family:calibri, arial, helvetica, sans-serif;
+	font-size:4em;
+	text-align:center;
+	height:auto;
+}
+
+#medlex
+{
+	position:absolute;
+	bottom:5px;
+	right:5px;
+	width:auto;
+	height:auto;
+	font-family:calibri, arial, helvetica, sans-serif;
 }

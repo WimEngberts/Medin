@@ -1346,6 +1346,23 @@ body
 	touch-action: manipulation;
 }
 
+.addTime
+{
+	position:relative;
+	left:0px;
+	right:0px;
+	display:block;
+	padding-top:5px;
+	padding-bottom:5px;
+	vertical-align:center;
+	background-color:#0153a1;
+	color:#ffffff;
+	font-family:calibri, arial, helvetica, sans-serif;
+	font-size:large;
+	margin-top:15px;
+	text-align: center;
+}
+
 #pinEntry
 {
 	position:absolute;
@@ -1374,7 +1391,7 @@ body
 	width:100%;
 	top:25%;
 	float:left;
-	background:transparent url('../res/icon/android/drawable-xxxhdpi-icon.png') center no-repeat;
+	background:transparent url('../img/icon.png') center no-repeat;
 	background-size:192px;
 	height:192px;
 }

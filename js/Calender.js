@@ -44,17 +44,11 @@ function fillCalender ()
 			if (results.rows.length > 0)
 			{
 				row = results.rows.item(0);
-				g_bWarnAboutList = row['warnCalender'];
-				if (g_bWarnAboutList)
-				{
-					document.getElementById ('wekkerHeader').innerHTML = '<b>Medicijnkalender van ' + row['naam'] + '</b>';
-					currentUser = row['naam'];
-					globalID = row['id'];
-					fillCalenderStep2 (row['id']);
-					setVisibility ('plus', true);
-				}
-				else
-					document.getElementById ('wekkerHeader').innerHTML = row['naam'] + ' gebruikt de kalender niet';
+				document.getElementById ('wekkerHeader').innerHTML = '<b>Medicijnkalender van ' + row['naam'] + '</b>';
+				currentUser = row['naam'];
+				globalID = row['id'];
+				fillCalenderStep2 (row['id']);
+				setVisibility ('plus', true);
 			}
 			else
 			{
@@ -519,12 +513,17 @@ function stipOK ()
 function stipCancel ()
 {
 	var individual;
-
+	var stip = document.getElementById ('tijdStip');
+	var fromList = stip.getAttribute ('data-fromlist');
+	var listID = stip.getAttribute ('data-listID');
+	var regel = stip.getAttribute ('data-regel');
 	document.getElementById ('tijdStip').style.opacity = '0';
 	document.getElementById ('individualCover').style.opacity = '0';
 	setVisibility ('plus', true);
 	removeEnterListener ();
 	removeBackListener ();
+	if (typeof (fromList) != 'undefined' && fromList)
+		addToCalender (listID, regel);
 	setTimeout(function()
 	{
 		setVisibility ('tijdStip', false);

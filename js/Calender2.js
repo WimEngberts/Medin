@@ -240,7 +240,6 @@ function deleteFromCalender (person, tijd, prk)
 function refreshDistribution ()
 {
 	closeAll ('lijssie');
-//	checkListInCalender ();
 	showList ();
 	setNextNotifications ();
 }
@@ -305,6 +304,7 @@ function addToCalender (listID, regel)
 							else
 								colorName = 'grey';
 						}
+						szHTML += '<div class="addRow addTime" onclick="addNewTime (' + g_Person + ');">Voeg tijdstip toe</div>';
 						var div = createList ('toevoegen', title, szHTML, closeAddAlarm, cancelAlarm, false);
 						div.setAttribute ('data-user' , g_Person);
 						div.setAttribute ('data-prk' ,  g_Medicatie['prk']);
@@ -312,6 +312,8 @@ function addToCalender (listID, regel)
 						div.setAttribute ('data-start', g_Medicatie['startGebruik']);
 						div.setAttribute ('data-stop' , g_Medicatie['eindGebruik']);
 						div.setAttribute ('data-nhg'  , g_Medicatie['nhg25']);
+						div.setAttribute ('data-list' , g_Medicatie['lijst']);
+						div.setAttribute ('data-regel', g_Medicatie['regel']);
 					}), function (tx, error)
 					{
 						alert ('er is een fout opgetreden\r\n' + error.message);
@@ -332,6 +334,27 @@ function addToCalender (listID, regel)
 		{
 		};
 	});
+}
+
+function addNewTime (personID)
+{
+	var iedere = document.getElementsByName ('iedere');
+	var div = document.getElementById ('toevoegen');
+	var listID = div.getAttribute ('data-list');
+	var regel  = div.getAttribute ('data-regel');
+	onCloseList ('toevoegen', null);
+	for (var i = 0; i < iedere.length; i++)
+		iedere[i].checked = true;
+	var stip = document.getElementById ('tijdStip');
+	stip.setAttribute ('data-person', personID);
+	stip.setAttribute ('data-stip', '');
+	stip.setAttribute ('data-fromlist', 1);
+	stip.setAttribute ('data-listID', listID);
+	stip.setAttribute ('data-regel', regel);
+	document.getElementById ('stipNaam').value = '';
+	document.getElementById ('stipTijd').value = '';
+	setVisibility ('stipDelete', false);
+	openTijdstip (true);
 }
 
 function selectTime (tijdID)

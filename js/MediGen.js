@@ -9,7 +9,6 @@ var enterHandlers		= [];
 var enterHandlerIndex	= -1;
 var backHandlers		= [];
 var backHandlerIndex	= -1;
-var g_bWarnAboutList	= false;
 
 //---------------------------------------------------------------
 // Cordova is ready
@@ -25,8 +24,6 @@ function onDeviceReady()
 		cleanMedication ();
 		showList (db);
 		fillCalender ();
-		if (g_bWarnAboutList)
-			checkListInCalender ();
 	}
 	else
 		alert ('no database available!');
@@ -120,12 +117,6 @@ function init()
 	if (setting == 'false')
 		bSetting = false;
 	setFont (bSetting);
-
-	setting = loadSetting ('warnAboutList');
-	bSetting = true;
-	if (setting == 'false')
-		bSetting = false;
-	g_bwarnAboutList = bSetting;
 
 	setting = loadSetting ('screen');							// Welk scherm staat voor?
 	var nScreen = 0;

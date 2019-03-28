@@ -10,6 +10,7 @@ var receivedList = null;
 var g_year;
 var g_month;
 var g_day;
+var g_bWarnAboutList = true;
 
 function showMenu (vShow)
 {
@@ -1133,7 +1134,6 @@ function importOverzicht (id, lijst)
 		log ('showing list');
 		showList (db);
 		myAlert ('Nieuwe medicijnlijst is opgeslagen', 'Melding');
-//		checkListInCalender ();
 	});
 }
 
@@ -1286,7 +1286,6 @@ function ProcessReceivedData ()
 	// Zo niet, dan vragen we of we iemand moeten aanmaken.
 	// Als er meer dan één is (tweeling) dan vragen we welke we moeten hebben.
 	//
-	g_bwarnAboutList = true;
 	var dateTemp = receivedList.birthdate.split ('-');		// haal even uit elkaar
 	if (dateTemp.length != 3)						// daaruit moeten we drie componenten overhouden
 	{

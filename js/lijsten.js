@@ -78,11 +78,10 @@ function initTables (db)
 	{
 		tx.executeSql ('ALTER TABLE innames ADD COLUMN startGebruik TEXT');							// datum start gebruik
 		tx.executeSql ('ALTER TABLE innames ADD COLUMN eindGebruik TEXT');							// datum eind gebruik
-		tx.executeSql ('ALTER TABLE innames ADD COLUMN nhg25 TEXT');								// inname, gecodeerd
 	});
 	db.transaction (function (tx)
 	{
-		tx.executeSql ('DROP TABLE IF EXISTS inname');												// Eventuele vorige versie mag weer weg nu.
+		tx.executeSql ('ALTER TABLE innames ADD COLUMN nhg25 TEXT');								// inname, gecodeerd
 	});
 	saveSetting ('dbVersion', '1');
 }

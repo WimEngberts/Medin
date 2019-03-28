@@ -23,7 +23,7 @@ function nhg25 (rawCode)
 
 	if (typeof rawCode == 'undefined' || !rawCode)
 	{
-		r.omschrijving = 'Niet opgegeven';
+		r.omschrijving = 'Gebruik niet opgegeven';
 		return r;
 	}
 

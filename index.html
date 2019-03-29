@@ -22,9 +22,8 @@
                   style-src * 'self' 'unsafe-inline' 'unsafe-eval'; 
                   script-src * 'self' 'unsafe-inline' 'unsafe-eval';">
 
-	<link rel="stylesheet" type="text/css" href="css/MediApp.css" />
-	<link rel="stylesheet" type="text/css" href="css/inputs.css" />
-<!--	<link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.0rc1.min.css" /> -->
+	<link rel="stylesheet" type="text/css" href="css/Medin.css" />
+<!--	<link rel="stylesheet" type="text/css" href="css/inputs.css" /> -->
 
 <!--	<script type="text/javascript" src="phonegap.js"></script> -->
 	<script type="text/javascript" src="js/MediGen.js"></script>
@@ -52,7 +51,7 @@
 			Hierin bevindt zich de medicijnkalender. Ofwel het medicatieoverzicht of de kalender worden getoond.
 		-->
 		<div id="kalender">
-			<div id="wekkerHeader" class="itemHeader standardWhite standard"><b>Medicijnwekker</b></div>
+			<div id="wekkerHeader" class="itemHeader standardWhite standard"><b>Medicijn kalender</b></div>
 		</div>
 		<!--
 			Het debug venster
@@ -112,10 +111,8 @@
 					</tr>
 					<tr class="cHeight">
 						<td class="cHeight large"><label for="largeFont" class="large">Grote letters</label></td>
-						<td>
-							<input id="largeFont" type="checkbox" onclick="setFontSize();"/>
-						    <label for="largeFont"><span></span>&nbsp;</label>
-						</td>
+						<td><div id="largeFont" onmouseup="clickFontsize ();"></div></td>
+					</tr>
 				</table>
 			</div>
 		</div>

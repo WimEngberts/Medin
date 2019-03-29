@@ -523,7 +523,7 @@ body
 	top:50%;
 	margin-top:-15px;
 	background:transparent url('../img/addalarm.png') center no-repeat;
-	background-size:36px;
+	background-size:30px;
 }
 
 .editAlarm
@@ -535,7 +535,7 @@ body
 	top:50%;
 	margin-top:-15px;
 	background:transparent url('../img/editalarm.png') center no-repeat;
-	background-size:36px;
+	background-size:30px;
 }
 
 #menuBox
@@ -880,6 +880,19 @@ body
 	right:0px;
 	display:block;
 	padding-right:34px;
+	padding-left:20px;
+	padding-top:12px;
+	padding-bottom:12px;
+	vertical-align:center;
+}
+
+.addRowButton
+{
+	position:relative;
+	left:0px;
+	right:0px;
+	display:block;
+	padding-right:20px;
 	padding-left:20px;
 	padding-top:12px;
 	padding-bottom:12px;
@@ -1352,8 +1365,8 @@ body
 	left:0px;
 	right:0px;
 	display:block;
-	padding-top:5px;
-	padding-bottom:5px;
+	padding-top:7px;
+	padding-bottom:7px;
 	vertical-align:center;
 	background-color:#0153a1;
 	color:#ffffff;
@@ -1361,6 +1374,7 @@ body
 	font-size:large;
 	margin-top:15px;
 	text-align: center;
+	border-radius: 8px;
 }
 
 #pinEntry

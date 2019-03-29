@@ -220,3 +220,30 @@ function closeAddAlarm (div)
 function cancelAlarm ()
 {
 }
+
+function deletePassedInnames ()
+{
+	db.transaction(function(tx)
+	{
+		tx.executeSql('SELECT * FROM innames', [], function (tx, results)
+		{
+			var now = new Date ();
+			var bDeleted = false;										// Ga er even vanuit dat we niets verwijderen
+			for (var i = 0; i < results.rows.length; i++)				// OK, we gaan nu alle innames langs
+			{
+				var inname = results.rows.item(i);
+				var stop  = new Date (inname['eindGebruik']);			// Stopdatum
+				if (now.getTime () > stop.getTime ())					// Oeps, deze is al voorbij datum einde gebruik
+				{
+					bDeleted = true;									// Er was dus wel degelijk iets te verwijderen!
+					deleteFromCalender (inname['personID'], inname['tijdID'], inname['prk']);
+				}
+			}
+		}), function (tx, error)
+		{
+			alert ('er is een fout opgetreden\r\n' + error.message);
+		}, function ()
+		{
+		};
+	});
+}

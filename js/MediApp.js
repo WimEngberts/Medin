@@ -146,13 +146,21 @@ function showAllLists ()
 function showConfig ()
 {
 	var config;
-	
+
 	showMenu (false);
 	setVisibility ('menubutton', false);
 	config = document.getElementById ('config');
 	
 	if (config)
 	{
+		var setting = loadSetting ('largeFont');						// grote letters gekozen?
+		var bSetting = true;
+		if (setting == 'false')
+			bSetting = false;
+		if (bSetting)
+			document.getElementById ('largeFont').className = 'xSelected';
+		else
+			document.getElementById ('largeFont').className = 'xUnselected';
 		config.style.display = 'block';
 		config.style.opacity = '1';
 		setVisibility ('back', true);
@@ -1458,11 +1466,30 @@ function setFontSize ()
 	setFontSizes ();
 }
 
+function clickFontsize ()
+{
+	var box = document.getElementById ('largeFont');
+	if (box.className == 'xSelected')
+	{
+		box.className = 'xUnselected';
+		saveSetting ('largeFont', 'false');
+	}
+	else
+	{
+		box.className = 'xSelected';
+		saveSetting ('largeFont', 'true');
+	}
+
+	setFontSizes ();
+}
+
 function setFont (largeFont)
 {
 	var slider = document.getElementById ('largeFont');
 	if (slider)
-		slider.checked = largeFont;
+		slider.className = 'xSelected';
+	else
+		slider.className = 'xUnselected';
 }
 
 function isLargeFont ()
@@ -1470,7 +1497,7 @@ function isLargeFont ()
 	var r = false;
 	var font = document.getElementById ('largeFont');
 
-	if (font.checked)
+	if (font.className == 'xSelected')
 		r = true;
 	
 	return r;

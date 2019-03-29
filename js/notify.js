@@ -123,9 +123,13 @@ function setNotifications ()
 						var inname = g_notiInnames.item (i);
 						if (inname['tijdID'] == tijd['tijdID'])			// OK, deze dus
 						{
-							if (medicijn != '')
-								medicijn += '\n';
-							medicijn += inname['naam'];
+							var stop  = new Date (inname['eindGebruik']);
+							if (now.getTime () <= stop.getTime ())		// En we zitten niet nu al voorbij einde gebruik
+							{
+								if (medicijn != '')
+									medicijn += '\n';
+								medicijn += inname['naam'];				// Dan mogen we voor deze inname waarschuwen.
+							}
 						}
 					}
 					if (medicijn != '')									// Is er iets geregistreerd op dit tijdstip?
@@ -229,9 +233,9 @@ function showMedicijn (id, day)
 						var n25 = nhg25 (inname['nhg25']);
 						szHTML += n25['omschrijving'];
 						if (now.getTime () > stop.getTime ())
-							szHTML += '<br /><span style="color:#ff0000">Let op: de gebruiksdatum van dit medicijn is inmiddels verstreken!</span>';
+							szHTML += '<br /><span style="color:#ff0000">Let op: de gebruiksperiode van dit medicijn is inmiddels verstreken!</span>';
 						else if (now.getTime () < start.getTime ())
-							szHTML += '<br /><span style="color:#ff0000">Let op: de gebruiksdatum voor dit medicijn is nog niet begonnen!</span>';
+							szHTML += '<br /><span style="color:#ff0000">Let op: de gebruiksperiode voor dit medicijn is nog niet begonnen!</span>';
 
 						szHTML += '</div>';
 						if (colorName == 'grey')

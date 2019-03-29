@@ -21,9 +21,10 @@ function onDeviceReady()
 	if (db)
 	{
 		initTables (db);
-		cleanMedication ();
-		showList (db);
-		fillCalender ();
+		cleanMedication ();						// Gooi te oude lijsten weg
+		deletePassedInnames ();					// Gooi innames weg die voorbij de uiterste datum zijn
+		showList (db);							// Bouw de medicatielijst op
+		fillCalender ();						// Vul de kalender
 	}
 	else
 		alert ('no database available!');

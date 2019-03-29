@@ -495,9 +495,9 @@ function stipOK ()
 
 			tx.executeSql(sqlStatement, [], function (tx, result)
 			{
-				stipCancel ();
 				fillCalender ();
 				setNextNotifications ();
+				stipCancel ();
 			}, function (tx, error)
 			{
 				alert ('er is een fout opgetreden\r\n' + error.message);

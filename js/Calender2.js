@@ -3,224 +3,6 @@ var g_Person;
 var g_ThingsToDo = false;
 var g_Innames;
 
-//---------------------------------------------------------------------------------------------------------------
-// Check of een lijst al volledig is verdeeld in de kalender
-//
-function checkListInCalender ()
-{
-
-	globalID = -1;
-	g_Medicatie = null;
-
-	showMenu (0);								// menu mag weer even weg (als het er al stond)
-
-	db.transaction(function(tx)
-	{
-		//-------------------------------------------------------------------------------------------------------
-		// Stap 1: Haal de persoon op voor wie we dit allemaal gaan doen. Dat is dus de geselecteerde persoon
-		//
-		tx.executeSql('SELECT * FROM person WHERE selected = 1', [], function (tx, results)
-		{
-			if (results.rows.length > 0)				// Er is iemand geselecteerd
-			{
-				row = results.rows.item(0);				// Deze persoon dus
-				currentUser = row['naam'];				// Met deze naam
-				globalID = row['id'];					// En deze id
-				checkListInCalenderStep2 (row['id']);	// Daar gaan we mee verder
-			}
-			// ----------------------------------------------------------------------------------------------------
-			// Is er geen geselecteerde persoon, dan doen we dus niets
-			//
-			else
-			{
-				myAlert ('Er is nog geen geselecteerde gebruiker gevonden');
-			}
-		}), function (tx, error)
-		{
-			alert ('er is een fout opgetreden\r\n' + error.message);
-		}, function ()
-		{
-		};
-	});
-}
-
-//---------------------------------------------------------------------------------------------------------------
-// Check of een lijst al volledig is verdeeld in de kalender
-// Stap 2: Haal de meest recente lijst op van de geselecteerde persoon
-//
-function checkListInCalenderStep2 (userID)
-{
-
-	db.transaction(function(tx)
-	{
-		var sqlStatement = 'SELECT * FROM lijsten WHERE patient = ' + userID + ' ORDER BY listJaar DESC, listMaand DESC, listDag DESC, listTijd DESC';
-		tx.executeSql(sqlStatement, [], function (tx, results)
-		{
-			if (results.rows.length > 0)								// Als er lijsten zijn geregistreerd
-			{
-				var row = results.rows.item(0);							// Dan is dit de meest recente
-				checkListInCalenderStep3 (row['patient'], row['id']);
-			}
-			// ------------------------------------------------------------------------------------------------------
-			// Als er geen lijsten zijn geregistreerd dan eindigt het dus hier
-			//
-		}), function (tx, error)
-		{
-			alert ('er is een fout opgetreden\r\n' + error.message);
-		}, function ()
-		{
-		};
-	});
-}
-
-//---------------------------------------------------------------------------------------------------------------
-// Check of een lijst al volledig is verdeeld in de kalender
-// Stap 3: We hebben nu de gebruiker en de lijst. Ga nu alle medicatieregels langs en kijk of we deze al
-//         ergens in de kalender hebben staan.
-//
-function checkListInCalenderStep3 (userID, listID)
-{
-
-	g_Person = userID;
-	g_ThingsToDo = false;
-
-	db.transaction(function(tx)
-	{
-		tx.executeSql('SELECT * FROM medicatie WHERE lijst = ' + listID, [], function (tx, results)
-		{
-			//----------------------------------------------------------------------------------------------------
-			// OK, alle medicatie is binnen
-			//
-			g_Medicatie = results.rows;					// ff bewaren
-			if (g_Medicatie.length > 0)
-			{
-				tx.executeSql('SELECT * FROM innames WHERE personID = ' + g_Person, [], function (tx, results)
-				{
-					var szHTML = '';
-					var back = 'white';
-					for (var m = 0; m < g_Medicatie.length; m++)
-					{
-						var medicatie = g_Medicatie.item(m);
-
-						medicatie['distributed'] = -2;
-						var n25 = nhg25 (medicatie['nhg25']);
-						medicatie['nhgExpanded'] = n25;
-						var hVan = parseInt (n25.hCodeVan);
-						var hTot = parseInt (n25.hCodeTot);
-						var f = false;
-						var bValid = true;
-						var n = 0;
-						var tijd;
-						var prk;
-						var person;
-						for (var i = 0; i < results.rows.length; i++)
-						{
-							var row = results.rows.item(i);
-							if (medicatie['prk'] == row['prk'])				// OK, die hebben we
-							{
-								n += row['nDosis'];							// Zoveel tellen we er nu dus bij
-								if (row['nDosis'] == 0)						// was niet gestructureerd opgegeven?
-									n++;									// dan dus maar één keer meer opgevoerd in de kalender
-								f = true;
-								prk = row['prk'];
-								person = row['personID'];
-								tijd = row['tijdID'];
-							}
-						}
-						if (f)
-							medicatie['distributed'] = 1;
-						else
-							medicatie['distributed'] = 0;
-						var waarom = '';
-						var now = new Date ();
-						var start = new Date (medicatie['startGebruik']);
-						var stop  = new Date (medicatie['eindGebruik']);
-						if (   medicatie['startGebruik'] != ''
-						    && start.getTime () > now.getTime ())
-						{
-							bValid = false;
-							waarom = 'nog niet gebruiken';
-						}
-						else if (   medicatie['eindgebruik'] != ''
-								 && stop.getTime () < now.getTime ())
-						{
-							bValid = false;
-							waarom = 'niet meer gebruiken';
-						}
-						szHTML += '<tr class=\"' + back;
-						if (f && !bValid)
-							szHTML += '\" onmouseup=\"deleteFromCalender (' + person + ', ' + tijd + ', ' + prk + ');\">';
-						else if (f)
-							szHTML += '\" onmouseup=\"addToCalender (' + medicatie['lijst'] + ', ' + medicatie['regel'] + ');\">';
-						else if (!f && !bValid)
-						{
-							szHTML += ' greyLetters\">';
-						}
-						else
-							szHTML += '\" onmouseup=\"addToCalender (' + medicatie['lijst'] + ', ' + medicatie['regel'] + ');\">';
-						szHTML += '<td class=\"tdleft\"><b>' + medicatie['dispensedMedicationName'] + '</b><br />';
-						szHTML += n25['omschrijving'] + '</td><td class=\"tdright\">';
-						if (f && !bValid)
-							szHTML += 'verwijderen (' + waarom + ')';
-						else if (f)
-							szHTML += 'wijzigen';
-						else if (!f && bValid)
-							szHTML += 'toevoegen';
-						else
-							szHTML += waarom;
-						szHTML += '</td></tr>';
-						if (back == 'white')
-							back = 'grey';
-						else
-							back = 'white';
-					}
-					for (var i = 0; i < results.rows.length; i++)							// Nu even omgekeerd. Hebt u niet teveel in de kalender?
-					{
-						var row = results.rows.item(i);
-						if (row['eigen'] != 1)											// Eigen ingevoerde medicatie telt niet mee natuurlijk
-						{
-							var f = false;
-							for (var m = 0; m < g_Medicatie.length; m++)
-							{
-								var medicatie = g_Medicatie.item(m);
-								if (medicatie['prk'] == row['prk'])						// OK, die hebben we
-									f = true;
-							}
-							if (!f)														// Nee, die staat niet meer in de lijst!
-							{
-								szHTML += '<tr class=\"' + back + '\" onmouseup=\"deleteFromCalender (' + row['personID'] + ',' + row['tijdID'] + ',' + row['prk'] + ');\">';
-								szHTML += '<td class=\"tdleft\"><b>' + row['naam'] + '</b><br />';
-								szHTML += '</td><td class=\"tdright\">verwijderen (niet meer in de lijst)</td></tr>';
-								if (back == 'white')
-									back = 'grey';
-								else
-									back = 'white';
-							}
-						}
-					}
-					createList ('lijssie', 'medicatie in wekker', szHTML, onCloseCheck, null, true);
-				}), function (tx, error)
-				{
-					alert ('er is een fout opgetreden\r\n' + error.message);
-				}, function ()
-				{
-				};
-			}
-		}), function (tx, error)
-		{
-			alert ('er is een fout opgetreden\r\n' + error.message);
-		}, function ()
-		{
-		};
-	});
-}
-
-function onCloseCheck (div)
-{
-	fillCalender ();
-	setNextNotifications ();
-}
-
 function deleteFromCalender (person, tijd, prk)
 {
 	db.transaction(function(tx)
@@ -241,6 +23,7 @@ function refreshDistribution ()
 {
 	closeAll ('lijssie');
 	showList ();
+	fillCalender ();
 	setNextNotifications ();
 }
 
@@ -304,7 +87,16 @@ function addToCalender (listID, regel)
 							else
 								colorName = 'grey';
 						}
-						szHTML += '<div class="addRow addTime" onclick="addNewTime (' + g_Person + ');">Voeg tijdstip toe</div>';
+						if (results.rows.length == 0)					// Er zijn nog helemaal geen tijden
+						{
+							szHTML += '<div class=\"addRow white\">Er zijn nog geen tijdstippen opgegeven waarop u een medicijn kan innemen.<br />'
+									+ 'Kies alstublieft één van onderstaande knoppen om ofwel een set van drie tijdstippen (\"Ontbijt/Lunch/Diner\") in één keer aan te maken '
+									+ 'ofwel individuele tijdstippen handmatig aan te maken.<br />'
+									+ 'U kunt later de namen, tijden en de dagen van de diverse tijdstippen altijd wijzigen.<br />';
+							szHTML += '<div class="addTime" onclick="addStandardTimes (' + g_Person + "," + g_Medicatie['lijst'] + ',' + g_Medicatie['regel'] + ',\'toevoegen\');">Stel "Ontbijt/Lunch/Diner" in</div>';
+						}
+						szHTML += '<div class="addTime" onclick="addNewTime (' + g_Person + ');">Voeg tijdstip toe</div>';
+
 						var div = createList ('toevoegen', title, szHTML, closeAddAlarm, cancelAlarm, false);
 						div.setAttribute ('data-user' , g_Person);
 						div.setAttribute ('data-prk' ,  g_Medicatie['prk']);
@@ -355,6 +147,24 @@ function addNewTime (personID)
 	document.getElementById ('stipTijd').value = '';
 	setVisibility ('stipDelete', false);
 	openTijdstip (true);
+}
+
+function addStandardTimes (personID, listID, regel, name)
+{
+	db.transaction(function(tx)
+	{
+		var sqlStatement = 'INSERT INTO tijden (personID, tijdNaam, periodiciteit, tijdStip) VALUES (' + personID + ', \'Ontbijt\', \'1111111\', \'08:30\')';
+		tx.executeSql(sqlStatement);
+		sqlStatement = 'INSERT INTO tijden (personID, tijdNaam, periodiciteit, tijdStip) VALUES (' + personID + ', \'Lunch\', \'1111111\', \'12:30\')';
+		tx.executeSql(sqlStatement);
+		sqlStatement = 'INSERT INTO tijden (personID, tijdNaam, periodiciteit, tijdStip) VALUES (' + personID + ', \'Diner\', \'1111111\', \'18:30\')';
+		tx.executeSql(sqlStatement);
+	});
+
+	closeAll (name);
+	fillCalender ();
+	setNextNotifications ();
+	addToCalender (listID, regel);
 }
 
 function selectTime (tijdID)

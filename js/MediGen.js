@@ -631,7 +631,7 @@ function createList (name, title, szText, callback, cancelCallback, bInTable)
 	elemWrapper.style.webkitTransition = 'opacity 0.5s ease';
 	elemDiv = document.createElement ('div');
 	elemDiv.style.cssText = 'position:relative;width:100%;height:auto;padding-top:10px;padding-bottom:10px;border-bottom:solid 1px #afafaf;font-family:calibri, helvetica, sans-serif;'
-						  + 'font-size:large;text-align:left;color:#000000;background-color:#c7e0ff;padding-left:15px;border-radius:20px 20px 0 0;border-bottom:solid 1px #a0a0a0;';
+						  + 'font-size:large;text-align:left;color:#000000;background-color:#c7e0ff;padding-left:15px;border-radius:20px 20px 0 0;';
 	elemDiv.innerHTML = title;
 	elemWrapper.appendChild (elemDiv);
 	elemText = document.createElement ('div');

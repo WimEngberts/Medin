@@ -146,7 +146,7 @@ function setNotifications ()
 								text: medicijn,
 								sound:true,
 								foreground: true,
-//								smallIcon: 'res://smallicon',
+								smallIcon: 'file://img/fullicon',
 								trigger: { every: { hour: hour, minute: minute } }		// Gewoon, altijd op deze tijd
 							};
 							count += 1;
@@ -168,7 +168,7 @@ function setNotifications ()
 										text: medicijn,
 										sound:true,
 										foreground: true,
-//										smallIcon: 'res://smallicon',
+										smallIcon: 'file://img/fullicon',
 										trigger: { every: { weekday: weekday, hour: hour, minute: minute } }
 									};
 									count += 1;
@@ -217,14 +217,22 @@ function showMedicijn (id, day)
 					var naam = 'Onbekend';
 					if (results.rows.length > 0)
 						naam = results.rows.item(0)['naam'];
+					var now = new Date ();
 					for (var i = 0; i < g_notiInnames.rows.length; i++)
 					{
 						var inname = g_notiInnames.rows.item (i);
+						var stop  = new Date (inname['eindGebruik']);
+						var start = new Date (inname['startGebruik']);
 						szHTML += '<div class=\"addRow ' + colorName + '\"><b>';
 						szHTML += inname['naam'];
 						szHTML += '</b><br />';
 						var n25 = nhg25 (inname['nhg25']);
 						szHTML += n25['omschrijving'];
+						if (now.getTime () > stop.getTime ())
+							szHTML += '<br /><span style="color:#ff0000">Let op: de gebruiksdatum van dit medicijn is inmiddels verstreken!</span>';
+						else if (now.getTime () < start.getTime ())
+							szHTML += '<br /><span style="color:#ff0000">Let op: de gebruiksdatum voor dit medicijn is nog niet begonnen!</span>';
+
 						szHTML += '</div>';
 						if (colorName == 'grey')
 							colorName = 'white';

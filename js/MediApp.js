@@ -1463,6 +1463,7 @@ function selectImportPatient (id)
 function setFontSize ()
 {
 
+	var div = document.getElementsByClassName ('standard');
 	setFontSizes ();
 }
 
@@ -1485,11 +1486,12 @@ function clickFontsize ()
 
 function setFont (largeFont)
 {
-	var slider = document.getElementById ('largeFont');
-	if (slider)
-		slider.className = 'xSelected';
+	var box = document.getElementById ('largeFont');
+	if (largeFont)
+		box.className = 'xSelected';
 	else
-		slider.className = 'xUnselected';
+		box.className = 'xUnselected';
+	setFontSizes ();
 }
 
 function isLargeFont ()
@@ -1499,7 +1501,7 @@ function isLargeFont ()
 
 	if (font.className == 'xSelected')
 		r = true;
-	
+
 	return r;
 }
 

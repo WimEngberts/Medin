@@ -343,7 +343,7 @@ function deleteStipStep2 ()
 			tx.executeSql('DELETE FROM innames WHERE personID = ' + dataPerson + ' AND tijdID = ' + dataStip, [], function (tx, results)
 			{
 				stipCancel ();
-				fillCalender ();
+				refreshDistribution ();
 			}), function (tx, error)
 			{
 				alert ('er is een fout opgetreden\r\n' + error.message);

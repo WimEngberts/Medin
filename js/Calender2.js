@@ -9,7 +9,6 @@ function deleteFromCalender (person, tijd, prk)
 	{
 		tx.executeSql('DELETE FROM innames WHERE personID = ' + person + ' AND tijdID = ' + tijd + ' AND prk=\"' + prk + '\"', [], function (tx, results)
 		{
-			refreshDistribution ();
 		}), function (tx, error)
 		{
 			alert ('er is een fout opgetreden\r\n' + error.message);
@@ -92,7 +91,7 @@ function addToCalender (listID, regel)
 							szHTML += '<div class=\"addRow white\">Er zijn nog geen tijdstippen opgegeven waarop u een medicijn kan innemen.<br />'
 									+ 'Kies alstublieft één van onderstaande knoppen om ofwel een set van drie tijdstippen (\"Ontbijt/Lunch/Diner\") in één keer aan te maken '
 									+ 'ofwel individuele tijdstippen handmatig aan te maken.<br />'
-									+ 'U kunt later de namen, tijden en de dagen van de diverse tijdstippen altijd wijzigen.<br />';
+									+ 'U kunt later de namen, tijden en de dagen van de diverse tijdstippen altijd wijzigen.<br /></div>';
 							szHTML += '<div class="addTime" onclick="addStandardTimes (' + g_Person + "," + g_Medicatie['lijst'] + ',' + g_Medicatie['regel'] + ',\'toevoegen\');">Stel "Ontbijt/Lunch/Diner" in</div>';
 						}
 						szHTML += '<div class="addTime" onclick="addNewTime (' + g_Person + ');">Voeg tijdstip toe</div>';
@@ -239,6 +238,8 @@ function deletePassedInnames ()
 					deleteFromCalender (inname['personID'], inname['tijdID'], inname['prk']);
 				}
 			}
+			if (bDeleted)												// Wijzigingen?
+				refreshDistribution ();									// Bouw dan alles opnieuw op
 		}), function (tx, error)
 		{
 			alert ('er is een fout opgetreden\r\n' + error.message);

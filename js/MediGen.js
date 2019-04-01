@@ -23,7 +23,7 @@ function onDeviceReady()
 		initTables (db);
 		cleanMedication ();						// Gooi te oude lijsten weg
 		deletePassedInnames ();					// Gooi innames weg die voorbij de uiterste datum zijn
-		showList (db);							// Bouw de medicatielijst op
+		showList ();							// Bouw de medicatielijst op
 		fillCalender ();						// Vul de kalender
 	}
 	else

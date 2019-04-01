@@ -73,8 +73,12 @@ function addToCalender (listID, regel)
 									f = true;
 							}
 							szHTML += '<div class=\"addRow ' + colorName + '\">';
+							szHTML += showPeriode (tijd['periodiciteit']);
+							szHTML += '<br /><b>';
+							szHTML += tijd['tijdStip'];
+							szHTML += ', ';
 							szHTML += tijd['tijdNaam'];
-							szHTML += '<div id=\"time' + n + '\" class=\"';
+							szHTML += '</b><div id=\"time' + n + '\" class=\"';
 							if (f)
 								szHTML += 'timeSelected ';
 							else
@@ -88,13 +92,15 @@ function addToCalender (listID, regel)
 						}
 						if (results.rows.length == 0)					// Er zijn nog helemaal geen tijden
 						{
-							szHTML += '<div class=\"addRow white\">Er zijn nog geen tijdstippen opgegeven waarop u een medicijn kan innemen.<br />'
-									+ 'Kies alstublieft één van onderstaande knoppen om ofwel een set van drie tijdstippen (\"Ontbijt/Lunch/Diner\") in één keer aan te maken '
-									+ 'ofwel individuele tijdstippen handmatig aan te maken.<br />'
-									+ 'U kunt later de namen, tijden en de dagen van de diverse tijdstippen altijd wijzigen.<br /></div>';
+							szHTML	+= '<div class=\"addRow white\">Er zijn nog geen tijdstippen opgegeven waarop u een medicijn kan innemen.<br />'
+									+  'Kies alstublieft één van onderstaande knoppen om ofwel een set van drie tijdstippen (\"Ontbijt/Lunch/Diner\") in één keer aan te maken '
+									+  'ofwel individuele tijdstippen handmatig aan te maken.<br />'
+									+  'U kunt later de namen, tijden en de dagen van de diverse tijdstippen altijd wijzigen.<br /></div>';
 							szHTML += '<div class="addTime" onclick="addStandardTimes (' + g_Person + "," + g_Medicatie['lijst'] + ',' + g_Medicatie['regel'] + ',\'toevoegen\');">Stel "Ontbijt/Lunch/Diner" in</div>';
+							szHTML += '<div class="addTime" onclick="addNewTime (' + g_Person + ');">Voeg een enkel tijdstip toe</div>';
 						}
-						szHTML += '<div class="addTime" onclick="addNewTime (' + g_Person + ');">Voeg tijdstip toe</div>';
+						else
+							szHTML += '<div class="addTime" onclick="addNewTime (' + g_Person + ');">Voeg een extra tijdstip toe</div>';
 
 						var div = createList ('toevoegen', title, szHTML, closeAddAlarm, cancelAlarm, false);
 						div.setAttribute ('data-user' , g_Person);

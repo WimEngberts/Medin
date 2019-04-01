@@ -86,45 +86,7 @@ function fillCalenderStep2 (personID)
 				div.setAttribute ('data-tijd', row['tijdID']);
 				div.setAttribute('onmouseup', 'editTijd(' + row['personID'] + ', ' + row['tijdID'] + ');');
 
-				var periodiciteit = row['periodiciteit'];
-				var szHTML = '';
-				if (periodiciteit == '1111111')
-					szHTML = 'Iedere dag';
-				else
-				{
-					for (var j=0; j < periodiciteit.length; j++)
-					{
-						if (periodiciteit.charAt (j) == '1')
-						{
-							if (szHTML != '')
-								szHTML += ', ';
-							switch (j)
-							{
-							case 0:
-								szHTML = "Ma";
-								break;
-							case 1:
-								szHTML += "Di";
-								break;
-							case 2:
-								szHTML += "Woe";
-								break;
-							case 3:
-								szHTML += "Do";
-								break;
-							case 4:
-								szHTML += "Vrij";
-								break;
-							case 5:
-								szHTML += "Zat";
-								break;
-							case 6:
-								szHTML += "Zon";
-								break;
-							}
-						}
-					}
-				}
+				var szHTML = showPeriode (row['periodiciteit']);
 				szHTML += '<br /><b>';
 				szHTML += row['tijdStip'];
 				szHTML += ', ';
@@ -147,6 +109,50 @@ function fillCalenderStep2 (personID)
 		{
 		};
 	});
+}
+
+function showPeriode (periodiciteit)
+{
+	var szHTML = '';
+	if (periodiciteit == '1111111')
+		szHTML = 'Iedere dag';
+	else
+	{
+		for (var j=0; j < periodiciteit.length; j++)
+		{
+			if (periodiciteit.charAt (j) == '1')
+			{
+				if (szHTML != '')
+					szHTML += ', ';
+				switch (j)
+				{
+				case 0:
+					szHTML = "Ma";
+					break;
+				case 1:
+					szHTML += "Di";
+					break;
+				case 2:
+					szHTML += "Woe";
+					break;
+				case 3:
+					szHTML += "Do";
+					break;
+				case 4:
+					szHTML += "Vrij";
+					break;
+				case 5:
+					szHTML += "Zat";
+					break;
+				case 6:
+					szHTML += "Zon";
+					break;
+				}
+			}
+		}
+	}
+
+	return szHTML;
 }
 
 function editTijd (personID, rowID)

@@ -84,7 +84,7 @@ function personsOK ()
 	if (persons)
 	{
 		persons.style.opacity = '0';
-		showList (db);
+		showList ();
 		fillCalender ();
 		setTimeout(function()
 		{
@@ -105,7 +105,7 @@ function listsOK ()
 	if (persons)
 	{
 		persons.style.opacity = '0';
-		showList (db);
+		showList ();
 		setTimeout(function()
 		{
 			setVisibility ('list', false);
@@ -1140,7 +1140,7 @@ function importOverzicht (id, lijst)
 		log ('selecting user ' + id);
 		setVisibility ('back', false);	// Er zou een terugknop kunnen staan. Die willen we nu niet meer
 		log ('showing list');
-		showList (db);
+		showList ();
 		myAlert ('Nieuwe medicijnlijst is opgeslagen', 'Melding');
 	});
 }
@@ -1170,7 +1170,7 @@ function fillLists (lists)
 				row = results.rows.item(0);
 				if (header)
 					header.innerHTML = '<b>lijsten van ' + row['naam'] + '</b>';
-				showListsStep2 (db, lists, row['id']);
+				showListsStep2 (lists, row['id']);
 			}
 			else
 			{
@@ -1186,7 +1186,7 @@ function fillLists (lists)
 	});
 }
 
-function showListsStep2 (db, lists, id)
+function showListsStep2 (lists, id)
 {
 	var div;
 	var colorName;
@@ -1227,7 +1227,7 @@ function showSimpleList (lijst)
 	var apotheek = '';
 	var szHTML = '';
 	var persons;
-	
+
 	persons = document.getElementById ('list');
 	setVisibility ('menubutton', true);
 	setVisibility ('back', false);
@@ -1264,7 +1264,7 @@ function showSimpleList (lijst)
 						var d = formatDate (row['listDag'], row['listMaand'], row['listJaar']);
 						szHTML += '<br><span class="standard">' + row['apotheek'] + ', ' + d + '</span>';
 						document.getElementById ('itemHeader').innerHTML = szHTML;
-						showListStep3 (db, lijst);
+						showListStep3 (lijst);
 					}
 					else
 						alert ('Kon de lijst (' + lijst + ') niet meer terugvinden');

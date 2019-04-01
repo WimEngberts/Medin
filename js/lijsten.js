@@ -159,7 +159,7 @@ function showListStep2 (id)
 				log ('most recent list = ' + row['id'] + ', ' + d);
 				szHTML += '<br><span class="standard">' + row['apotheek'] + ', ' + d + ', ' + row['listTijd'] + '</span>';
 				document.getElementById ('itemHeader').innerHTML = szHTML;
-				showListStep3 (row['id']);
+				showListStep3 (row['id'], true);
 			}
 		}), function (tx, error)
 		{
@@ -173,7 +173,7 @@ function showListStep2 (id)
 //-------------------------------------------------------------------------------------
 // Toon de juiste medicatielijst. Stap3: Toon nu de gevonden, meest recente, lijst
 //
-function showListStep3 (id)
+function showListStep3 (id, bCurrent)
 {
 
 	db.transaction(function(tx)
@@ -207,7 +207,8 @@ function showListStep3 (id)
 				szHTML = '<div onclick="onShowMed(' + id + ',' + row['regel'] + ');" class="' + className + '"><b>' + row['dispensedMedicationName'] + '</b><br />';
 				szHTML += n25['omschrijving'];
 				szHTML += '</div>';
-				if (!bGrey)												// We gaan de wekker opties geven als dit medicijn nog geldig is
+				if (   !bGrey											// We gaan de wekker opties geven als dit medicijn nog geldig is
+				    && bCurrent)										// En we de actuele lijst laten zien
 				{
 					var bExists = false;
 					for (var j = 0; j < g_notiInnames.length; j++)

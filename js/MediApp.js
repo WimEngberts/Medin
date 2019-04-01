@@ -1193,7 +1193,7 @@ function showListsStep2 (lists, id)
 
 	db.transaction(function(tx)
 	{
-		tx.executeSql('SELECT * FROM lijsten WHERE patient = ' + id, [], function (tx, results)
+		tx.executeSql('SELECT * FROM lijsten WHERE patient = ' + id + ' ORDER BY listJaar DESC, listMaand DESC, listDag DESC, listTijd DESC', [], function (tx, results)
 		{
 			for (var i = 0; i < results.rows.length; i++)
 			{
@@ -1255,18 +1255,30 @@ function showSimpleList (lijst)
 			if (results.rows.length > 0)
 			{
 				row = results.rows.item(0);
-				szHTML = '<b>lijsten van ' + row['naam'] + '</b>';
-				tx.executeSql('SELECT * FROM lijsten WHERE id = ' + lijst, [], function (tx, results)
+				var id = row['id'];
+				szHTML = '<b>Medicatielijst van ' + row['naam'] + '</b>';
+				tx.executeSql ('SELECT * FROM lijsten WHERE patient = ' + id + ' ORDER BY listJaar DESC, listMaand DESC, listDag DESC, listTijd DESC', [], function (tx, results)
+//				tx.executeSql('SELECT * FROM lijsten WHERE id = ' + lijst, [], function (tx, results)
 				{
-					if (results.rows.length == 1)
+					var bShown = false;
+					for (var i = 0; i < results.rows.length; i++)
 					{
-						row = results.rows.item(0);
-						var d = formatDate (row['listDag'], row['listMaand'], row['listJaar']);
-						szHTML += '<br><span class="standard">' + row['apotheek'] + ', ' + d + '</span>';
-						document.getElementById ('itemHeader').innerHTML = szHTML;
-						showListStep3 (lijst);
+						var row = results.rows.item (i);
+						if (row['id'] == lijst)
+						{
+							bShown = true;
+							var d = formatDate (row['listDag'], row['listMaand'], row['listJaar']);
+							var bCurrent = false;
+							if (i == 0)
+								bCurrent = true;
+							if (!bCurrent)
+								szHTML += ' <span style="color:#ff2222"><b>Niet actueel!</b></span>';
+							szHTML += '<br><span class="standard">' + row['apotheek'] + ', ' + d + '</span>';
+							document.getElementById ('itemHeader').innerHTML = szHTML;
+							showListStep3 (lijst, bCurrent);
+						}
 					}
-					else
+					if (!bShown)
 						alert ('Kon de lijst (' + lijst + ') niet meer terugvinden');
 				}), function (tx, error)
 				{

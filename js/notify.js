@@ -233,9 +233,9 @@ function showMedicijn (id, day)
 						var n25 = nhg25 (inname['nhg25']);
 						szHTML += n25['omschrijving'];
 						if (now.getTime () > stop.getTime ())
-							szHTML += '<br /><span style="color:#ff0000">Let op: de gebruiksperiode van dit medicijn is inmiddels verstreken!</span>';
+							szHTML += '<br /><span style="color:#af0000">Let op: de gebruiksperiode van dit medicijn is inmiddels verstreken!</span>';
 						else if (now.getTime () < start.getTime ())
-							szHTML += '<br /><span style="color:#ff0000">Let op: de gebruiksperiode voor dit medicijn is nog niet begonnen!</span>';
+							szHTML += '<br /><span style="color:#af0000">Let op: de gebruiksperiode voor dit medicijn is nog niet begonnen!</span>';
 
 						szHTML += '</div>';
 						if (colorName == 'grey')

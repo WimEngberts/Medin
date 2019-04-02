@@ -268,14 +268,14 @@ function fillCalenderStep3 (personID)
 						szHTML += row['naam'];
 						szHTML += '</li>';
 						tijd.innerHTML = szHTML;
-						tijd.setAttribute ('first', 'false');
+						tijd.setAttribute ('data-first', 'false');
 					}
 				}
 			}
 			for (var j = 0; j < tijden.length; j++)
 			{
 				var tijd = tijden[j];
-				var first = tijd.getAttribute ('first');
+				var first = tijd.getAttribute ('data-first');
 				if (first == 'false');
 				{
 					var szHTML = tijd.innerHTML;

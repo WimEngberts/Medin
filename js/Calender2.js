@@ -244,8 +244,6 @@ function deletePassedInnames ()
 					deleteFromCalender (inname['personID'], inname['tijdID'], inname['prk']);
 				}
 			}
-			if (bDeleted)												// Wijzigingen?
-				refreshDistribution ();									// Bouw dan alles opnieuw op
 		}), function (tx, error)
 		{
 			alert ('er is een fout opgetreden\r\n' + error.message);

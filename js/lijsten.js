@@ -375,6 +375,10 @@ function showWarning (lijst, regel)
 	});
 }
 
+//----------------------------------------------------------------------------------------------------------
+// Haal de lijsten weg die te oud zijn
+// Ook worden innames verwijderd die niet in de meest recente lijst voorkomen
+//
 function cleanMedication ()
 {
 
@@ -418,6 +422,10 @@ function cleanMedicationStep2 (patient)
 				if (months > accept)									// meer dan we willen?
 					cleanMedicationStep3 (row['patient'], row['id']);	// Dan mag deze lijst weg
 			}
+			if (results.rows.length > 0)								// tenminste één lijst?
+				cleanInnames (patient, results.rows.item(0)['id']);		// Haal dan weg wat er niet meer op staat
+			else
+				cleanAllInnames (patient);
 		}), function (tx, error)
 		{
 			alert ('er is een fout opgetreden\r\n' + error.message);
@@ -433,6 +441,59 @@ function cleanMedicationStep3 (patient, lijst)
 	{
 		tx.executeSql('DELETE FROM medicatie WHERE lijst=' + lijst);
 		tx.executeSql('DELETE FROM lijsten WHERE patient=' + patient + ' AND id=' + lijst);
+	});
+}
+
+function cleanAllInnames (patient)
+{
+	db.transaction(function(tx)
+	{
+		tx.executeSql('DELETE FROM innames WHERE personID=' + patient);
+	});
+}
+
+function cleanInnames (patient, lijst)
+{
+	db.transaction(function(tx)
+	{
+		tx.executeSql('SELECT * FROM medicatie WHERE lijst=' + lijst, [], function (tx, results)
+		{
+			var medicatie = results.rows;							// Dit is alle medicatie in de meest recente lijst
+			tx.executeSql('SELECT * FROM innames WHERE personID=' + patient, [], function (tx, results)
+			{
+				for (var i = 0; i < results.rows.length; i++)		// Ga nu alle inname registraties langs
+				{
+					var inname = results.rows.item (i);
+					var bInList = false;
+					for (var j = 0; j < medicatie.length; j++)
+					{
+						var medicijn = medicatie.item (j);
+						if (medicijn['prk'] == inname['prk'])		// Deze staat in de lijst
+							bInLijst = true;
+					}
+					if (!bInLijst)									// Deze staat niet meer in de huidige lijst
+						removeInname (inname['personID'], inname['tijdID'], inname['prk']);	// Dan mag 'ie weg!
+				}
+			}), function (tx, error)
+			{
+				alert ('er is een fout opgetreden\r\n' + error.message);
+			}, function ()
+			{
+			};
+		}), function (tx, error)
+		{
+			alert ('er is een fout opgetreden\r\n' + error.message);
+		}, function ()
+		{
+		};
+	});
+}
+
+function removeInname (personID, tijdID, prk)
+{
+	db.transaction(function(tx)
+	{
+		tx.executeSql('DELETE FROM innames WHERE personID=' + personID + ' AND tijdID=' + tijdID + ' AND prk=\'' + prk + '\'');
 	});
 }
 

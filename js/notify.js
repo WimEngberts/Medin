@@ -159,7 +159,7 @@ function setNotifications ()
 						}
 						if (every)										// Iedere dag innemen is eenvoudig
 						{
-							if (typeof cordova != 'undefined' && cordova)				// Mooi, we draaien op een mobiel!
+/*							if (typeof cordova != 'undefined' && cordova)				// Mooi, we draaien op een mobiel!
 							{
 								cordova.plugins.notification.local.schedule(
 								{
@@ -173,7 +173,7 @@ function setNotifications ()
 								});	// OK, voeg dan de notifications toe
 							}
 							else
-							{
+							{ */
 								notifs[count] =
 								{
 									id: tijd['tijdID'] * 10,
@@ -184,10 +184,10 @@ function setNotifications ()
 //									smallIcon: 'file://img/fullicon',
 									trigger: { every: { hour: hour, minute: minute } }		// Gewoon, altijd op deze tijd
 								};
-							}
+//							}
 							count += 1;
 						}
-						else if (typeof cordova != 'undefined' && cordova)	// Mooi, we draaien op een mobiel!
+/*						else if (typeof cordova != 'undefined' && cordova)	// Mooi, we draaien op een mobiel!
 						{
 							for (var i = 0; i < periodiciteit.length; i++)	// Dan moeten we ook de dag van de week instellen.
 							{
@@ -210,7 +210,7 @@ function setNotifications ()
 									count += 1;
 								}
 							}
-						}
+						} */
 
 						else												// Alleen op bepaalde dagen:
 						{
@@ -241,9 +241,9 @@ function setNotifications ()
 			}
 			if (count > 0)
 			{
-/*				if (typeof cordova != 'undefined' && cordova)				// Mooi, we draaien op een mobiel!
+				if (typeof cordova != 'undefined' && cordova)				// Mooi, we draaien op een mobiel!
 					cordova.plugins.notification.local.schedule(notifs);	// OK, voeg dan de notifications toe
-					*/
+
 				if (typeof cordova == 'undefined' || !cordova)
 				{
 					document.getElementById ('debugWindow').innerHTML = '';

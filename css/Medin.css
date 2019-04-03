@@ -405,10 +405,7 @@ body
 
 .item
 {
-	position:relative;
-	left:0px;
-	right:0px;
-	display:block;
+
 	border-bottom:solid 1px #a6a6a6;
 /*	padding-right:34px;
 	padding-left:20px;
@@ -420,16 +417,15 @@ body
 
 .innerItem
 {
-	position:relative;
-	left:0px;
-	right:43px;
-	display:block;
-	padding-right:48px;
+
+	padding-right:10px;
 	padding-left:20px;
 	padding-top:12px;
 	padding-bottom:12px;
+	padding-left:10px;
 	vertical-align:center;
 	background:#ffffff;
+	border-bottom:solid 1px #a6a6a6;
 }
 
 .itemHeader
@@ -443,6 +439,37 @@ body
 	padding-bottom:6px;
 	vertical-align:center;
 	background-color:#c7e0ff;
+}
+
+#itemsBody
+{
+	position:relative;
+	width:100%;
+	height:auto;
+	padding-left:0;
+	padding-right:0;
+	padding-top:0;
+	background-color:#ffffff;
+}
+
+.addAlarm
+{
+	width: 36px;
+	height:36px;
+	background:transparent url('../img/addalarm.png') center no-repeat;
+	background-size:30px;
+	padding-right:15px;
+	border-bottom:solid 1px #a6a6a6;
+}
+
+.editAlarm
+{
+	width: 36px;
+	height:36px;
+	background:transparent url('../img/editalarm.png') center no-repeat;
+	background-size:30px;
+	padding-right:15px;
+	border-bottom:solid 1px #a6a6a6;
 }
 
 .sliderBack
@@ -512,30 +539,6 @@ body
 	margin-top:-15px;
 	background:transparent url('../img/i.png') center no-repeat;
     background-size:36px;
-}
-
-.addAlarm
-{
-	position:absolute;
-	right:5px;
-	width: 36px;
-	height:36px;
-	top:50%;
-	margin-top:-15px;
-	background:transparent url('../img/addalarm.png') center no-repeat;
-	background-size:30px;
-}
-
-.editAlarm
-{
-	position:absolute;
-	right:5px;
-	width: 36px;
-	height:36px;
-	top:50%;
-	margin-top:-15px;
-	background:transparent url('../img/editalarm.png') center no-repeat;
-	background-size:30px;
 }
 
 #menuBox
@@ -1428,4 +1431,5 @@ body
 	width:auto;
 	height:auto;
 	font-family:calibri, arial, helvetica, sans-serif;
+	font-size:x-large;
 }

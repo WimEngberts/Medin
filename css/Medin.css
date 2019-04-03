@@ -472,6 +472,14 @@ body
 	border-bottom:solid 1px #a6a6a6;
 }
 
+.noAlarm
+{
+	width: 36px;
+	height:36px;
+	padding-right:15px;
+	border-bottom:solid 1px #a6a6a6;
+}
+
 .sliderBack
 {
 	position:absolute;

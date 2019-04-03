@@ -227,7 +227,7 @@ function showListStep3 (id, bCurrent)
 					szHTML += '">&nbsp;</td>';
 				}
 				else
-					szHTML += '>&nbsp;</td>';
+					szHTML += ' class="noAlarm">&nbsp;</td>';
 				szHTML += '</tr>';
 //				div.innerHTML = szHTML;
 //				overzicht.appendChild (div);

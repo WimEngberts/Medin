@@ -241,9 +241,10 @@ function setNotifications ()
 			}
 			if (count > 0)
 			{
-				if (typeof cordova != 'undefined' && cordova)				// Mooi, we draaien op een mobiel!
+/*				if (typeof cordova != 'undefined' && cordova)				// Mooi, we draaien op een mobiel!
 					cordova.plugins.notification.local.schedule(notifs);	// OK, voeg dan de notifications toe
-				else
+					*/
+				if (typeof cordova == 'undefined' || !cordova)
 				{
 					document.getElementById ('debugWindow').innerHTML = '';
 					log ('setting ' + count + ' notifications:');

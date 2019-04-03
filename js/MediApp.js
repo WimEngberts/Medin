@@ -692,7 +692,7 @@ function indiOK (id, qr)
 				fillPersons (persons);				// Dan zitten we nu in de gebruikerlijst, dus opnieuw opbouwen
 			}
 			fillCalender ();						// Misschien nu wel of juist niet meer kalender tonen
-			setNextNotifications ();				// misschien is 'warnCalender' wel gewijzigd!
+			setPopups ();				// misschien is 'warnCalender' wel gewijzigd!
 		}, function (tx, error)
 		{
 			alert ('er is een fout opgetreden\r\n' + error.message);

@@ -23,7 +23,7 @@ function refreshDistribution ()
 	closeAll ('lijssie');
 	showList ();
 	fillCalender ();
-	setNextNotifications ();
+	setPopups ();
 }
 
 function distriCancel ()
@@ -168,7 +168,7 @@ function addStandardTimes (personID, listID, regel, name)
 
 	closeAll (name);
 	fillCalender ();
-	setNextNotifications ();
+	setPopups ();
 	addToCalender (listID, regel);
 }
 

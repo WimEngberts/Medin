@@ -4,7 +4,7 @@ var g_notiPersons;
 // -------------------------------------------------------------------------------------------------
 // We gaan de popups voor de medicijnwekker instellen.
 //
-function setNextNotifications ()
+function setPopups ()
 {
 
 	if (typeof cordova != 'undefined' && cordova)						// Aha, we draaien op een mobiel!
@@ -91,11 +91,15 @@ function setNotifications ()
 
 	db.transaction(function(tx)
 	{
-		tx.executeSql('SELECT * FROM tijden ORDER BY personID', [], function (tx, results)
+		tx.executeSql('SELECT * FROM tijden ORDER BY tijdStip', [], function (tx, results)
 		{
-			var count = 0;
-			var now = new Date ();
-			var notifs = [];
+			var count      = 0;
+			var now        = new Date ();
+			var notifs     = [];
+			var pHour      = -1;
+			var pMinute    = -1;
+			var pIncrement =  1;
+
 			for (var t = 0; t < results.rows.length; t++)				// OK, we gaan nu alle tijdstippen langs
 			{
 				var yep = false;
@@ -134,6 +138,18 @@ function setNotifications ()
 					}
 					if (medicijn != '')									// Is er iets geregistreerd op dit tijdstip?
 					{
+						if (   hour   == pHour
+							&& minute == pMinute)						// Exact hetzelfde tijdstip hadden we al eerder!
+						{
+							minute += pIncrement;						// Geeft problemen bij de notification. Minuutje verder dan maar
+							pIncrement++;								// Eventuele volgende nog weer een minuutje verder
+						}
+						else											// Een nieuwe tijd
+						{
+							pMinute = minute;
+							pHour   = hour;
+							pIncrement = 1;								// Dan weer op het eigenlijke minuutje
+						}
 						var every = true;
 						var periodiciteit = tijd['periodiciteit'];
 						for (var i = 0; i < periodiciteit.length; i++)
@@ -150,7 +166,7 @@ function setNotifications ()
 								text: medicijn,
 								sound:true,
 								foreground: true,
-								smallIcon: 'file://img/fullicon',
+//								smallIcon: 'file://img/fullicon',
 								trigger: { every: { hour: hour, minute: minute } }		// Gewoon, altijd op deze tijd
 							};
 							count += 1;
@@ -172,7 +188,7 @@ function setNotifications ()
 										text: medicijn,
 										sound:true,
 										foreground: true,
-										smallIcon: 'file://img/fullicon',
+//										smallIcon: 'file://img/fullicon',
 										trigger: { every: { weekday: weekday, hour: hour, minute: minute } }
 									};
 									count += 1;

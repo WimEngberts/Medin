@@ -54,7 +54,7 @@ function onDeviceReady2()
 				splash.style.opacity = '0';
 				splash.style.mozOpacity = '0';
 				setTimeout(function() { setVisibility ('splash', false); }, 500);
-			}, 1500);
+			}, 500);
 		}
 	}, 500);
 }
@@ -138,7 +138,7 @@ function init()
 			splash.style.opacity = '0';
 			splash.style.mozOpacity = '0';
 			setTimeout(function() { setVisibility ('splash', false); }, 500);
-		}, 2000);
+		}, 1000);
 	}
 
 	document.addEventListener ("deviceready", onDeviceReady2, false);

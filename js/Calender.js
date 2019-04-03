@@ -466,10 +466,7 @@ function stipOK ()
 	periodiciteit += isDayChecked ('zaterdag' )
 	periodiciteit += isDayChecked ('zondag'   )
 
-	if (stipNaam == '')
-		myAlert (  'U hebt nog geen naam ingevuld voor dit tijdstip.<br />'
-				 + 'Denk bijvoorbeeld aan namen als \'ontbijt\', \'voor het slapen\' en dergelijke');
-	else if (stipTijd == '')
+	if (stipTijd == '')
 		myAlert ('U hebt nog geen tijd ingevuld voor dit tijdstip.<br />'
 				 + 'Tijden worden ingevuld als bijvoorbeeld 8:00, 13:30 en dergelijke');
 	else if (periodiciteit == '0000000')
@@ -502,7 +499,7 @@ function stipOK ()
 			tx.executeSql(sqlStatement, [], function (tx, result)
 			{
 				fillCalender ();
-				setNextNotifications ();
+				setPopups ();
 				stipCancel ();
 			}, function (tx, error)
 			{

@@ -92,7 +92,7 @@ function initTables (db)
 function showList ()
 {
 	var overzicht = document.getElementById ('overzicht');
-	var div = overzicht.childNodes;
+/*	var div = overzicht.childNodes;
 	var i = div.length;
 
 	log ('showList ()');
@@ -100,7 +100,8 @@ function showList ()
 	{
 		if (div[i].id != 'itemHeader')
 			overzicht.removeChild (div[i]);
-	}
+	} */
+
 	db.transaction(function(tx)
 	{
 		tx.executeSql('SELECT * FROM person WHERE selected = 1', [], function (tx, results)
@@ -181,8 +182,9 @@ function showListStep3 (id, bCurrent)
 		tx.executeSql('SELECT * FROM medicatie WHERE lijst = ' + id, [], function (tx, results)
 		{
 			var overzicht = document.getElementById ('overzicht');
-			var szHTML;
+			var szHTML = '<table width="100%" cellspacing="0">';
 			var id;
+			var itemsBody = document.getElementById ('itemsBody');
 
 			for (var i=0; i < results.rows.length; i++)
 			{
@@ -198,15 +200,15 @@ function showListStep3 (id, bCurrent)
 					bGrey = true;
 				if (i == 0)
 					id = row['lijst'];
-				var div = document.createElement ('div');
-				div.className = 'item standard';
+
+				var className = 'standard';
+				szHTML += '<tr className="item standard">';
 				var className = 'innerItem standard';
 				if (bGrey)
 					className += ' greyLetters';
-
-				szHTML = '<div onclick="onShowMed(' + id + ',' + row['regel'] + ');" class="' + className + '"><b>' + row['dispensedMedicationName'] + '</b><br />';
+				szHTML += '<td onclick="onShowMed(' + id + ',' + row['regel'] + ');" class="' + className + '"><b>' + row['dispensedMedicationName'] + '</b><br />';
 				szHTML += n25['omschrijving'];
-				szHTML += '</div>';
+				szHTML += '</td><td';
 				if (   !bGrey											// We gaan de wekker opties geven als dit medicijn nog geldig is
 				    && bCurrent)										// En we de actuele lijst laten zien
 				{
@@ -217,16 +219,21 @@ function showListStep3 (id, bCurrent)
 						if (inname['prk'] == row['prk'])
 							bExists = true;
 					}
-					szHTML += '<div onclick="addToCalender(' + row['lijst'] + ',' + row['regel'] + ');" class="';
+					szHTML += ' onclick="addToCalender(' + row['lijst'] + ',' + row['regel'] + ');" class="';
 					if (bExists)
 						szHTML += 'editAlarm';
 					else
 						szHTML += 'addAlarm';
-					szHTML += '"></div>';
+					szHTML += '">&nbsp;</td>';
 				}
-				div.innerHTML = szHTML;
-				overzicht.appendChild (div);
+				else
+					szHTML += '>&nbsp;</td>';
+				szHTML += '</tr>';
+//				div.innerHTML = szHTML;
+//				overzicht.appendChild (div);
 			}
+			szHTML += '</table>';
+			itemsBody.innerHTML = szHTML;
 			setFontSizes ();
 		}), function (tx, error)
 		{

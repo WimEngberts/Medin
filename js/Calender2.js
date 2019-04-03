@@ -76,8 +76,11 @@ function addToCalender (listID, regel)
 							szHTML += showPeriode (tijd['periodiciteit']);
 							szHTML += '<br /><b>';
 							szHTML += tijd['tijdStip'];
-							szHTML += ', ';
-							szHTML += tijd['tijdNaam'];
+							if (tijd['tijdNaam'] && tijd['tijdNaam'] != '')
+							{
+								szHTML += ', ';
+								szHTML += tijd['tijdNaam'];
+							}
 							szHTML += '</b><div id=\"time' + n + '\" class=\"';
 							if (f)
 								szHTML += 'timeSelected ';

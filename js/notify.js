@@ -159,18 +159,59 @@ function setNotifications ()
 						}
 						if (every)										// Iedere dag innemen is eenvoudig
 						{
-							notifs[count] =
+							if (typeof cordova != 'undefined' && cordova)				// Mooi, we draaien op een mobiel!
 							{
-								id: tijd['tijdID'] * 10,
-								title: naam + ', tijd voor uw medicijn',
-								text: medicijn,
-								sound:true,
-								foreground: true,
-//								smallIcon: 'file://img/fullicon',
-								trigger: { every: { hour: hour, minute: minute } }		// Gewoon, altijd op deze tijd
-							};
+								cordova.plugins.notification.local.schedule(
+								{
+									id: tijd['tijdID'] * 10,
+									title: naam + ', tijd voor uw medicijn',
+									text: medicijn,
+									sound:true,
+									foreground: true,
+//									smallIcon: 'file://img/fullicon',
+									trigger: { every: { hour: hour, minute: minute } }		// Gewoon, altijd op deze tijd
+								});	// OK, voeg dan de notifications toe
+							}
+							else
+							{
+								notifs[count] =
+								{
+									id: tijd['tijdID'] * 10,
+									title: naam + ', tijd voor uw medicijn',
+									text: medicijn,
+									sound:true,
+									foreground: true,
+//									smallIcon: 'file://img/fullicon',
+									trigger: { every: { hour: hour, minute: minute } }		// Gewoon, altijd op deze tijd
+								};
+							}
 							count += 1;
 						}
+						else if (typeof cordova != 'undefined' && cordova)	// Mooi, we draaien op een mobiel!
+						{
+							for (var i = 0; i < periodiciteit.length; i++)	// Dan moeten we ook de dag van de week instellen.
+							{
+								if (periodiciteit[i] == '1')				// Op deze dag bijvoorbeeld?
+								{
+									var weekday = i+2;						// zondag = 1, maandag = 2, etc. Wij beginnen echter met maandag = 0, dinsdag = 1, etc.
+
+									if (i == 6)								// Zondag
+										weekday = 1;
+									cordova.plugins.notification.local.schedule(
+									{
+										id: (tijd['tijdID'] * 10) + weekday,	// Aangezien we hier dezelfde tijd voor meerdere dagen kunnen hebben moeten we de id uniek maken
+										title: naam + ', tijd voor uw medicijn',
+										text: medicijn,
+										sound:true,
+										foreground: true,
+//										smallIcon: 'file://img/fullicon',
+										trigger: { every: { weekday: weekday, hour: hour, minute: minute } }
+									});
+									count += 1;
+								}
+							}
+						}
+
 						else												// Alleen op bepaalde dagen:
 						{
 							for (var i = 0; i < periodiciteit.length; i++)	// Dan moeten we ook de dag van de week instellen.

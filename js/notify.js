@@ -127,10 +127,17 @@ function setNotifications ()
 						var inname = g_notiInnames.item (i);
 						if (inname['tijdID'] == tijd['tijdID'])			// OK, deze dus
 						{
-							var stop  = new Date (inname['eindGebruik']);
-							if (now.getTime () <= stop.getTime ())		// En we zitten niet nu al voorbij einde gebruik
+							var bInnemen = true;
+							if (   inname['eindGebruik']
+								&& inname['eindGebruik'] != '')			// Er is een einde gebruikdatum opgegeven
 							{
-								if (medicijn != '')
+								var stop  = new Date (inname['eindGebruik']);
+								if (now.getTime () > stop.getTime ())	// En we zitten  nu al voorbij einde gebruik
+									bInnemen = false;					// Dan niet in de lijst
+							}
+							if (bInnemen)								// OK, gaat deze nu wel of niet in de popups?
+							{
+								if (medicijn != '')						// Yep, en niet eens de eerste op deze tijd
 									medicijn += '\n';
 								medicijn += inname['naam'];				// Dan mogen we voor deze inname waarschuwen.
 							}
@@ -138,7 +145,7 @@ function setNotifications ()
 					}
 					if (medicijn != '')									// Is er iets geregistreerd op dit tijdstip?
 					{
-						if (   hour   == pHour
+/*						if (   hour   == pHour
 							&& minute == pMinute)						// Exact hetzelfde tijdstip hadden we al eerder!
 						{
 							minute += pIncrement;						// Geeft problemen bij de notification. Minuutje verder dan maar
@@ -149,7 +156,7 @@ function setNotifications ()
 							pMinute = minute;
 							pHour   = hour;
 							pIncrement = 1;								// Dan weer op het eigenlijke minuutje
-						}
+						} */
 						var every = true;
 						var periodiciteit = tijd['periodiciteit'];
 						for (var i = 0; i < periodiciteit.length; i++)
@@ -210,11 +217,23 @@ function setNotifications ()
 					log ('setting ' + count + ' notifications:');
 					for (var i = 0; i < count; i++)
 						log (JSON.stringify(notifs[i], null, 4));
+					log ('Persons:');
 					for (var i = 0; i < g_notiPersons.length; i++)
 					{
 						var person = g_notiPersons.item (i);
-						log ('Persons:');
-						log (person['naam'] + ' -> ' + person['warnCalender']);
+						log ('id: ' + person['id'] + ', ' + person['naam'] + ' -> ' + person['warnCalender']);
+					}
+					log ('Tijden:');
+					for (var i = 0; i < tijden.rows.length; i++)
+					{
+						var tijd = tijden.rows.item (i);						// Deze bijvoorbeeld
+						log ('id: '+ tijd['tijdID'] + ', ' + tijd['tijdStip']);
+					}
+					log ('Innames:');
+					for (var i = 0; i < g_notiInnames.length; i++)		// En welke medicijnen gaan we dan innemen?
+					{
+						var inname = g_notiInnames.item (i);
+						log ('tijdID: ' + inname['tijdID'] + ', medicijn: '+ inname['naam']);
 					}
 					setVisibility ('debug', true);
 //				}

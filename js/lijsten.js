@@ -2,6 +2,7 @@
 // lijsten.js
 // Het omgaan met medicatielijsten (tonen, inlezen en zo)
 //
+
 function initTables (db)
 {
 	db.transaction (function (tx)
@@ -177,11 +178,21 @@ function showListStep2 (id)
 function showListStep3 (id, bCurrent)
 {
 
+	var overzicht = document.getElementById ('overzicht');
+	if (bCurrent)
+		overzicht.setAttribute ('data-current', 'true');
+	else
+		overzicht.setAttribute ('data-current', 'false');
+
 	db.transaction(function(tx)
 	{
 		tx.executeSql('SELECT * FROM medicatie WHERE lijst = ' + id, [], function (tx, results)
 		{
 			var overzicht = document.getElementById ('overzicht');
+			var bCurrent = true;
+			var szCurrent = overzicht.getAttribute ('data-current');
+			if (szCurrent == 'false')
+				bCurrent = false;
 			var szHTML = '<table width="100%" cellspacing="0">';
 			var id;
 			var itemsBody = document.getElementById ('itemsBody');
@@ -208,7 +219,7 @@ function showListStep3 (id, bCurrent)
 					className += ' greyLetters';
 				szHTML += '<td onclick="onShowMed(' + id + ',' + row['regel'] + ');" class="' + className + '"><b>' + row['dispensedMedicationName'] + '</b><br />';
 				szHTML += n25['omschrijving'];
-				szHTML += '</td><td';
+				szHTML += '</td><td ';
 				if (   !bGrey											// We gaan de wekker opties geven als dit medicijn nog geldig is
 				    && bCurrent)										// En we de actuele lijst laten zien
 				{
@@ -219,16 +230,16 @@ function showListStep3 (id, bCurrent)
 						if (inname['prk'] == row['prk'])
 							bExists = true;
 					}
-					szHTML += ' onclick="addToCalender(' + row['lijst'] + ',' + row['regel'] + ');" class="';
+					szHTML += 'onclick="addToCalender(' + row['lijst'] + ',' + row['regel'] + ');" class="';
 					if (bExists)
 						szHTML += 'editAlarm';
 					else
 						szHTML += 'addAlarm';
-					szHTML += '">&nbsp;</td>';
+					szHTML += '">';
 				}
 				else
-					szHTML += ' class="noAlarm">&nbsp;</td>';
-				szHTML += '</tr>';
+					szHTML += 'class="noAlarm">';
+				szHTML += '&nbsp;</td></tr>';
 //				div.innerHTML = szHTML;
 //				overzicht.appendChild (div);
 			}

@@ -951,11 +951,11 @@ function addMedicationList ()
 		var listJaar  = date.getFullYear ();
 		var listTijd  = formatTijd (date);
 
-		var sqlStatement = 'SELECT * from lijsten WHERE apotheekID=\'' + apotheekID
-						 + '\' AND patient=' + patient
-						 + ' AND listDag=' + listDag
-						 + ' AND listMaand=' + listMaand
-						 + ' AND listJaar=' + listJaar
+		var sqlStatement = 'SELECT * from lijsten WHERE apotheekID=\'' + apotheekID + '\''
+						 + ' AND patient='    + patient
+						 + ' AND listDag='    + listDag
+						 + ' AND listMaand='  + listMaand
+						 + ' AND listJaar='   + listJaar
 						 + ' AND listTijd=\'' + listTijd + '\'';
 
 		log ('finding possible existing list<br />&nbsp;&nbsp;' + sqlStatement);
@@ -1138,7 +1138,7 @@ function importOverzicht (id, lijst)
 		}
 		selectPerson (id);
 		log ('selecting user ' + id);
-		setVisibility ('back', false);	// Er zou een terugknop kunnen staan. Die willen we nu niet meer
+		setVisibility ('back', false);			// Er zou een terugknop kunnen staan. Die willen we nu niet meer
 		log ('showing list');
 		showList ();
 		myAlert ('Nieuwe medicijnlijst is opgeslagen', 'Melding');
@@ -1223,7 +1223,6 @@ function showSimpleList (lijst)
 {
 	var overzicht = document.getElementById ('overzicht');
 	var div = overzicht.childNodes;
-	var i = div.length;
 	var apotheek = '';
 	var szHTML = '';
 	var persons;
@@ -1241,11 +1240,6 @@ function showSimpleList (lijst)
 			setVisibility ('list', false);
 		}, 500);
 	}
-	while (i-- > 0)			// verwijder alle regels uit een eventuele huidige lijst, behalve de header
-	{
-		if (div[i].id != 'itemHeader')
-			overzicht.removeChild (div[i]);
-	}
 
 	db.transaction(function(tx)
 	{
@@ -1258,7 +1252,6 @@ function showSimpleList (lijst)
 				var id = row['id'];
 				szHTML = '<b>Medicatielijst van ' + row['naam'] + '</b>';
 				tx.executeSql ('SELECT * FROM lijsten WHERE patient = ' + id + ' ORDER BY listJaar DESC, listMaand DESC, listDag DESC, listTijd DESC', [], function (tx, results)
-//				tx.executeSql('SELECT * FROM lijsten WHERE id = ' + lijst, [], function (tx, results)
 				{
 					var bShown = false;
 					for (var i = 0; i < results.rows.length; i++)

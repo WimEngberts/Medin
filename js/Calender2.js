@@ -40,6 +40,8 @@ function addCancel ()
 
 function addToCalender (listID, regel)
 {
+	alert ('addToCalender (' + listID + ', ' + regel + ');');
+	
 	db.transaction(function(tx)
 	{
 		tx.executeSql('SELECT * FROM medicatie WHERE lijst = ' + listID + ' AND regel = '+ regel, [], function (tx, results)

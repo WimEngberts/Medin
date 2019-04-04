@@ -15,12 +15,12 @@ function setPopups ()
 	}
 	db.transaction(function(tx)
 	{
-		tx.executeSql('SELECT * FROM person', [], function (tx, results)
+		tx.executeSql('SELECT * FROM person', [], function (tx, persons)
 		{
-			g_notiPersons = results.rows;											// De geregistreerde personen
-			tx.executeSql('SELECT * FROM innames', [], function (tx, results)		// Halen we eerst alle geregistreerde innames op
+			g_notiPersons = persons.rows;											// De geregistreerde personen
+			tx.executeSql('SELECT * FROM innames', [], function (tx, slikken)		// Halen we eerst alle geregistreerde innames op
 			{
-				g_notiInnames = results.rows;
+				g_notiInnames = slikken.rows;
 				var any = false;													// Want als er niets is geregistreerd, dan gaan we ook nog niets registreren!
 				for (var i = 0; i < g_notiInnames.length; i++)						// Ga ze dan even langs
 				{
@@ -91,7 +91,7 @@ function setNotifications ()
 
 	db.transaction(function(tx)
 	{
-		tx.executeSql('SELECT * FROM tijden ORDER BY tijdStip', [], function (tx, results)
+		tx.executeSql('SELECT * FROM tijden ORDER BY tijdStip', [], function (tx, tijden)
 		{
 			var count      = 0;
 			var now        = new Date ();
@@ -100,11 +100,11 @@ function setNotifications ()
 			var pMinute    = -1;
 			var pIncrement =  1;
 
-			for (var t = 0; t < results.rows.length; t++)				// OK, we gaan nu alle tijdstippen langs
+			for (var t = 0; t < tijden.rows.length; t++)				// OK, we gaan nu alle tijdstippen langs
 			{
 				var yep = false;
 				var naam = '';
-				var tijd = results.rows.item (t);						// Deze bijvoorbeeld
+				var tijd = tijden.rows.item (t);						// Deze bijvoorbeeld
 				for (var i = 0; i < g_notiPersons.length; i++)			// van wie is deze?
 				{
 					var person = g_notiPersons.item(i);
@@ -118,8 +118,8 @@ function setNotifications ()
 				if (yep)
 				{
 					var medicijn = '';
-					var stip = tijd['tijdStip'].split (':');			// Welke tijd is dit?
-					var hour = parseInt (stip[0]);
+					var stip   = tijd['tijdStip'].split (':');			// Welke tijd is dit?
+					var hour   = parseInt (stip[0]);
 					var minute = parseInt (stip[1]);
 
 					for (var i = 0; i < g_notiInnames.length; i++)		// En welke medicijnen gaan we dan innemen?

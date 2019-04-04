@@ -210,6 +210,12 @@ function setNotifications ()
 					log ('setting ' + count + ' notifications:');
 					for (var i = 0; i < count; i++)
 						log (JSON.stringify(notifs[i], null, 4));
+					for (var i = 0; i < g_notiPersons.length; i++)
+					{
+						var person = g_notiPersons.item (i);
+						log ('Persons:');
+						log (person['naam'] + ' -> ' + person['warnCalender']);
+					}
 					setVisibility ('debug', true);
 //				}
 			}

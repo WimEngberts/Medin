@@ -211,8 +211,8 @@ function setNotifications ()
 				if (typeof cordova != 'undefined' && cordova)				// Aha, we draaien op een mobiel!
 					cordova.plugins.notification.local.schedule(notifs);	// OK, voeg dan de notifications toe
 
-//				if (typeof cordova == 'undefined' || !cordova)
-//				{
+				if (typeof cordova == 'undefined' || !cordova)
+				{
 					document.getElementById ('debugWindow').innerHTML = '';
 					log ('setting ' + count + ' notifications:');
 					for (var i = 0; i < count; i++)
@@ -236,7 +236,7 @@ function setNotifications ()
 						log ('tijdID: ' + inname['tijdID'] + ', medicijn: '+ inname['naam']);
 					}
 					setVisibility ('debug', true);
-//				}
+				}
 			}
 		}), function (tx, error)
 		{

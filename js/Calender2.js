@@ -40,8 +40,7 @@ function addCancel ()
 
 function addToCalender (listID, regel)
 {
-	alert ('addToCalender (' + listID + ', ' + regel + ');');
-	
+
 	db.transaction(function(tx)
 	{
 		tx.executeSql('SELECT * FROM medicatie WHERE lijst = ' + listID + ' AND regel = '+ regel, [], function (tx, results)
@@ -69,9 +68,9 @@ function addToCalender (listID, regel)
 						{
 							var tijd = results.rows.item (i);
 							var f = false;
-							for (var j=0; j<g_Innames.length; j++)
+							for (var j=0; j < g_Innames.length; j++)
 							{
-								if (g_Innames[j]['tijdID'] == tijd['tijdID'])
+								if (g_Innames.item (j)['tijdID'] == tijd['tijdID'])
 									f = true;
 							}
 							szHTML += '<div class=\"addRow ' + colorName + '\">';

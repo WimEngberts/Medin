@@ -45,9 +45,11 @@ function onDeviceReady2()
 			var id = parseInt (launch.id/10);
 			var day = parseInt (launch.id%10);
 			showMedicijn (id, day);
+			setPopups ();
 		}
 		else
 		{
+			setPopups ();
 			setTimeout (function()
 			{
 				var splash = document.getElementById ('splash');

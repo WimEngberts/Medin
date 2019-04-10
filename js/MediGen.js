@@ -45,7 +45,7 @@ function onDeviceReady2()
 			var id = parseInt (launch.id/10);
 			var day = parseInt (launch.id%10);
 			showMedicijn (id, day);
-			setPopups ();
+//			setPopups ();						// Niet hier zetten, want dan kunnen we wellicht dezelfde popup nog eens krijgen
 		}
 		else
 		{

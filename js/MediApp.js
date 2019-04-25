@@ -14,29 +14,29 @@ var g_bWarnAboutList = true;
 
 function showMenu (vShow)
 {
-   	var vMenu = document.getElementById ('menuBox');
-	
-    if (vShow == 0)
-    {
-    	setVisibility ('menuCover', false);
+	var vMenu = document.getElementById ('menuBox');
+
+	if (vShow == 0)
+	{
+		setVisibility ('menuCover', false);
 		canShowPlus ();
-    	menuBox.style.left  = '-70%';
-    }
-    else
-    {
-    	setVisibility ('menuCover', true);
+		menuBox.style.left  = '-70%';
+	}
+	else
+	{
+		setVisibility ('menuCover', true);
 		setVisibility ('plus', false);
-    	menuBox.style.left  = '0px';
-    }
+		menuBox.style.left  = '0px';
+	}
 }
 
 function showPersons ()
 {
 	var persons;
-	
+
+	screenID = 1;
 	showMenu (false);
 	persons = document.getElementById ('list');
-	screenID = 1;
 
 	if (persons)
 	{
@@ -46,10 +46,10 @@ function showPersons ()
 		setVisibility ('back', true);
 		persons.style.display = 'block';
 		persons.style.opacity = '1';
-		setVisibility ('plus', true);
 		fillPersons (persons);
 		setPlus ();
 	}
+//	canShowPlus ();
 }
 
 function back ()
@@ -202,7 +202,7 @@ function fillPersons (person)
 	var div;
 	var action;
 	var colorName;
-	
+
 	div = person.getElementsByClassName ('listLine');
 	var i = div.length;
 	while (i--)
@@ -874,34 +874,32 @@ function nieuwePatient (year, month, day)
 		preset += '0';
 	preset += day;
 	individual.setAttribute ('data-preset', preset);
-	myQuestion ('qnewPat', 'Nog niet bekend', question, 'JA', 'NEE', nieuwePatientStep2, null);
+	myQuestion ('qnewPat', question, 'Nog niet bekend', 'JA', 'NEE', nieuwePatientStep2, null);
 }
 
 function nieuwePatientStep2 ()
 {
-//	if (q)											// Yep, dus nu even het betreffende scherm opbouwen
-//	{
-		var individual = document.getElementById ('individual');
-		var preset = individual.getAttribute ('data-preset');
-		addEnterListener (indiEnter);
-		addBackListener (indiBack);
-		individual.setAttribute ('data-id', -1);
-		individual.setAttribute ('data-new', 1);
-		setVisibility ('individualCover', true);
-		document.getElementById ('individualCover').style.opacity = '0.4';
-		setVisibility ('individual', true);
-		document.getElementById ('individualText').innerHTML = '<b>Nieuwe gebruiker</b>';
-		document.getElementById ('indiNaam').value = '';
-		document.getElementById ('indiGeboren').value = preset;
-		document.getElementById ('indiGeboren').disabled = true;		// Geboortedatum  mag u niet meer aanpassen!
-		document.getElementById ('individualButton').setAttribute ('onmouseup', 'indiOK (-1,1);');
-		document.getElementById ('indiNaam').focus();
-		setVisibility ('back', false);
-		if (individual)
-		{
-			individual.style.opacity = '1';
-		}
-//	}
+	var individual = document.getElementById ('individual');
+	var preset = individual.getAttribute ('data-preset');
+	addEnterListener (indiEnter);
+	addBackListener (indiBack);
+	individual.setAttribute ('data-id', -1);
+	individual.setAttribute ('data-new', 1);
+	setVisibility ('individualCover', true);
+	document.getElementById ('individualCover').style.opacity = '0.4';
+	setVisibility ('individual', true);
+	document.getElementById ('individualText').innerHTML = '<b>Nieuwe gebruiker</b>';
+	document.getElementById ('indiNaam').value = '';
+	document.getElementById ('indiGeboren').value = preset;
+	document.getElementById ('indiGeboren').disabled = true;		// Geboortedatum  mag u niet meer aanpassen!
+	document.getElementById ('indiKalender').className = 'xSelected';	// per default: gebruikt kalender
+	document.getElementById ('individualButton').setAttribute ('onmouseup', 'indiOK (-1,1);');
+	document.getElementById ('indiNaam').focus();
+	setVisibility ('back', false);
+	if (individual)
+	{
+		individual.style.opacity = '1';
+	}
 }
 
 //------------------------------------------------------------------------------------------------
@@ -1541,45 +1539,48 @@ function setFontSizes ()
 
 function setMain (setTo)
 {
-	var slider	 = document.getElementById ('mainSlider');
-	var calender = document.getElementById ('kalender');
-	var list	 = document.getElementById ('overzicht');
+	if (screenID == 0)						// Werkt alleen als we nog in het hoofdscherm zitten!
+	{
+		var slider	 = document.getElementById ('mainSlider');
+		var calender = document.getElementById ('kalender');
+		var list	 = document.getElementById ('overzicht');
 
-	if (setTo == 0)							// innamekalender
-	{
-		slider.style.left = '0px';
-		calender.style.left = '0px';
-		overzicht.style.left = '100%';
-		slider.setAttribute ('data-screen', 'kalender');
-		document.getElementById ('allLists').style.color='#afafaf';
-		document.getElementById ('allListsImg').style.background = 'transparent url(\'img/documentsGrey.png\') center no-repeat';
-		document.getElementById ('allListsImg').style.backgroundSize = '30px';
-		document.getElementById ('selectLijst').style.color='#afafaf';
-		document.getElementById ('selectKalender').style.color='#0152a1';
-	}
-	else									// lijsten
-	{
-		slider.style.left = '50%';
-		calender.style.left = '-100%';
-		overzicht.style.left = '0px';
-		slider.setAttribute ('data-screen', 'lijst');
-		document.getElementById ('allLists').style.color='#0152a1';
-		document.getElementById ('allListsImg').style.background = 'transparent url(\'img/documents.png\') center no-repeat';
-		document.getElementById ('allListsImg').style.backgroundSize = '30px';
-		document.getElementById ('selectLijst').style.color='#0152a1';
-		document.getElementById ('selectKalender').style.color='#afafaf';
-	}
-	saveSetting ('screen', slider.getAttribute ('data-screen'));
+		if (setTo == 0)							// innamekalender
+		{
+			slider.style.left = '0px';
+			calender.style.left = '0px';
+			overzicht.style.left = '100%';
+			slider.setAttribute ('data-screen', 'kalender');
+			document.getElementById ('allLists').style.color='#afafaf';
+			document.getElementById ('allListsImg').style.background = 'transparent url(\'img/documentsGrey.png\') center no-repeat';
+			document.getElementById ('allListsImg').style.backgroundSize = '30px';
+			document.getElementById ('selectLijst').style.color='#afafaf';
+			document.getElementById ('selectKalender').style.color='#0152a1';
+		}
+		else									// lijsten
+		{
+			slider.style.left = '50%';
+			calender.style.left = '-100%';
+			overzicht.style.left = '0px';
+			slider.setAttribute ('data-screen', 'lijst');
+			document.getElementById ('allLists').style.color='#0152a1';
+			document.getElementById ('allListsImg').style.background = 'transparent url(\'img/documents.png\') center no-repeat';
+			document.getElementById ('allListsImg').style.backgroundSize = '30px';
+			document.getElementById ('selectLijst').style.color='#0152a1';
+			document.getElementById ('selectKalender').style.color='#afafaf';
+		}
+		saveSetting ('screen', slider.getAttribute ('data-screen'));
 
-	setTimeout(function()
-	{
-		var transition = 'all 0.5s ease';
-		calender.style.transition = transition;
-		slider.style.transition = transition;
-		list.style.transition = transition;
-		setPlus ();
-		canShowPlus ();
-	}, 500);
+		setTimeout(function()
+		{
+			var transition = 'all 0.5s ease';
+			calender.style.transition = transition;
+			slider.style.transition = transition;
+			list.style.transition = transition;
+			setPlus ();
+			canShowPlus ();
+		}, 500);
+	}
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -1612,7 +1613,8 @@ function canShowPlus ()
 		}
 	}
 	else if (screenID == 1)						// gebruikers
-	{
 		setVisibility ('plus', true);			// mag altijd een nieuwe toevoegen, dus plusje mag getoond
-	}
+
+	else										// Alle overige schermen (config en zo)
+		setVisibility ('plus', false);			// hebben geen plusje
 }

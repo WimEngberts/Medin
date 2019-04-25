@@ -19,7 +19,7 @@ function showMenu (vShow)
     if (vShow == 0)
     {
     	setVisibility ('menuCover', false);
-		setVisibility ('plus', true);
+		canShowPlus ();
     	menuBox.style.left  = '-70%';
     }
     else
@@ -80,7 +80,7 @@ function personsOK ()
 	setVisibility ('menubutton', true);
 	setVisibility ('back', false);
 	screenID = 0;							// weer het medicatielijst of kalender scherm
-	setVisibility ('plus', true);
+	canShowPlus ();
 	if (persons)
 	{
 		persons.style.opacity = '0';
@@ -101,7 +101,7 @@ function listsOK ()
 	setVisibility ('menubutton', true);
 	setVisibility ('back', false);
 	screenID = 0;							// weer het medicatielijst scherm
-	setVisibility ('plus', true);
+	canShowPlus ();
 	if (persons)
 	{
 		persons.style.opacity = '0';
@@ -182,7 +182,8 @@ function configOK ()
 	config = document.getElementById ('config');
 	setVisibility ('menubutton', true);
 	setVisibility ('back', false);
-	setVisibility ('plus', true);
+	screenID = 0;
+	canShowPlus ();
 	if (config)
 	{
 		config.style.opacity = '0';
@@ -191,7 +192,6 @@ function configOK ()
 			setVisibility ('config', false);
 		}, 500);
 	}
-	screenID = 0;
 }
 
 function fillPersons (person)
@@ -706,10 +706,10 @@ function indiOK (id, qr)
 
 function indiCancel ()
 {
-	
+
 	document.getElementById ('individual').style.opacity = '0';
 	document.getElementById ('individualCover').style.opacity = '0';
-	setVisibility ('plus', true);
+	canShowPlus ();
 	setVisibility ('back', true);
 	removeEnterListener ();
 	removeBackListener ();
@@ -1230,8 +1230,8 @@ function showSimpleList (lijst)
 	persons = document.getElementById ('list');
 	setVisibility ('menubutton', true);
 	setVisibility ('back', false);
-	setVisibility ('plus', true);
 	screenID = 0;							// weer het medicatielijst scherm
+	canShowPlus ();
 	if (persons)
 	{
 		persons.style.opacity = '0';
@@ -1541,9 +1541,9 @@ function setFontSizes ()
 
 function setMain (setTo)
 {
-	var slider = document.getElementById ('mainSlider');
+	var slider	 = document.getElementById ('mainSlider');
 	var calender = document.getElementById ('kalender');
-	var list = document.getElementById ('overzicht');
+	var list	 = document.getElementById ('overzicht');
 
 	if (setTo == 0)							// innamekalender
 	{
@@ -1578,5 +1578,41 @@ function setMain (setTo)
 		slider.style.transition = transition;
 		list.style.transition = transition;
 		setPlus ();
+		canShowPlus ();
 	}, 500);
+}
+
+// ---------------------------------------------------------------------------------------------
+// We tonen het plusje al dan niet
+//
+function canShowPlus ()
+{
+	if (screenID == 0)						// lijsten
+	{
+		if (whichMainScreen () == 0)		// Medicatielijst
+			setVisibility ('plus', true);	// Kan altijd een nieuwe ophalen, dus plusje mag getoond
+
+		else								// momenten
+		{
+			db.transaction(function(tx)
+			{
+				tx.executeSql('SELECT * FROM person WHERE selected = 1', [], function (tx, results)
+				{
+					if (results.rows.length > 0)
+						setVisibility ('plus', true);	// plusje kan alleen als er iemand is geselecteerd.
+					else
+						setVisibility ('plus', false);	// Anders weet ik niet voor wie ik tijden ga toevoegen
+				}), function (tx, error)
+				{
+					alert ('er is een fout opgetreden\r\n' + error.message);
+				}, function ()
+				{
+				};
+			});
+		}
+	}
+	else if (screenID == 1)						// gebruikers
+	{
+		setVisibility ('plus', true);			// mag altijd een nieuwe toevoegen, dus plusje mag getoond
+	}
 }

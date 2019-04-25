@@ -12,7 +12,7 @@ function calenderOK ()
 	setVisibility ('menubutton', true);
 	setVisibility ('back', false);
 	screenID = 0;							// weer het medicatielijst scherm
-	setVisibility ('plus', true);
+	canShowPlus ();
 	if (calender)
 	{
 		calender.style.opacity = '0';
@@ -48,13 +48,12 @@ function fillCalender ()
 				currentUser = row['naam'];
 				globalID = row['id'];
 				fillCalenderStep2 (row['id']);
-				setVisibility ('plus', true);
 			}
 			else
 			{
 				document.getElementById ('wekkerHeader').innerHTML = '<b>Medicijnkalender</b>';
-				setVisibility ('plus', false);
 			}
+			canShowPlus ();
 		}), function (tx, error)
 		{
 			alert ('er is een fout opgetreden\r\n' + error.message);
@@ -522,7 +521,7 @@ function stipCancel ()
 	var regel = stip.getAttribute ('data-regel');
 	document.getElementById ('tijdStip').style.opacity = '0';
 	document.getElementById ('individualCover').style.opacity = '0';
-	setVisibility ('plus', true);
+	canShowPlus ();
 	removeEnterListener ();
 	removeBackListener ();
 	if (typeof (fromList) != 'undefined' && fromList)

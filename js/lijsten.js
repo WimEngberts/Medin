@@ -93,15 +93,6 @@ function initTables (db)
 function showList ()
 {
 	var overzicht = document.getElementById ('overzicht');
-/*	var div = overzicht.childNodes;
-	var i = div.length;
-
-	log ('showList ()');
-	while (i-- > 0)			// verwijder alle regels uit een eventuele huidige lijst, behalve de header
-	{
-		if (div[i].id != 'itemHeader')
-			overzicht.removeChild (div[i]);
-	} */
 
 	db.transaction(function(tx)
 	{

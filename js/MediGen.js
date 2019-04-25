@@ -122,11 +122,11 @@ function init()
 	setFont (bSetting);
 
 	setting = loadSetting ('screen');							// Welk scherm staat voor?
-	var nScreen = 0;
+	var nScreen = 1;
 	if (setting)
 	{
-		if (setting == 'lijst')
-			nScreen = 1;
+		if (setting == 'kalender')
+			nScreen = 0;
 	}
 	setMain (nScreen);
 
